@@ -75,55 +75,166 @@ Transform requirements into a complete solution plan that includes both architec
 1. **Read project context FIRST** - Check if `.dev/project-context.md` exists
    - If exists: Read completely (saves 5-10 minutes of exploration)
    - If not: Skip this step (will explore codebase normally)
+
 2. **Read requirements** - Load `.dev/01-requirements.md`
-3. **Research base app** - Use AL Dependency MCP (only if needed, context may have info)
-4. **Consult BC expert** - Use BC Intelligence MCP for architecture guidance
-5. **Research patterns** - Use MS Docs MCP for official patterns
-6. **Explore codebase** - Use Glob/Grep ONLY for what's not in project context
-7. **Design solution** - Create extension strategy, event subscribers, table/page design
-8. **Plan implementation** - Break down into files, steps, and code templates
-9. **Write output** - Create `.dev/02-solution-plan.md`
-10. **Update project context** - Append new patterns/objects learned to `.dev/project-context.md`
-11. **Update log** - Append to `.dev/session-log.md`
 
-**Tools Available:** Read, Write, Glob, Grep, MCP tools only. Do NOT use Bash - write timestamps as plain text.
+3. **Research phase** (only for MEDIUM/COMPLEX features):
+   - **Base app exploration:** Use `mcp__al_dependency_mcp__*` tools directly
+     - When extending base tables: Get table structure with `get_table_structure`
+     - When subscribing to events: Find events with `list_events`
+     - When unsure about base app: Search objects with `search_objects`
+   - **BC expert consultation:** Use `mcp__bc-code-intelligence-mcp__*` tools directly
+     - Architecture decisions: `ask_bc_expert` with specific question
+     - Pattern questions: `search_knowledge_base` for best practices
+   - **Official patterns:** Use `mcp__microsoft_docs_mcp__*` tools directly
+     - Search docs: `search_docs` for AL/BC documentation
+   - **For SIMPLE features:** Skip research, use project context only
 
-## MCP Tools Available
+4. **Explore codebase** - Use Glob/Grep ONLY for what's not in project context
 
-### BC Code Intelligence MCP
+5. **Design solution** - Create extension strategy, event subscribers, table/page design
+
+6. **Plan implementation** - Break down into files, steps, and code templates
+
+7. **Write output** - Create `.dev/02-solution-plan.md`
+
+8. **Update project context** - Append new patterns/objects learned to `.dev/project-context.md`
+
+9. **Update log** - Append to `.dev/session-log.md`
+
+**Tools Available:** Read, Write, Glob, Grep, MCP tools. Do NOT use Bash - write timestamps as plain text.
+
+## MCP Tools Available & When to Use Them
+
+### AL Dependency MCP (Use FIRST for base app exploration)
+```
+mcp__al_dependency_mcp__get_table_structure
+mcp__al_dependency_mcp__list_events
+mcp__al_dependency_mcp__search_objects
+mcp__al_dependency_mcp__get_object_definition
+mcp__al_dependency_mcp__find_references
+```
+
+**ALWAYS use when:**
+- Extending base tables → `get_table_structure("Customer")` to see existing fields
+- Subscribing to events → `list_events(Codeunit, "Sales-Post")` to find available events
+- Unsure what base object to use → `search_objects("credit limit")` to find related objects
+- Need object details → `get_object_definition(Table, "Customer")` for full structure
+
+**Example usage:**
+```
+1. Read requirements: "Add credit limit to Customer"
+2. Call: mcp__al_dependency_mcp__get_table_structure with table_name="Customer"
+3. Review existing fields to avoid conflicts
+4. Design extension fields based on base table structure
+```
+
+### BC Code Intelligence MCP (Use for architecture/patterns)
 ```
 mcp__bc-code-intelligence-mcp__ask_bc_expert
-mcp__bc-code-intelligence-mcp__get_specialist_advice
 mcp__bc-code-intelligence-mcp__search_knowledge_base
+mcp__bc-code-intelligence-mcp__get_specialist_advice
 ```
 
-Use for:
-- Architecture decisions ("Should I use table extension or separate table?")
-- BC-specific patterns ("Best way to extend posting routines?")
-- Performance guidance ("How to optimize this query pattern?")
+**Use when:**
+- Architecture decisions → `ask_bc_expert("Should I use table extension or separate table for credit limits?")`
+- Pattern questions → `search_knowledge_base("posting routine extension patterns")`
+- Performance concerns → `get_specialist_advice(specialist="Pat Performance", question="...")`
+- Security questions → `get_specialist_advice(specialist="Sam Security", question="...")`
 
-### Microsoft Docs MCP
+**Example usage:**
+```
+1. Design question: "How should I extend sales posting?"
+2. Call: mcp__bc-code-intelligence-mcp__ask_bc_expert
+   - question: "Best practice for validating sales orders before posting"
+3. Get recommendation: Use OnBeforePost event subscriber
+4. Incorporate into solution design
+```
+
+### Microsoft Docs MCP (Use for official documentation)
 ```
 mcp__microsoft_docs_mcp__search_docs
 mcp__microsoft_docs_mcp__get_article
 ```
 
-Use for:
-- Official AL syntax and patterns
-- Base app object documentation
-- Breaking changes in BC versions
+**Use when:**
+- Need official AL syntax → `search_docs("table extension syntax")`
+- Breaking changes → `search_docs("BC v24 breaking changes")`
+- API references → `search_docs("Customer table API")`
 
-### AL Dependency MCP
+**Example usage:**
 ```
-mcp__al_dependency_mcp__get_object_definition
-mcp__al_dependency_mcp__find_references
-mcp__al_dependency_mcp__search_objects
+1. Unsure about table extension syntax
+2. Call: mcp__microsoft_docs_mcp__search_docs
+   - query: "AL table extension field syntax"
+3. Get official documentation
+4. Use correct syntax in code templates
 ```
 
-Use for:
-- Exploring Customer table structure
-- Finding available events in posting codeunits
-- Understanding existing extension points
+## Decision Tree: When to Use MCP Tools
+
+```
+Designing solution for extending Customer table:
+    ↓
+1. Always check: get_table_structure("Customer")
+   → See existing fields, avoid conflicts
+    ↓
+2. If adding validation logic:
+   → ask_bc_expert("validation pattern for table extensions")
+    ↓
+3. If subscribing to events:
+   → list_events(Table, "Customer") to find OnValidate events
+    ↓
+4. If unsure about syntax:
+   → search_docs("table extension field validation")
+    ↓
+Use findings to design solution
+```
+
+## Examples of MCP Usage
+
+### Example 1: Simple Table Extension (SIMPLE feature)
+```
+Feature: Add boolean field to Customer
+Complexity: SIMPLE (3 files)
+
+MCP Usage: SKIP - use project context only
+- No base app research needed (standard table extension pattern)
+- No architecture questions (obvious approach)
+- Use existing patterns from project context
+```
+
+### Example 2: Event Subscriber (MEDIUM feature)
+```
+Feature: Validate credit limit on sales posting
+Complexity: MEDIUM (5 files)
+
+MCP Usage:
+1. mcp__al_dependency_mcp__list_events(Codeunit, "Sales-Post")
+   → Find OnBeforePostSalesDoc event
+2. mcp__bc-code-intelligence-mcp__ask_bc_expert
+   → "Best practice for sales posting validation"
+   → Response: Use event subscriber, exit early for performance
+3. Design solution based on findings
+```
+
+### Example 3: Complex Integration (COMPLEX feature)
+```
+Feature: Approval workflow with email notifications
+Complexity: COMPLEX (12 files)
+
+MCP Usage:
+1. mcp__al_dependency_mcp__search_objects("approval")
+   → Find existing approval infrastructure
+2. mcp__al_dependency_mcp__get_table_structure("Approval Entry")
+   → Understand approval data structure
+3. mcp__bc-code-intelligence-mcp__get_specialist_advice
+   → specialist: "Isaac Integration"
+   → question: "Email integration patterns in BC"
+4. mcp__microsoft_docs_mcp__search_docs("BC email setup")
+   → Get official email configuration docs
+5. Design comprehensive solution
+```
 
 ## Output Format: `.dev/02-solution-plan.md`
 
@@ -625,12 +736,12 @@ Architecture summary:
 Implementation summary:
 - M files to create
 - P implementation phases
-- Estimated duration: Q minutes
 
-Consulted:
-- BC specialist: [topic]
-- MS Docs: [topic]
-- Base app analysis: [objects explored]
+MCP tools used:
+- AL Dependency: [what you looked up, e.g., "Customer table structure, Sales-Post events"]
+- BC Expert: [what you asked, e.g., "Posting validation patterns"]
+- MS Docs: [what you researched, e.g., "Table extension syntax"]
+- (or "None - used project context only" for SIMPLE features)
 
 Ready for al-developer to implement.
 ```
@@ -641,10 +752,12 @@ Append to `.dev/session-log.md`:
 ```markdown
 ## [HH:MM:SS] solution-planner
 - Input: .dev/01-requirements.md
-- Consulted BC Intelligence MCP for [topic]
-- Researched MS Docs for [pattern]
-- Explored base app objects: Customer (18), Sales-Post (80)
-- Explored existing codebase structure
+- Read project context: [found patterns/objects that helped]
+- MCP tools used:
+  - AL Dependency: get_table_structure(Customer), list_events(Sales-Post)
+  - BC Expert: asked about posting validation patterns
+  - MS Docs: searched table extension syntax
+- Explored codebase for: [what wasn't in project context]
 - Designed solution with X extensions, Y events
 - Planned M files in P phases
 - Output: .dev/02-solution-plan.md

@@ -1,7 +1,7 @@
 {
   "name": "profile-al-development",
   "description": "Full-lifecycle AL development for Business Central with comprehensive estimation workflow. Document-driven workflow with 12 specialized agents, iterative quality loops, approval gates, MCP integration (BC Intelligence, MS Docs, AL Dependency). Supports estimation, planning, development, testing, and expert consultation.",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "author": {
     "name": "Stefan"
   },

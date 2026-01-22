@@ -1,6 +1,6 @@
 # AL Development Profile - Full Lifecycle Workflow
 
-**Version:** 2.10.1
+**Version:** 2.11.0
 
 ## 🎯 Core Principles
 
@@ -212,9 +212,9 @@ Runs entire pipeline: requirements → design → implementation → code → re
 - Find object definitions and references
 - **Tool prefix:** `mcp__al_dependency_mcp__*`
 
-## ⚠️ CRITICAL RULE: MCP Tool Isolation
+## ⚠️ CRITICAL RULE: MCP Tool Usage
 
-**NEVER call MCP tools directly in the main conversation.**
+**Main conversation must NEVER call MCP tools directly. Only agents use MCP tools.**
 
 ❌ **WRONG** (Main conversation):
 ```
@@ -224,26 +224,26 @@ Result: 10KB of JSON floods context
 
 ✅ **CORRECT** (Agent delegation):
 ```
-Claude: [spawns bc-expert agent]
-Agent: [uses MCP tools in isolation]
-Agent: [writes to .dev/expert-consultation.md]
-Agent: [returns "Consultation complete → .dev/expert-consultation.md"]
-Claude: "BC expert consulted. Details in .dev/expert-consultation.md"
+Claude: [spawns solution-planner agent]
+Agent: [uses MCP tools: get_table_structure, ask_bc_expert, search_docs]
+Agent: [writes findings to .dev/02-solution-plan.md]
+Agent: [returns "Solution plan complete → .dev/02-solution-plan.md"]
+Claude: "Solution designed. Details in .dev/02-solution-plan.md"
 ```
 
 **Why?** MCP responses can be verbose (KB of JSON). Agents keep main conversation lean by writing details to files.
 
-### Enforcement Table
+### Which Agent Uses Which MCP?
 
-| Need | Use Agent | Never Use Directly |
-|------|-----------|-------------------|
-| Solution planning | `solution-planner` | ❌ MCP tools directly |
-| BC specialist advice | `bc-expert` | ❌ `mcp__bc-code-intelligence-mcp__*` |
-| MS docs lookup | `docs-lookup` | ❌ `mcp__microsoft_docs_mcp__*` |
-| Base app navigation | `dependency-navigator` | ❌ `mcp__al_dependency_mcp__*` |
-| Code review | `code-reviewer` | ❌ Any MCP directly |
+| Agent | MCP Tools Used | Purpose |
+|-------|----------------|---------|
+| `solution-planner` | ✅ All 3 MCPs | Uses AL Dependency, BC Expert, MS Docs during planning |
+| `bc-expert` | ✅ BC Intelligence only | On-demand BC consultation (user command) |
+| `docs-lookup` | ✅ MS Docs only | On-demand documentation lookup (user command) |
+| `dependency-navigator` | ✅ AL Dependency only | On-demand base app exploration (user command) |
+| Main conversation | ❌ None | Never uses MCP directly |
 
-**Note:** solution-planner agent uses all MCP tools internally, keeping main conversation clean.
+**Key principle:** `solution-planner` uses MCP tools automatically during planning. `bc-expert`, `docs-lookup`, and `dependency-navigator` are for user-invoked on-demand consultation via `/bc-expert`, `/docs-lookup`, `/nav-baseapp` commands.
 
 ## 🔨 AL Compilation Tool
 

@@ -61,6 +61,7 @@ Analyze the user request and classify:
 1. Read project-context.md
 2. requirements-engineer → brief plan (50-75 lines max)
 3. solution-planner → lightweight plan (50-100 lines max)
+   - SKIP MCP tools - use project context only
 4. User approval (quick review)
 5. al-developer → implement
 6. code-reviewer → quick review
@@ -93,6 +94,7 @@ Analyze the user request and classify:
 1. Read project-context.md
 2. requirements-engineer → balanced requirements (100-150 lines)
 3. solution-planner → balanced plan (100-300 lines)
+   - USE MCP tools: get_table_structure, list_events, ask_bc_expert as needed
 4. User approval
 5. al-developer → implement
 6. code-reviewer + diagnostics-fixer
@@ -130,7 +132,8 @@ Analyze the user request and classify:
 **Steps:**
 1. Read project-context.md (still helps!)
 2. requirements-engineer → comprehensive (150-300 lines)
-3. solution-planner → comprehensive (300-600 lines, with MCP tools)
+3. solution-planner → comprehensive (300-600 lines)
+   - EXTENSIVE MCP usage: explore base app, consult experts, research patterns
 4. Approval gate
 5. al-developer
 6. code-reviewer + iterations
