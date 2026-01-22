@@ -20,6 +20,10 @@
 
 **Planning Target: 100-150 lines total**
 
+**⚠️ CRITICAL: NO COMPLETE CODE IN PLANNING**
+
+Solution plans describe WHAT to build and WHY, not HOW (code). Code is written by al-developer during implementation.
+
 #### Requirements (50-75 lines)
 ```markdown
 # Requirements: [Feature Name]
@@ -66,29 +70,20 @@
 ### File 1: [Name]
 **Purpose:** [One line]
 **Changes:**
-- Add field X
-- Add validation Y
-
-**Code:**
-[Essential code only, 10-20 lines]
+- Add field X (Boolean)
+- Add field Y (Code[20])
 
 ### File 2: [Name]
 **Purpose:** [One line]
 **Changes:**
-- Extend page
-- Add control
-
-**Code:**
-[Essential code only, 10-20 lines]
+- Add control for field X
+- Add control for field Y
 
 ### File 3: [Name]
 **Purpose:** [One line]
 **Changes:**
-- Add IF check
-- Call helper
-
-**Code:**
-[Essential code only, 10-20 lines]
+- Add IF check for field X
+- Call validation procedure
 
 ## Implementation Order
 1. File 1 (no dependencies)
@@ -100,13 +95,19 @@
 - Test scenario 2
 ```
 
+**DO:**
+- List fields/procedures by name and type
+- Describe what changes, not show code
+
 **DON'T:**
+- Write complete AL code (field definitions, triggers, procedures)
 - Create ASCII diagrams (visual overkill)
 - Write "Design Rationale" section
 - List alternatives considered
-- Add extensive code templates
 - Include "Potential Issues" section
 - Create detailed object allocation tables
+
+**Remember: al-developer writes the code, not solution-planner.**
 
 ---
 
@@ -119,6 +120,10 @@
 - Examples: Multi-file validation, event subscribers, moderate business logic
 
 **Planning Target: 200-400 lines total**
+
+**⚠️ CRITICAL: DESCRIBE CODE, DON'T WRITE IT**
+
+Solution plans explain WHAT fields/procedures are needed and WHY, not the complete AL implementation.
 
 #### Requirements (100-150 lines)
 - Brief summary
@@ -135,13 +140,23 @@
 - Architecture overview (text, no ASCII art unless truly helpful)
 - Implementation per file:
   - Purpose
-  - Key changes
-  - Essential code (20-40 lines per file)
+  - Key fields/procedures BY NAME (not full code)
+  - Integration points
 - Implementation sequence
 - Testing approach
 
-**Include:** Clear implementation steps, key code templates
-**Omit:** Extensive alternatives analysis, detailed troubleshooting, migration plans
+**DO:**
+- List field names, types, purpose
+- List procedure names, parameters, purpose
+- Describe validation logic in plain English
+
+**DON'T:**
+- Write complete table definitions with all field properties
+- Write complete procedure implementations
+- Write triggers with full code logic
+- Show more than 5-10 lines of code per object
+
+**Remember: al-developer writes the AL code during implementation.**
 
 ---
 
@@ -154,6 +169,10 @@
 - Examples: Approval workflows, API integrations, new posting routines
 
 **Planning Target: 400-800 lines total**
+
+**⚠️ CRITICAL: ARCHITECTURAL DOCUMENTATION, NOT CODE**
+
+Even complex features: Describe the design comprehensively, but don't write the AL code. That's al-developer's job.
 
 #### Requirements (150-300 lines)
 - Detailed user stories
@@ -169,15 +188,33 @@
 - Design philosophy
 - Architecture diagrams (ASCII art appropriate here)
 - Alternatives considered with pros/cons
-- Detailed code templates
-- Integration patterns
+- Data model (tables and key fields listed)
+- Integration patterns (described, not coded)
+- Per-file breakdown:
+  - Object purpose
+  - **Field/procedure LISTS** (not implementations)
+  - Integration points
+  - Key validations (described in English)
 - Performance considerations
 - Error handling strategy
 - Testing requirements
-- Rollback plan
-- Migration path
+- Implementation sequence
 
-**Include everything:** Comprehensive documentation appropriate for complexity.
+**DO:**
+- Comprehensive field lists with types and purposes
+- Procedure signatures (name, parameters, return type, purpose)
+- Validation rules in plain English
+- Data flow descriptions
+- Architecture diagrams
+
+**DON'T:**
+- Write 200-line table definitions
+- Write 100-line procedure implementations
+- Write complete triggers with full logic
+- Write complete page layouts
+- Show more than 10-15 lines of AL code per object
+
+**Remember: ARCHITECTURE YES, IMPLEMENTATION NO. al-developer writes the actual AL code.**
 
 ---
 

@@ -1,6 +1,6 @@
 # AL Development Profile - Full Lifecycle Workflow
 
-**Version:** 2.11.0
+**Version:** 2.12.0
 
 ## 🎯 Core Principles
 

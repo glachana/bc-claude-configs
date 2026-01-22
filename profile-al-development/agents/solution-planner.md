@@ -236,6 +236,24 @@ MCP Usage:
 5. Design comprehensive solution
 ```
 
+## ⚠️ CRITICAL: NO COMPLETE AL CODE IN SOLUTION PLANS
+
+**Solution plans are ARCHITECTURAL documentation, NOT implementations.**
+
+**DO:**
+- List fields/procedures by name, type, and purpose
+- Describe validation logic in plain English
+- Show procedure signatures (name, parameters, return type)
+- Explain data flows and integration points
+
+**DON'T:**
+- Write complete table definitions with all properties
+- Write complete procedure implementations
+- Write triggers with full code logic
+- Show more than 5-10 lines of code per object
+
+**WHY:** al-developer writes the AL code during implementation. Solution plan guides WHAT to build and WHY, not HOW (code).
+
 ## Output Format: `.dev/02-solution-plan.md`
 
 ```markdown
@@ -285,23 +303,15 @@ MCP Usage:
 
 ### Event Subscription Pattern
 
-```al
-[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
-local procedure ValidateCreditLimitOnBeforePost(var SalesHeader: Record "Sales Header")
-var
-    Customer: Record Customer;
-    OutstandingAmount: Decimal;
-begin
-    if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then
-        exit;
+**Subscribe to:** `Codeunit::"Sales-Post"::OnBeforePostSalesDoc`
 
-    Customer.Get(SalesHeader."Sell-to Customer No.");
-    OutstandingAmount := CalculateOutstandingAmount(Customer);
+**Logic:**
+1. Exit if not sales order
+2. Get customer and calculate outstanding
+3. If blocked AND over limit → Error()
+4. If over warning → Confirm() dialog
 
-    if Customer.CreditLimitBlocked and ((OutstandingAmount + OrderAmount) > Customer.CreditLimit) then
-        Error('Cannot post - customer exceeds credit limit.');
-end;
-```
+(al-developer will implement full event subscriber code)
 
 ### Business Logic Components
 
@@ -375,42 +385,11 @@ end;
 **Base:** Customer (18)
 **Purpose:** Add credit limit fields
 
-**Implementation:**
-```al
-tableextension 50100 "Customer Ext" extends Customer
-{
-    fields
-    {
-        field(50100; CreditLimit; Decimal)
-        {
-            Caption = 'Credit Limit';
-            DataClassification = CustomerContent;
-            MinValue = 0;
-            DecimalPlaces = 2:2;
-
-            trigger OnValidate()
-            begin
-                if CreditLimit < 0 then
-                    Error('Credit limit cannot be negative.');
-            end;
-        }
-
-        field(50101; CreditLimitWarningPct; Decimal)
-        {
-            Caption = 'Credit Limit Warning %';
-            DataClassification = CustomerContent;
-            MinValue = 0;
-            MaxValue = 100;
-        }
-
-        field(50102; CreditLimitBlocked; Boolean)
-        {
-            Caption = 'Credit Limit Blocked';
-            DataClassification = CustomerContent;
-        }
-    }
-}
-```
+**Fields to Add:**
+- `CreditLimit` (Decimal) - Maximum credit allowed, MinValue: 0, DecimalPlaces: 2:2
+  - Validation: Must be >= 0
+- `CreditLimitWarningPct` (Decimal) - Warning threshold %, MinValue: 0, MaxValue: 100
+- `CreditLimitBlocked` (Boolean) - Hard block if exceeded
 
 **Dependencies:** None (implement first)
 
@@ -420,57 +399,22 @@ tableextension 50100 "Customer Ext" extends Customer
 **Type:** Codeunit
 **Purpose:** Credit limit business logic
 
-**Implementation:**
-```al
-codeunit 50100 "Credit Limit Mgt."
-{
-    procedure CalculateOutstandingAmount(CustomerNo: Code[20]): Decimal
-    var
-        CustLedgerEntry: Record "Cust. Ledger Entry";
-        OutstandingAmt: Decimal;
-    begin
-        CustLedgerEntry.SetRange("Customer No.", CustomerNo);
-        CustLedgerEntry.SetRange(Open, true);
-        if CustLedgerEntry.FindSet() then
-            repeat
-                CustLedgerEntry.CalcFields("Remaining Amt. (LCY)");
-                OutstandingAmt += CustLedgerEntry."Remaining Amt. (LCY)";
-            until CustLedgerEntry.Next() = 0;
+**Procedures:**
+- `CalculateOutstandingAmount(CustomerNo: Code[20]): Decimal`
+  - Query open customer ledger entries
+  - Sum remaining amounts
+  - Return total outstanding
 
-        exit(OutstandingAmt);
-    end;
+- `CheckCreditLimit(CustomerNo: Code[20]; NewAmount: Decimal): Boolean`
+  - Get customer credit limit
+  - If limit = 0, return true (unlimited)
+  - Calculate: (Outstanding + NewAmount) <= CreditLimit
+  - Return validation result
 
-    procedure CheckCreditLimit(CustomerNo: Code[20]; NewAmount: Decimal): Boolean
-    var
-        Customer: Record Customer;
-        OutstandingAmt: Decimal;
-    begin
-        if not Customer.Get(CustomerNo) then
-            exit(true);
-
-        if Customer.CreditLimit = 0 then
-            exit(true); // Unlimited
-
-        OutstandingAmt := CalculateOutstandingAmount(CustomerNo);
-        exit((OutstandingAmt + NewAmount) <= Customer.CreditLimit);
-    end;
-
-    procedure GetCreditUtilizationPct(CustomerNo: Code[20]): Decimal
-    var
-        Customer: Record Customer;
-        OutstandingAmt: Decimal;
-    begin
-        if not Customer.Get(CustomerNo) then
-            exit(0);
-
-        if Customer.CreditLimit = 0 then
-            exit(0);
-
-        OutstandingAmt := CalculateOutstandingAmount(CustomerNo);
-        exit((OutstandingAmt / Customer.CreditLimit) * 100);
-    end;
-}
-```
+- `GetCreditUtilizationPct(CustomerNo: Code[20]): Decimal`
+  - Calculate outstanding amount
+  - Return (Outstanding / CreditLimit) * 100
+  - Return 0 if unlimited
 
 **Dependencies:** Requires table extension (file 1)
 
@@ -480,58 +424,24 @@ codeunit 50100 "Credit Limit Mgt."
 **Type:** Codeunit (Event Subscriber)
 **Purpose:** Validate credit limit on sales posting
 
-**Implementation:**
-```al
-codeunit 50101 "Sales Post Subscriber"
-{
-    SingleInstance = true;
+**Event Subscription:**
+- Subscribe to: `Codeunit::"Sales-Post"::OnBeforePostSalesDoc`
+- SingleInstance: true
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
-    local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header")
-    var
-        Customer: Record Customer;
-        CreditLimitMgt: Codeunit "Credit Limit Mgt.";
-        OrderAmount: Decimal;
-    begin
-        // Only check for sales orders
-        if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then
-            exit;
+**Logic:**
+1. Exit if not sales order
+2. Get customer record
+3. Exit if credit limit = 0 (unlimited)
+4. Calculate order amount
+5. Check credit limit:
+   - If blocked AND over limit → Error()
+   - If over warning threshold → Confirm() dialog
+   - Otherwise → Continue
 
-        if not Customer.Get(SalesHeader."Sell-to Customer No.") then
-            exit;
-
-        // Skip if unlimited credit
-        if Customer.CreditLimit = 0 then
-            exit;
-
-        OrderAmount := CalculateSalesOrderAmount(SalesHeader);
-
-        if not CreditLimitMgt.CheckCreditLimit(Customer."No.", OrderAmount) then begin
-            if Customer.CreditLimitBlocked then
-                Error('Cannot post sales order - customer %1 exceeds credit limit.', Customer.Name);
-
-            // Show warning if over warning threshold
-            if not Confirm('Customer %1 is near or over credit limit. Continue?', true, Customer.Name) then
-                Error('');
-        end;
-    end;
-
-    local procedure CalculateSalesOrderAmount(SalesHeader: Record "Sales Header"): Decimal
-    var
-        SalesLine: Record "Sales Line";
-        TotalAmount: Decimal;
-    begin
-        SalesLine.SetRange("Document Type", SalesHeader."Document Type");
-        SalesLine.SetRange("Document No.", SalesHeader."No.");
-        if SalesLine.FindSet() then
-            repeat
-                TotalAmount += SalesLine."Amount Including VAT";
-            until SalesLine.Next() = 0;
-
-        exit(TotalAmount);
-    end;
-}
-```
+**Local Procedures:**
+- `CalculateSalesOrderAmount(SalesHeader: Record "Sales Header"): Decimal`
+  - Sum all line amounts including VAT
+  - Return total
 
 **Dependencies:** Requires table extension (file 1) and codeunit (file 2)
 
@@ -542,55 +452,18 @@ codeunit 50101 "Sales Post Subscriber"
 **Base:** Customer Card (21)
 **Purpose:** Display credit limit fields
 
-**Implementation:**
-```al
-pageextension 50100 "Customer Card Ext" extends "Customer Card"
-{
-    layout
-    {
-        addafter(Blocked)
-        {
-            group("Credit Management")
-            {
-                Caption = 'Credit Management';
+**Layout Changes:**
+- Add group "Credit Management" after "Blocked" field
+- Add controls:
+  - CreditLimit (editable)
+  - CreditLimitWarningPct (editable)
+  - CreditLimitBlocked (editable)
+  - OutstandingAmount (calculated, read-only)
 
-                field(CreditLimit; Rec.CreditLimit)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the maximum credit limit for this customer.';
-                }
-
-                field(CreditLimitWarningPct; Rec.CreditLimitWarningPct)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the percentage at which to show a warning.';
-                }
-
-                field(CreditLimitBlocked; Rec.CreditLimitBlocked)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies if posting should be blocked when credit limit is exceeded.';
-                }
-
-                field(OutstandingAmount; GetOutstandingAmount())
-                {
-                    ApplicationArea = All;
-                    Caption = 'Outstanding Amount';
-                    Editable = false;
-                    ToolTip = 'Shows the current outstanding amount for this customer.';
-                }
-            }
-        }
-    }
-
-    local procedure GetOutstandingAmount(): Decimal
-    var
-        CreditLimitMgt: Codeunit "Credit Limit Mgt.";
-    begin
-        exit(CreditLimitMgt.CalculateOutstandingAmount(Rec."No."));
-    end;
-}
-```
+**Local Procedures:**
+- `GetOutstandingAmount(): Decimal`
+  - Call CreditLimitMgt.CalculateOutstandingAmount
+  - Return current outstanding
 
 **Dependencies:** Requires table extension (file 1) and codeunit (file 2)
 
