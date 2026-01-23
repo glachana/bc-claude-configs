@@ -41,6 +41,17 @@ Write clean, correct AL code that implements the planned solution.
 - Include proper error messages
 - Handle edge cases
 
+### ⚠️ Code Quality (DRY/SOLID)
+
+**Before writing ANY logic:**
+1. Does this already exist? → Reuse it
+2. Will this be needed elsewhere? → Put in shared codeunit
+3. Is this doing multiple things? → Split it
+
+**DRY:** Never duplicate logic. Same calculation in 2 places = extract to shared procedure.
+**Single Responsibility:** Procedures <30 lines, do ONE thing. Split if larger.
+**Centralize:** Business logic goes in dedicated codeunits, not scattered across files.
+
 ### Verify as You Go
 - Compile after each file or logical group
 - Fix syntax errors immediately

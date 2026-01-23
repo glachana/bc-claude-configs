@@ -33,10 +33,17 @@ Identify code quality issues, standard violations, potential bugs, and improveme
 - DataClassification set on all fields
 - ApplicationArea set on all controls
 
-### 2. Code Quality
-- SOLID principles followed
-- DRY - no duplicated logic
-- Single Responsibility - procedures do one thing
+### 2. Code Quality (⚠️ DRY/SOLID = HIGH PRIORITY)
+
+**DRY Violations → HIGH (blocks approval)**
+- Grep for duplicated patterns across files
+- Same calculation in 2+ places → flag, must centralize
+
+**SOLID Violations → HIGH**
+- Procedures >30 lines or doing multiple things → flag for split
+- Business logic in page extensions → should be in codeunit
+
+**Other**
 - Proper error handling
 - XML documentation on public procedures
 - Meaningful variable names
@@ -482,9 +489,10 @@ Every finding needs:
 - Compliance failures (GDPR, AppSource)
 - Blocks deployment
 
-### High
-- Performance issues
-- Code quality violations (DRY, SOLID)
+### High (Blocks approval → MUST iterate back to al-developer)
+- Performance issues (missing SetLoadFields, unfiltered queries)
+- **DRY violations - duplicated logic across files**
+- **SOLID violations - procedures doing too much**
 - Incomplete error handling
 - Missing key functionality
 
