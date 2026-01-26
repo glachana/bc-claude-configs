@@ -13,6 +13,26 @@ Generate comprehensive documentation for implemented features and maintain docum
 
 Create clear, accurate documentation that helps users understand, use, and maintain the AL code.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| `.dev/01-requirements.md` | **Yes** | What was needed |
+| `.dev/02-solution-plan.md` | **Yes** | Architecture |
+| AL source files | **Yes** | Actual implementation |
+| `.dev/03-code-review.md` | No | Quality notes |
+| `.dev/05-test-plan.md` | No | Test coverage info |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `docs/` or `wiki/` | **Primary** - Documentation files |
+| `docs/Features/[name].md` | Feature documentation |
+| `docs/API/[name].md` | API reference (if public procedures) |
+| `CHANGELOG.md` | Updated changelog |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## Workflow
 
 1. **Detect documentation location**

@@ -13,6 +13,22 @@ Design test strategy and implement comprehensive AL test codeunits.
 
 Create complete test coverage for implemented functionality using AL test framework.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| `.dev/01-requirements.md` | **Yes** | Requirements to verify |
+| `.dev/02-solution-plan.md` | **Yes** | Design context |
+| AL source files | **Yes** | Code to test |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/05-test-plan.md` | **Primary** - Test strategy and results |
+| Test codeunits | AL test code in `src/Tests/` |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## Workflow
 
 1. **Read context** - Load `.dev/01-requirements.md`, `.dev/02-solution-plan.md`
@@ -20,7 +36,7 @@ Create complete test coverage for implemented functionality using AL test framew
 3. **Design test strategy** - Unit tests, integration tests
 4. **Create test codeunits** - Write AL test code
 5. **Run tests** - Execute and verify
-6. **Write report** - Create `.dev/06-test-plan.md`
+6. **Write report** - Create `.dev/05-test-plan.md`
 7. **Update log** - Append to `.dev/session-log.md`
 
 ## Test Types
@@ -120,7 +136,7 @@ For each functional requirement:
 - ✓ Outstanding amount calculates correctly
 - ✓ Visual indicators show correct status
 
-## Output Format: `.dev/06-test-plan.md`
+## Output Format: `.dev/05-test-plan.md`
 
 ```markdown
 # Test Plan & Implementation
@@ -395,7 +411,7 @@ Average test execution time:
 
 Return ONLY:
 ```
-Test implementation complete → .dev/06-test-plan.md
+Test implementation complete → .dev/05-test-plan.md
 
 Summary:
 - Test codeunits created: X
@@ -418,7 +434,7 @@ Append to `.dev/session-log.md`:
 - Implemented Y test procedures
 - Test results: Z passed, N failed
 - Coverage: 100% of requirements
-- Output: .dev/06-test-plan.md
+- Output: .dev/05-test-plan.md
 - Status: ✓ Complete
 ```
 

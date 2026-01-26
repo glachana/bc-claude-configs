@@ -1,6 +1,6 @@
 # AL Development Profile - Full Lifecycle Workflow
 
-**Version:** 2.15.0
+**Version:** 2.16.0
 
 ## 🎯 Core Principles
 
@@ -79,6 +79,8 @@ CLAUDE_CODE_TASK_LIST_ID=<id> claude
 See `task-coordination.md` for full details.
 
 ## 🔄 Development Lifecycle Pipeline
+
+> **Visual diagram:** See `agents/README.md` for detailed ASCII workflow diagram with dependencies.
 
 ### Phase 1: Planning & Design
 ```
@@ -450,18 +452,17 @@ Agent: [updates .dev/02-solution-plan.md with revised approach]
 
 ## 📋 Agent Capabilities Matrix
 
-| Agent | Input | Output | MCP Tools Used |
-|-------|-------|--------|----------------|
+| Agent | Input | Output | MCP Tools |
+|-------|-------|--------|-----------|
 | requirements-engineer | User request | 01-requirements.md | None |
-| solution-planner | 01-requirements.md | 02-solution-plan.md | BC Intel, MS Docs, AL Dep |
+| solution-planner | 01-requirements.md | 02-solution-plan.md | All 3 |
 | al-developer | 02-solution-plan.md | AL code files | None |
 | code-reviewer | Code files | 03-code-review.md | None |
-| diagnostics-fixer | Compiler output | 04-diagnostics.md + fixes | None |
-| test-engineer | 02+code | 05-test-plan.md + tests | None |
+| diagnostics-fixer | Compiler output | 04-diagnostics.md | None |
+| test-engineer | 02+code | 05-test-plan.md | None |
 | test-reviewer | Test code | 06-test-review.md | None |
-| bc-expert | Question | expert-*.md | BC Intel |
-| docs-lookup | Question | docs-*.md | MS Docs |
-| dependency-navigator | Query | nav-*.md | AL Dependency |
+
+> **Full details:** See `agents/README.md` for complete dependency matrix, tool access, iteration rules, and workflow diagrams.
 
 ## 🔧 AL Coding Standards (Quick Reference)
 
@@ -673,7 +674,7 @@ Agents support iterative refinement:
 ```
 User: "Actually, let's use a separate validation codeunit instead"
 
-Claude: [spawns implementation-planner again]
+Claude: [spawns solution-planner again]
 Agent: [reads 01+02, applies new constraint, updates 03]
 Agent: "Implementation plan revised → .dev/02-solution-plan.md"
 ```

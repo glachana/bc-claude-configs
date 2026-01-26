@@ -13,6 +13,22 @@ Design BC-native solutions and create concrete implementation plans in one compr
 
 Transform requirements into a complete solution plan that includes both architectural rationale and step-by-step implementation guidance.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| `.dev/01-requirements.md` | **Yes** | Requirements from requirements-engineer |
+| `.dev/project-context.md` | No | Project memory (read FIRST if exists) |
+| MCP tools | No | BC Intelligence, MS Docs, AL Dependency |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/02-solution-plan.md` | **Primary** - Architecture + implementation plan |
+| `.dev/project-context.md` | Update with new patterns/objects learned |
+| `.dev/session-log.md` | Append entry with summary of work done |
+
 ## ⚠️ CRITICAL: Proportional Output
 
 **Your output length must match task complexity. See `proportional-planning.md` for full guidelines.**

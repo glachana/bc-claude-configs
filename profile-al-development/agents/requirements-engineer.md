@@ -13,6 +13,21 @@ Extract clear, structured requirements from user requests and existing code cont
 
 Transform vague user requests into clear, actionable requirements that guide design and implementation.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| User request | **Yes** | The feature/task description from user |
+| `.dev/project-context.md` | No | Project memory (read first if exists) |
+| Existing codebase | No | Explore with Glob/Grep for context |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/01-requirements.md` | **Primary** - Structured requirements document |
+| `.dev/session-log.md` | Append entry with summary of work done |
+
 ## ⚠️ CRITICAL: Proportional Output
 
 **Your output length must match task complexity. See `proportional-planning.md` for full guidelines.**
@@ -65,7 +80,16 @@ Stop if you're writing:
 5. **Write output** - Create `.dev/01-requirements.md`
 6. **Update log** - Append to `.dev/session-log.md`
 
-**Tools Available:** Read, Write, Grep, Glob only. Do NOT use Bash - write timestamps and dates as plain text.
+## Tool Usage
+
+| Tool | Purpose |
+|------|---------|
+| **Read** | Read existing files, project context |
+| **Write** | Create `.dev/01-requirements.md`, update session log |
+| **Grep** | Search for patterns in codebase |
+| **Glob** | Find files by pattern |
+
+**Note:** Write timestamps as plain text (e.g., "2026-01-15 14:30 UTC"). No shell commands available.
 
 ## Output Format: `.dev/01-requirements.md`
 

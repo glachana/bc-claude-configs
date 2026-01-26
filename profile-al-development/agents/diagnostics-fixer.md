@@ -13,6 +13,23 @@ Automatically fix AL compiler diagnostics including errors, warnings, and CodeCo
 
 Run AL compilation, identify diagnostics, and automatically fix safe issues.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| AL source files | **Yes** | Code to compile and fix |
+| `app.json` | **Yes** | Project manifest |
+| `.alpackages/` | **Yes** | Dependencies |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/05-diagnostics.md` | **Primary** - Diagnostics report |
+| `.dev/compile-errors.log` | Raw compilation output |
+| Fixed AL source files | Auto-fixed code (safe fixes only) |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## Workflow
 
 1. **Compile** - Run AL compiler to get diagnostics
@@ -27,70 +44,21 @@ Run AL compilation, identify diagnostics, and automatically fix safe issues.
 
 **CRITICAL: ALWAYS use `al-compile` wrapper - it handles all complexity automatically.**
 
-### Basic Compilation
-
 ```bash
-# Default compilation with all standard analyzers
-al-compile
-
-# Verbose output to see details
-al-compile --verbose
-
-# Include ALL analyzers (even without AppSourceCop.json)
-al-compile --analyzers all
+al-compile                    # Default: compile with all standard analyzers
+al-compile --verbose          # Show detailed compilation info
+al-compile --analyzers all    # Include ALL analyzers
 ```
 
-### What al-compile Does Automatically
+> **Full documentation:** See "AL Compilation Tool" section in main CLAUDE.md for complete options, troubleshooting, and manual compilation fallback.
 
-✅ Auto-detects VS Code AL extension and uses matching compiler
-✅ Auto-detects workspace structure (single vs multi-app)
-✅ Auto-finds ALL .alpackages directories for transitive dependencies
-✅ Auto-applies ruleset files (workspace or project level)
-✅ Auto-includes AppSourceCop if AppSourceCop.json exists
-✅ Warns if AppSourceCop is enabled but config is missing
-✅ Writes error log to `.dev/compile-errors.log`
+### Agent Compilation Workflow
 
-### Compilation Workflow
-
-**STEP 1: Run Compilation**
-
-```bash
-al-compile
-```
-
-**STEP 2: Check Compilation Result**
-
-```bash
-if [ $? -eq 0 ]; then
-    echo "Compilation succeeded!"
-else
-    echo "Compilation errors found - proceeding to fix"
-fi
-```
-
-**STEP 3: Parse Error Log**
-
-Extract diagnostics from `.dev/compile-errors.log`
-
-**STEP 4: Fix Issues**
-
-Apply automated fixes (see Auto-Fix Patterns section)
-
-**STEP 5: Recompile to Verify**
-
-```bash
-al-compile
-```
-
-**STEP 6: Iterate**
-
-Repeat until clean or only manual issues remain
-
-### Manual AL Compiler (Advanced)
-
-**Only use manual compilation if al-compile is not available.**
-
-See detailed manual compilation instructions at bottom of this file if needed.
+1. **Run:** `al-compile` → outputs to `.dev/compile-errors.log`
+2. **Parse:** Extract diagnostics from error log (JSON format below)
+3. **Fix:** Apply auto-fixes (see patterns below)
+4. **Recompile:** Verify fixes worked
+5. **Iterate:** Repeat until clean or only manual issues remain
 
 ### Error Log Format
 
@@ -111,21 +79,6 @@ Error log is JSON with diagnostics:
 ```
 
 Parse this JSON to extract file locations and error codes for automated fixing.
-
-### Prerequisites
-
-**Before compiling:**
-- Ensure `app.json` exists in project root
-- Ensure `.alpackages/` directory exists with dependencies
-- Download symbols if needed:
-  - Via VS Code: `AL: Download Symbols` command
-  - Or ensure packages are in `.alpackages/`
-
-**If compilation fails completely:**
-- Verify AL compiler is in PATH: `which AL`
-- Check AL version: `AL version`
-- Ensure project has valid `app.json`
-- Check that dependencies are downloaded to `.alpackages/`
 
 ## Code Analyzers
 
@@ -632,23 +585,35 @@ Stop fixing when:
 - Documentation warnings may be critical for maintainability
 - Code quality info may reveal technical debt
 
-## Decision: Iterate to Developer?
+## Iteration Decision
 
-**After auto-fixing, evaluate remaining issues:**
+### ⬆️ ITERATE back to al-developer if ANY of these are true:
 
-### If LARGE/COMPLEX issues remain:
-→ **ITERATE BACK to al-developer** with specific issue list
-→ Examples: Type mismatches, logic errors, missing declarations, breaking changes
-→ Threshold: 3+ complex errors OR any error requiring business logic changes
+- [ ] **3+ complex compilation errors** (type mismatches, undeclared identifiers, wrong signatures)
+- [ ] **Logic errors in code** (errors reveal incorrect implementation, not just syntax)
+- [ ] **Breaking changes detected** (API modifications, removed fields/methods)
+- [ ] **Auto-fix caused new errors** (revert and escalate)
 
-### If SMALL/TRIVIAL issues remain:
-→ Document in diagnostics report
-→ Developer can fix quickly or manual review
-→ Examples: 1-2 typos, simple missing semicolons
+**Action:** Return error list to al-developer with file:line references and suggested fixes.
 
-### If NO errors (only warnings):
-→ Proceed to testing
-→ Warnings are acceptable
+### ➡️ CONTINUE to test-engineer if ALL of these are true:
+
+- [ ] **0 compilation errors** (after auto-fixes)
+- [ ] **Only warnings/info remain** (document in report for user review)
+- [ ] **All auto-fixable issues resolved** (spacing, parentheses, docs)
+- [ ] **≤2 trivial errors** (typos, simple fixes that were documented)
+
+**Action:** Proceed to test-engineer. Warnings are acceptable.
+
+### Iteration Flow
+
+```
+diagnostics-fixer compiles
+    ↓
+Complex errors (3+)? → ITERATE to al-developer → re-run diagnostics
+    ↓
+Clean/trivial only? → CONTINUE to test-engineer
+```
 
 ## Handling Unexpected Errors
 

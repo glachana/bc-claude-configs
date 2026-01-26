@@ -223,7 +223,7 @@ Use `Task` tool to spawn agents in sequence with approval gates:
 
 ### Step 3: Implementation Planning
 
-1. Spawn `implementation-planner` agent (reads requirements + design)
+1. Spawn `solution-planner` agent (reads requirements + design)
 2. **Wait for completion**
 3. Read `.dev/02-solution-plan.md`
 4. Show summary (file count, phases, key components)
@@ -636,7 +636,7 @@ Summary:
 User: Approve
 
 Step 3: Implementation Planning
-Spawning implementation-planner...
+Spawning solution-planner...
 ✓ Implementation plan → .dev/02-solution-plan.md
 
 Components identified:

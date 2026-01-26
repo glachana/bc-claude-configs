@@ -13,16 +13,40 @@ Comprehensive code review of implemented AL code against standards, best practic
 
 Identify code quality issues, standard violations, potential bugs, and improvement opportunities.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| `.dev/02-solution-plan.md` | **Yes** | Design to verify against |
+| `.dev/01-requirements.md` | No | Requirements for compliance check |
+| AL source files | **Yes** | Code to review |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/03-code-review.md` | **Primary** - Review findings and recommendations |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## Workflow
 
 1. **Read implementation plan** - Load `.dev/02-solution-plan.md` for context
 2. **Find implemented files** - Use Glob to locate all AL files
 3. **Review each file** - Check against standards and best practices
 4. **Categorize findings** - Critical, High, Medium, Low
-5. **Write report** - Create `.dev/04-code-review.md`
+5. **Write report** - Create `.dev/03-code-review.md`
 6. **Update log** - Append to `.dev/session-log.md`
 
-**Tools Available:** Read, Glob, Grep, Write only. Do NOT use Bash - write timestamps as plain text.
+## Tool Usage
+
+| Tool | Purpose |
+|------|---------|
+| **Read** | Read implementation plan, AL source files |
+| **Glob** | Find all AL files in project |
+| **Grep** | Search for patterns, find DRY violations |
+| **Write** | Create `.dev/03-code-review.md`, update session log |
+
+**Note:** Write timestamps as plain text. No shell commands available.
 
 ## Review Criteria
 
@@ -74,7 +98,7 @@ Identify code quality issues, standard violations, potential bugs, and improveme
 - Error messages are user-friendly
 - Logic is correct
 
-## Output Format: `.dev/04-code-review.md`
+## Output Format: `.dev/03-code-review.md`
 
 ```markdown
 # Code Review Report
@@ -391,25 +415,35 @@ Checking against `.dev/02-design.md`:
 - High: 0
 - Medium: 1 (ToolTips)
 
-## Next Steps
+## Iteration Decision
 
-### Decision: Iterate to Developer?
+### ⬆️ ITERATE back to al-developer if ANY of these are true:
 
-**If Critical or High Priority issues found:**
-→ **ITERATE BACK to al-developer** to fix issues
-→ After fixes, re-run code-reviewer to verify
-→ Continue iteration until only Medium/Low issues remain
+- [ ] **Critical severity issues found** (security, crashes, data corruption)
+- [ ] **High severity issues > 2** (DRY violations, SOLID violations, missing error handling)
+- [ ] **Logic/architectural issues** (wrong approach, incorrect implementation of requirements)
+- [ ] **Breaking API changes** (without user approval)
 
-**If only Medium/Low Priority issues:**
-→ Proceed to diagnostics-fixer (will handle CodeCop warnings)
-→ Developer can address Medium/Low issues after testing
+**Action:** Return issue list to al-developer with specific file:line references and fix instructions.
 
-### Recommended Flow
+### ➡️ CONTINUE to diagnostics-fixer if ALL of these are true:
 
-1. **Critical/High issues found:** Spawn al-developer with fix instructions
-2. **After developer fixes:** Re-run code-reviewer
-3. **Only Medium/Low remain:** Proceed to diagnostics-fixer
-4. **All clean or acceptable:** Proceed to testing
+- [ ] **No Critical issues**
+- [ ] **High issues ≤ 2** (or all are edge cases/minor)
+- [ ] **Only Medium/Low severity** (documentation, naming, style)
+- [ ] **Requirements correctly implemented**
+
+**Action:** Proceed to diagnostics-fixer for CodeCop and compiler fixes.
+
+### Iteration Flow
+
+```
+code-reviewer finds issues
+    ↓
+Critical/High? → ITERATE to al-developer → re-run code-reviewer
+    ↓
+Only Medium/Low? → CONTINUE to diagnostics-fixer
+```
 
 ---
 
@@ -425,7 +459,7 @@ Overall assessment determines next step:
 
 Return ONLY:
 ```
-Code review complete → .dev/04-code-review.md
+Code review complete → .dev/03-code-review.md
 
 Summary:
 - Overall assessment: [Grade]
@@ -451,7 +485,7 @@ Append to `.dev/session-log.md`:
 - Found Y critical issues, Z high priority issues
 - Requirements compliance: A/B met
 - Overall assessment: [Grade]
-- Output: .dev/04-code-review.md
+- Output: .dev/03-code-review.md
 - Status: ✓ Complete
 ```
 

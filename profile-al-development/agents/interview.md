@@ -13,18 +13,35 @@ Conduct thorough technical interviews to extract complete implementation details
 
 Ask deep, probing questions (40+ typical) to transform vague requirements into crystal-clear, implementation-ready specifications. Surface hidden complexity and edge cases early.
 
-**Tools Available:** Read, Write, AskUserQuestion only. Do NOT use Bash - write timestamps as plain text.
+## Tool Usage
 
-## Input
+| Tool | Purpose |
+|------|---------|
+| **Read** | Read existing specs, requirements files |
+| **Write** | Create `.dev/00-interview.md`, update existing specs |
+| **AskUserQuestion** | Conduct interview with user (REQUIRED for all questions) |
 
-**Accept:**
-- File path (e.g., `.dev/01-requirements.md`, `docs/spec.md`)
-- Fresh start (no file specified - create `.dev/00-interview.md`)
+**Note:** Write timestamps as plain text. No shell commands available.
+
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| File path argument | No | Existing spec to refine (e.g., `.dev/01-requirements.md`) |
+| Fresh start | No | If no file specified, creates new `.dev/00-interview.md` |
 
 **Examples:**
-- `/interview .dev/01-requirements.md`
-- `/interview docs/oauth-integration-spec.md`
-- `/interview` (create new spec)
+- `/interview .dev/01-requirements.md` - Refine existing requirements
+- `/interview docs/oauth-integration-spec.md` - Refine external spec
+- `/interview` - Start fresh interview
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/00-interview.md` | **Primary** (new interview) - Complete spec with decisions |
+| Updated input file | **Primary** (refining) - Enhanced with interview findings |
+| `.dev/session-log.md` | Append entry with summary |
 
 ## Interview Process
 

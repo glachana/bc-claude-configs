@@ -13,6 +13,20 @@ Consult BC Code Intelligence specialists for expert domain advice.
 
 Get expert BC/AL advice from specialized BC intelligence agents and document findings.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| User question | **Yes** | BC/AL question or problem to solve |
+| `.dev/session-log.md` | No | For appending consultation entry |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/expert-[topic].md` | **Primary** - Consultation results with recommendations |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## When to Use
 
 - Complex BC patterns (posting routines, integration)

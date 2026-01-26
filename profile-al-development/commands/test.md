@@ -52,8 +52,8 @@ Runs testing agents in sequence with task tracking:
 
 ## Output
 
-- `.dev/06-test-plan.md`
-- `.dev/07-test-review.md`
+- `.dev/05-test-plan.md`
+- `.dev/06-test-review.md`
 - Test codeunits (in src/tests/)
 
 ## When to Use

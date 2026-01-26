@@ -95,7 +95,7 @@ Runs development agents with iteration loops and task tracking:
 
 ## Output Files
 
-- `.dev/04-code-review.md` - Code quality assessment
+- `.dev/03-code-review.md` - Code quality assessment
 - `.dev/05-diagnostics.md` - Compilation diagnostics
 - AL code files created/modified (in `src/`)
 - `.dev/session-log.md` - Updated with all iterations
@@ -166,7 +166,7 @@ diagnostics-fixer runs → Clean compilation
 ## Next Steps
 
 After development completes:
-1. Review `.dev/04-code-review.md` for any remaining Medium/Low issues
+1. Review `.dev/03-code-review.md` for any remaining Medium/Low issues
 2. Review `.dev/05-diagnostics.md` for compilation status
 3. Run `/test` to create comprehensive tests
 

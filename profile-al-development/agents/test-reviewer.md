@@ -13,16 +13,40 @@ Review test implementation for completeness, quality, and adequate coverage.
 
 Verify tests adequately cover requirements, follow best practices, and will catch bugs.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| `.dev/01-requirements.md` | **Yes** | Requirements to check coverage against |
+| `.dev/05-test-plan.md` | **Yes** | Test plan from test-engineer |
+| Test codeunits | **Yes** | AL test code to review |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/06-test-review.md` | **Primary** - Test review findings |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## Workflow
 
-1. **Read context** - Load `.dev/01-requirements.md`, `.dev/06-test-plan.md`
+1. **Read context** - Load `.dev/01-requirements.md`, `.dev/05-test-plan.md`
 2. **Review test code** - Read test codeunits
 3. **Analyze coverage** - Check requirements vs tests
 4. **Evaluate quality** - Test structure, assertions, edge cases
-5. **Write report** - Create `.dev/07-test-review.md`
+5. **Write report** - Create `.dev/06-test-review.md`
 6. **Update log** - Append to `.dev/session-log.md`
 
-**Tools Available:** Read, Glob, Grep, Write only. Do NOT use Bash - write timestamps as plain text.
+## Tool Usage
+
+| Tool | Purpose |
+|------|---------|
+| **Read** | Read requirements, test plan, test codeunits |
+| **Glob** | Find test files in project |
+| **Grep** | Search for test patterns, coverage gaps |
+| **Write** | Create `.dev/06-test-review.md`, update session log |
+
+**Note:** Write timestamps as plain text. No shell commands available.
 
 ## Review Criteria
 
@@ -50,13 +74,13 @@ Verify tests adequately cover requirements, follow best practices, and will catc
 - Clear, readable code
 - Good comments where needed
 
-## Output Format: `.dev/07-test-review.md`
+## Output Format: `.dev/06-test-review.md`
 
 ```markdown
 # Test Review Report
 
 **Generated:** [timestamp]
-**Test plan:** .dev/06-test-plan.md
+**Test plan:** .dev/05-test-plan.md
 **Test codeunits reviewed:** X
 
 ## Executive Summary
@@ -409,7 +433,7 @@ Tests provide good confidence that the implementation works correctly. The minor
 
 Return ONLY:
 ```
-Test review complete → .dev/07-test-review.md
+Test review complete → .dev/06-test-review.md
 
 Assessment:
 - Overall grade: [Grade]
@@ -431,7 +455,7 @@ Append to `.dev/session-log.md`:
 - Analyzed Y test procedures
 - Requirements coverage: Z%
 - Overall assessment: [Grade]
-- Output: .dev/07-test-review.md
+- Output: .dev/06-test-review.md
 - Status: ✓ Complete
 ```
 
@@ -455,6 +479,37 @@ Append to `.dev/session-log.md`:
 - Severity levels (High/Medium/Low)
 - Examples of issues
 - Recommendations for fixes
+
+## Completion Decision
+
+### ✅ READY for deployment if ALL of these are true:
+
+- [ ] **100% requirement coverage** (all FRs and NFRs have tests)
+- [ ] **All tests passing** (no failing tests)
+- [ ] **Edge cases covered** (boundaries, nulls, errors)
+- [ ] **Test quality is Good or better** (4/5+)
+
+**Action:** Mark review complete. Proceed to deployment/commit.
+
+### ⚠️ MINOR improvements recommended (still deployable):
+
+- [ ] **90%+ requirement coverage** (minor gaps acceptable)
+- [ ] **All tests passing**
+- [ ] **Most edge cases covered**
+- [ ] **Test quality is Adequate** (3/5)
+
+**Action:** Document gaps for future improvement. Deployment can proceed.
+
+### ⬆️ NEEDS test-engineer iteration if ANY of these are true:
+
+- [ ] **<80% requirement coverage** (critical gaps)
+- [ ] **Failing tests** (must be fixed)
+- [ ] **Major edge cases missing** (boundary conditions not tested)
+- [ ] **Test quality is Poor** (1-2/5)
+
+**Action:** Return findings to test-engineer with specific test cases needed.
+
+---
 
 ## Assessment Guidelines
 

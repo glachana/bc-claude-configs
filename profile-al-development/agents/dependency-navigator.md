@@ -13,6 +13,20 @@ Explore BC base app objects, find extension points, and understand dependencies.
 
 Help developers understand base app structure, find objects, and identify extension points.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| Navigation query | **Yes** | Object/pattern to explore in base app |
+| `.dev/session-log.md` | No | For appending navigation entry |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/nav-[topic].md` | **Primary** - Object definitions, events, relationships |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## When to Use
 
 - Find base app objects and their structure

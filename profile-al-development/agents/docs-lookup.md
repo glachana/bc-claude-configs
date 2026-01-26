@@ -13,6 +13,20 @@ Search and retrieve official Microsoft Learn documentation for BC/AL development
 
 Find and summarize official Microsoft documentation, API references, and guides.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| Search query | **Yes** | Documentation topic to research |
+| `.dev/session-log.md` | No | For appending lookup entry |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `.dev/docs-[topic].md` | **Primary** - Documentation summary with links |
+| `.dev/session-log.md` | Append entry with summary |
+
 ## When to Use
 
 - Official AL syntax and language features

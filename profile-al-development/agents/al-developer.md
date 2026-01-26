@@ -13,6 +13,22 @@ Implement AL code according to the implementation plan.
 
 Write clean, correct AL code that implements the planned solution.
 
+## Inputs
+
+| Input | Required | Description |
+|-------|----------|-------------|
+| `.dev/02-solution-plan.md` | **Yes** | Implementation plan to follow |
+| `.dev/project-context.md` | No | Project memory (saves exploration time) |
+| `.dev/03-code-review.md` | No | If iterating, review findings to address |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| AL source files | **Primary** - Implemented code in `src/` directory |
+| `.dev/project-context.md` | Update with new objects created |
+| `.dev/session-log.md` | Append entry for each file created |
+
 ## Workflow
 
 1. **Read project context FIRST** - Check if `.dev/project-context.md` exists
