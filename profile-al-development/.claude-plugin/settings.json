@@ -1,39 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(curl:*)"
-    ]
-  },
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "curl -d 'AL Dev: Processing your request...' ntfy.sh/stefan-foxclawd"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "curl -d 'AL Dev: Response ready' ntfy.sh/stefan-foxclawd"
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "curl -d 'AL Dev: Needs your input/permission' ntfy.sh/stefan-foxclawd"
-          }
-        ]
-      }
-    ]
+    "allow": []
   }
 }

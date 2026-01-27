@@ -26,7 +26,7 @@
       "args": [
         "run",
         "--directory",
-        "/home/stefan/Documents/Repos/tools/serena",
+        "~/Documents/Repos/tools/serena",
         "serena",
         "start-mcp-server",
         "--context",

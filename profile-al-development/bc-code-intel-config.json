@@ -5,7 +5,7 @@
       "type": "local",
       "priority": 80,
       "source": {
-        "path": "/home/stefan/claude-configs/profile-al-development/bc-code-intel-knowledge"
+        "path": "~/claude-configs/profile-al-development/bc-code-intel-knowledge"
       },
       "enabled": true
     }

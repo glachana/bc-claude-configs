@@ -26,6 +26,16 @@ claude-configs/
 └── README.md (this file)
 ```
 
+## Quick Start Configuration
+
+Before using these plugins:
+
+1. **Update external tool paths (optional):**
+   - In `profile-al-development/.mcp.json`, update the path to the Serena tool if you're using it
+   - Or remove the serena MCP server configuration if not applicable
+
+All other paths use `~` which expands to your home directory automatically.
+
 ## Setup Instructions
 
 ### Initial Setup (First Computer)
@@ -58,7 +68,7 @@ In each project where you want to use these plugins, create or edit `.claude/set
     "local": {
       "source": {
         "source": "directory",
-        "path": "/home/stefan/claude-configs"
+        "path": "~/claude-configs"
       }
     }
   },
@@ -68,7 +78,7 @@ In each project where you want to use these plugins, create or edit `.claude/set
 }
 ```
 
-**Note:** Adjust the path if your username is different from `stefan`.
+**Note:** The `~` expands to your home directory automatically.
 
 #### Compose Multiple Profiles
 
@@ -79,7 +89,7 @@ As you add more profiles, you can combine them in a single project:
     "my-configs": {
       "source": {
         "source": "directory",
-        "path": "/home/stefan/claude-configs"
+        "path": "~/claude-configs"
       }
     }
   },
