@@ -19,22 +19,6 @@
       "env": {
         "BC_CODE_INTEL_CONFIG": "~/claude-configs/profile-al-development/bc-code-intel-config.json"
       }
-    },
-    "serena": {
-      "type": "stdio",
-      "command": "uv",
-      "args": [
-        "run",
-        "--directory",
-        "~/Documents/Repos/tools/serena",
-        "serena",
-        "start-mcp-server",
-        "--context",
-        "ide-assistant",
-        "--project",
-        "\"$(pwd)\""
-      ],
-      "env": {}
     }
   }
 }

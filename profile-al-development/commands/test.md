@@ -1,295 +1,330 @@
 ---
-description: Run/analyze existing tests or validate test coverage (v2.18+ with bc-test support)
-allowed-tools: ["Task", "TaskCreate", "TaskUpdate", "TaskList", "Read", "Bash"]
+description: Develop comprehensive test suite with 4 parallel test engineers
+allowed-tools: ["Task", "Read", "Glob", "Grep", "Bash", "AskUserQuestion"]
 ---
 
-# Testing Phase
 
-## IMPORTANT CHANGE in v2.18
+**Develop comprehensive test suite using parallel test engineering teams.**
 
-**Old behavior (v2.17):** Create tests for existing code
-**New behavior (v2.18):** Tests created during TDD (in /develop). This command validates coverage or runs existing tests.
+---
+
+## Purpose
+
+Create complete test coverage by spawning 4 specialized test engineer teammates:
+- Unit tests (individual functions/methods)
+- Integration tests (cross-object interactions)
+- Scenario tests (end-to-end workflows)
+- Edge case tests (boundaries, errors, negatives)
+
+---
 
 ## Usage
 
-```
+```bash
 /test
 ```
 
-## What This Command Does (v2.18+)
+**Prerequisites:**
+- Implementation must be complete (AL code exists)
+- Optionally: `.dev/02-solution-plan.md` for context
 
-### If TDD Workflow Was Used (tests exist)
+---
 
-1. **Validate test coverage** against `.dev/05-test-specification.md`
-2. **Run test-reviewer** to verify:
-   - All test specifications were implemented
-   - Test quality is high
-   - Coverage is comprehensive
-3. **Output:** `.dev/06-test-review.md`
+## How This Command Works (v3.0)
 
-### If Tests Don't Exist (Traditional Workflow)
+**Your Role:** Engineering Manager
+**Teammates:** 4 test engineer specialists (parallel work)
+**You:** Partition test scenarios, manage bc-test execution, iterate on failures, present passing suite
 
-**Error message:**
-```
-❌ No tests found and no test specification exists.
+### ❌ DON'T
+- Write tests yourself
+- Accept failing tests
+- Skip edge cases or error scenarios
 
-In v2.18+, tests are created during /develop using TDD workflow.
+### ✅ DO
+- Spawn 4 test engineers for parallel development
+- Assign clear ID ranges to avoid conflicts
+- Run bc-test and manage iteration on failures
+- Present only when ALL tests pass
 
-Options:
-1. Run /plan to create test specification
-2. Run /develop with test specification for TDD implementation
-3. (Not recommended) Create tests after-the-fact
+---
 
-For TDD workflow:
-  /plan "your feature" → /develop
-```
+## Implementation Steps
 
-## Step 0: Check Test Status
-
-```
-# Check for test specification
-Read .dev/05-test-specification.md
-
-# Check for test codeunits
-Glob pattern: "src/Tests/**/*.al" OR "**/*Test*.al"
-
-# Check for TDD log
-Read .dev/03-tdd-log.md
-```
-
-### Scenarios
-
-**Scenario A: TDD workflow completed (recommended)**
-- Test specification exists: `.dev/05-test-specification.md`
-- Tests exist: `src/Tests/*.al`
-- TDD log exists: `.dev/03-tdd-log.md`
-- **Action:** Validate coverage with test-reviewer
-
-**Scenario B: Tests exist, no specification**
-- Tests exist but no `.dev/05-test-specification.md`
-- **Action:** Review test quality only (cannot validate against spec)
-
-**Scenario C: No tests exist**
-- No test codeunits found
-- **Action:** Guide user to use TDD workflow or create tests first
-
-## Step 0: Check/Create Tasks
-
-**Check for existing tasks:**
+### Step 1: Read Implementation (2-3 min)
 
 ```
-TaskList → Check if Test Validation task exists
-  - If exists → Continue
-  - If not exists → Create test validation task
+1. Find and read implemented AL files
+2. Understand what needs testing:
+   - Business logic to validate
+   - Data validation rules
+   - UI workflows
+   - Integration points
+3. Read .dev/02-solution-plan.md if available (for context)
 ```
 
-**Create task if needed:**
+### Step 2: Identify Test Scenarios (3-5 min)
 
 ```
-TaskCreate: "Test Validation"
-  - description: "Validate test coverage matches specification"
-  - activeForm: "Validating test coverage"
+Categorize test needs:
+
+UNIT TESTS (isolated functions):
+- Calculation methods
+- Validation logic
+- Data transformations
+- Pure functions
+
+INTEGRATION TESTS (object interactions):
+- Table ↔ Codeunit interactions
+- Event subscribers
+- Multi-object workflows
+- API integrations
+
+SCENARIO TESTS (end-to-end):
+- Complete user workflows
+- UI → Business Logic → Database
+- Real-world use cases
+
+EDGE CASES (boundaries/errors):
+- Null/empty inputs
+- Boundary values (min/max)
+- Error conditions
+- Invalid data
 ```
 
-## Workflow
-
-### Scenario A: TDD Workflow (Validate Coverage)
-
-1. **TaskUpdate:** "Test Validation" → status: "in_progress"
-2. **Read test specification:** `.dev/05-test-specification.md`
-3. **Find test codeunits:** Glob for test files
-4. **(Optional) Execute tests:**
-   ```bash
-   al-compile
-   bc-publish
-   bc-test -o .dev/test-execution-results.txt
-   # Note: Auto-detects test codeunit range from app.json
-
-   # Alternative: Specify explicitly
-   # bc-test 50200 50201 -o .dev/test-execution-results.txt
-   # bc-test 50200-50210 -o .dev/test-execution-results.txt
-
-   # Focus on failures only
-   # bc-test --failures-only
-
-   # Export as JSON for CI/CD
-   # bc-test -o results.json -f json
-   ```
-5. **Spawn test-reviewer** with instructions:
-   - Read test specification
-   - Read implemented tests
-   - Optionally run tests to verify they pass
-   - Verify all specs were implemented
-   - Check test quality
-   - Report coverage percentage
-6. **TaskUpdate:** "Test Validation" → status: "completed"
-7. **Show summary** of `.dev/06-test-review.md`
-
-### Scenario B: No Specification (Quality Review Only)
-
-1. **TaskUpdate:** "Test Validation" → status: "in_progress"
-2. **Find test codeunits:** Glob for test files
-3. **Spawn test-reviewer** with instructions:
-   - Review test quality
-   - Cannot validate against specification (doesn't exist)
-   - Report on test patterns and quality
-4. **TaskUpdate:** "Test Validation" → status: "completed"
-5. **Show summary**
-
-### Scenario C: No Tests (Error)
+### Step 3: Assign Object ID Ranges (1 min)
 
 ```
-❌ No tests found.
+Partition test codeunit IDs to avoid conflicts:
 
-Detected workflow: [Traditional / Unknown]
+- Unit tests: 50100-50199
+- Integration tests: 50200-50299
+- Scenario tests: 50300-50399
+- Edge case tests: 50400-50499
 
-In v2.18+, tests are created during /develop via TDD:
-
-Recommended workflow:
-1. /plan "your feature"
-   - Creates requirements, solution plan, test specification
-2. /develop
-   - Implements tests + code via TDD
-3. /test (optional)
-   - Validates coverage
-
-If you want to add tests to existing code:
-1. Manually run test-engineer agent to create test specification
-2. Run al-developer with TDD workflow to implement tests
-3. Or manually write tests (not recommended)
-
-TDD workflow ensures tests are correct (RED phase proves test can fail).
-Adding tests after code doesn't provide this confidence.
+Adjust ranges based on project's available IDs.
 ```
 
-## Output
-
-**TDD Workflow:**
-- `.dev/06-test-review.md` - Coverage validation report
-- Shows: specs implemented, coverage %, test quality
-
-**Traditional Workflow:**
-- `.dev/06-test-review.md` - Test quality report only
-
-## When to Use
-
-### Use /test when:
-- **After TDD development** - Validate final coverage
-- **Testing existing tests** - Want quality review of test code
-- **Debugging test failures** - Analyze why tests are failing
-
-### Don't use /test when:
-- **No tests exist and no specification** - Use /plan then /develop instead
-- **Want to create tests** - Tests are created in /develop (TDD workflow)
-
-## Example Sessions
-
-### Example 1: After TDD Workflow (Success)
+### Step 4: Spawn Test Engineering Team (10-30 min)
 
 ```
-User: /test
+Create agent team with 4 test engineers:
 
-Claude: Checking test status...
-- Test specification found: .dev/05-test-specification.md
-- Test codeunits found: 3 files (Cod50200, Cod50201, Cod50202)
-- TDD log found: .dev/03-tdd-log.md
+"Unit Test Engineer: Develop unit tests for [feature].
 
-Spawning test-reviewer to validate coverage...
+ Test codeunit ID range: 50100-50199
+ Focus: Individual methods and functions
+ - [List key methods to test from implementation]
 
-Test validation complete → .dev/06-test-review.md
+ Use AL Test Framework.
+ Each test method should verify one behavior.
+ Include assertions for expected outcomes."
 
-Summary:
-- Test specifications: 12 total
-- Implemented tests: 12 (100%)
-- Coverage: 100% of specifications
-- Test quality: Excellent
-- All tests passing: ✅
+"Integration Test Engineer: Develop integration tests for [feature].
 
-✅ Test coverage validated successfully.
+ Test codeunit ID range: 50200-50299
+ Focus: Cross-object interactions
+ - [List integration points from implementation]
+
+ Test event subscribers, table-codeunit flows, API integrations."
+
+"Scenario Test Engineer: Develop end-to-end scenario tests for [feature].
+
+ Test codeunit ID range: 50300-50399
+ Focus: Complete user workflows
+ - [List business scenarios from solution plan]
+
+ Simulate real user actions from UI through to database."
+
+"Edge Case Test Engineer: Develop edge case and error tests for [feature].
+
+ Test codeunit ID range: 50400-50499
+ Focus: Boundaries, nulls, errors, invalid data
+ - [List edge cases to cover]
+
+ Test error handling, validation failures, boundary conditions."
 ```
 
-### Example 2: No Tests Found (Error)
+### Step 5: Monitor Test Development (Ongoing)
 
 ```
-User: /test
+While test engineers work:
 
-Claude: Checking test status...
-- Test specification: Not found
-- Test codeunits: Not found
-- TDD log: Not found
+1. Check for ID conflicts
+   - No two engineers using same test codeunit ID
 
-❌ No tests found.
+2. Answer technical questions
+   - How to mock dependencies?
+   - Which test fixtures to use?
 
-In v2.18+, tests are created during /develop using TDD workflow.
-
-Recommended next steps:
-1. /plan "your feature" - Creates test specification
-2. /develop - Implements tests via TDD
-
-Or if you already have production code and want to add tests:
-- You can manually run test-engineer to create specification
-- Then run al-developer with TDD workflow
-
-Note: TDD (tests before code) provides higher confidence than
-tests after code, because RED phase proves tests can fail.
+3. Verify test coverage alignment
+   - Are all key scenarios covered?
+   - Any gaps in coverage?
 ```
 
-### Example 3: Tests Exist, No Specification
+### Step 6: Run bc-test (2-5 min)
 
 ```
-User: /test
+When all test engineers complete:
 
-Claude: Checking test status...
-- Test specification: Not found
-- Test codeunits found: 2 files
-- TDD log: Not found
+1. Run bc-test on all test codeunits:
+   bc-test --output-file .dev/test-results.txt
 
-Warning: Tests exist but no test specification found.
-Cannot validate coverage against specification.
-Will review test quality only.
-
-Spawning test-reviewer...
-
-Test quality review complete → .dev/06-test-review.md
-
-Summary:
-- Test codeunits: 2
-- Test procedures: 8
-- Test quality: Good
-- Patterns used: [GIVEN]/[WHEN]/[THEN]
-- Mocks: Some tests use mocks
-
-Note: Without test specification, cannot verify if all
-requirements are covered. Consider creating specification
-for future development.
+2. Analyze results:
+   ✅ All passing → Step 8 (present to user)
+   ❌ Some failing → Step 7 (iterate)
 ```
 
-## Migration from v2.17 to v2.18
+### Step 7: Iterate on Failures (5-20 min per iteration)
 
-**If you have existing projects without test specifications:**
+```
+For each failing test:
 
-1. **Option A: Continue without TDD** (not recommended)
-   - Use /test as before
-   - Tests reviewed for quality only
-   - No coverage validation
+1. Identify which engineer owns it (by ID range)
 
-2. **Option B: Adopt TDD for new features** (recommended)
-   - Use /plan then /develop for new work
-   - TDD workflow creates tests + code together
-   - High confidence in test correctness
+2. Assign fix to that engineer:
+   "Unit Test Engineer, test 'ValidateCreditLimit_NegativeValue'
+    is failing with error: [error message].
+    Fix the test or the test assumption."
 
-3. **Option C: Retrofit test specifications** (optional)
-   - Manually create `.dev/05-test-specification.md` for existing code
-   - Document what existing tests should cover
-   - Use /test to validate against specification
+3. Engineer fixes test
 
-## Key Takeaway
+4. Re-run bc-test
 
-**v2.18 Changes:**
-- Tests created DURING development (TDD), not AFTER
-- /test command validates coverage, doesn't create tests
-- Test specifications drive implementation
-- Higher confidence: RED phase proves test can fail
+5. Repeat until all tests pass
+```
 
-**For new projects:** Use /plan → /develop workflow
-**For existing projects:** /test still works but only reviews quality
+**Don't present to user until all tests pass.**
+
+### Step 8: Write .dev/05-test-plan.md (3-5 min)
+
+```
+YOU write the synthesis:
+
+## Test Plan: [Feature Name]
+
+### Test Coverage Summary
+- Unit tests: [N] tests covering [methods/functions]
+- Integration tests: [N] tests covering [integrations]
+- Scenario tests: [N] tests covering [workflows]
+- Edge case tests: [N] tests covering [boundaries/errors]
+
+**Total:** [N] tests, all passing ✅
+
+### Test Codeunits Created
+- Test Codeunit 50100: "[Name]" - Unit tests
+- Test Codeunit 50200: "[Name]" - Integration tests
+- Test Codeunit 50300: "[Name]" - Scenario tests
+- Test Codeunit 50400: "[Name]" - Edge case tests
+
+### Key Test Scenarios
+[List 5-10 most important test scenarios with brief descriptions]
+
+### Test Execution
+Command: bc-test --output-file .dev/test-results.txt
+Result: All [N] tests passing ✅
+
+### Coverage Analysis
+Covered:
+- [Key functionality 1]
+- [Key functionality 2]
+- [Key functionality 3]
+
+Not covered (if applicable):
+- [Gap 1]: [Rationale for skipping]
+
+### Test Maintenance Notes
+[How to run tests, dependencies, special setup if needed]
+```
+
+### Step 9: Clean Up Team
+
+```
+Shut down all test engineers:
+"Unit test engineer, shut down"
+"Integration test engineer, shut down"
+"Scenario test engineer, shut down"
+"Edge case test engineer, shut down"
+
+Clean up team resources:
+"Clean up the team"
+```
+
+### Step 10: Present to User 🛑
+
+```
+"Test suite complete → [N] tests, all passing ✅
+
+Test coverage:
+- Unit: [N] tests (methods/functions)
+- Integration: [N] tests (object interactions)
+- Scenario: [N] tests (end-to-end workflows)
+- Edge cases: [N] tests (boundaries/errors)
+
+Test results → .dev/test-results.txt
+Test plan → .dev/05-test-plan.md
+
+All tests verified with bc-test.
+
+Ready for deployment?"
+
+Use AskUserQuestion:
+- Approve - Tests are adequate
+- Add More Tests - What scenarios should I add?
+- Review Failures - Show me which tests are problematic
+- Stop
+```
+
+---
+
+## Output Files
+
+**YOU create:**
+- `.dev/05-test-plan.md` - Synthesized test plan
+- `.dev/test-results.txt` - bc-test output
+
+**Test engineers create:**
+- Test codeunit files (one or more per engineer)
+
+---
+
+## Success Criteria
+
+✅ 4 test engineers developed tests in parallel
+✅ No ID conflicts (clear range assignments)
+✅ All test categories covered (unit, integration, scenario, edge)
+✅ bc-test executed successfully
+✅ All tests passing before presentation
+✅ .dev/05-test-plan.md documents comprehensive coverage
+
+---
+
+## Tips
+
+**Assign Specific Scenarios:**
+Don't just say "write tests" - list specific scenarios:
+- "Test ValidateCredit with negative amount"
+- "Test posting when credit limit is exactly at max"
+- "Test UI validation triggers on field change"
+
+**Use bc-test Features:**
+```bash
+# All tests
+bc-test
+
+# Specific codeunit
+bc-test --codeunit-id 50100
+
+# Output to file
+bc-test --output-file .dev/test-results.txt
+
+# Failures only
+bc-test --failures-only
+```
+
+**Iterate Until All Pass:**
+Never present failing tests. Manage iteration between engineers and test execution.
+
+---
+
+**Remember:** Spawn 4 specialized test engineers, assign clear ID ranges, run bc-test, iterate until all pass, then present.

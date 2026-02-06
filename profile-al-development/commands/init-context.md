@@ -1,8 +1,17 @@
+---
+description: Initialize project context document for faster workflows (one-time setup)
+allowed-tools: ["Task", "Read", "Write", "Glob", "Grep", "Bash", "AskUserQuestion"]
+---
+
 # Command: /init-context
 
-Initialize or update the project context document that speeds up all workflows.
+Initialize project for AL development profile and create project context document.
 
 ## Purpose
+
+**Two-part setup:**
+1. **Link profile instructions** — Ensures the AL development CLAUDE.md is loaded in this project
+2. **Create project context** — Documents project structure for faster agent workflows
 
 Creates `.dev/project-context.md` by exploring the project once and documenting:
 - Project structure
@@ -14,6 +23,49 @@ Creates `.dev/project-context.md` by exploring the project once and documenting:
 This document is then used by ALL agents to avoid redundant exploration, reducing workflow runtime by 40-60%.
 
 ## Implementation
+
+### Step 0: Link Profile Instructions
+
+The AL development profile CLAUDE.md must be available to Claude Code via `.claude/rules/`. Check if it's already linked:
+
+```bash
+# Check if profile instructions are already linked
+if [ -f .claude/rules/al-development-profile.md ]; then
+    echo "Profile instructions already linked."
+else
+    echo "Profile instructions NOT linked - needs setup."
+fi
+```
+
+**If not linked:**
+
+1. Create the rules directory:
+```bash
+mkdir -p .claude/rules
+```
+
+2. Create a symlink to the profile CLAUDE.md:
+```bash
+ln -s ~/claude-configs/profile-al-development/CLAUDE.md .claude/rules/al-development-profile.md
+```
+
+3. Verify the link works:
+```bash
+# Should show the symlink target
+ls -la .claude/rules/al-development-profile.md
+# Should show content (first line)
+head -1 .claude/rules/al-development-profile.md
+```
+
+4. Check if `.claude/rules/` is gitignored (it should be — these are local machine paths):
+```bash
+# If .gitignore doesn't cover it, inform the user
+grep -q '.claude/rules/' .gitignore 2>/dev/null || echo "Consider adding .claude/rules/ to .gitignore (symlink is machine-specific)"
+```
+
+**Tell the user:** "Profile instructions linked. Restart Claude Code session for instructions to take effect."
+
+**If already linked:** Skip to Step 1.
 
 ### Step 1: Check if Context Exists
 

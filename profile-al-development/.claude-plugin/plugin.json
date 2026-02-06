@@ -1,23 +1,22 @@
 {
   "name": "profile-al-development",
-  "description": "Full-lifecycle AL development for Business Central with Test-Driven Development (TDD) workflow. Testable architecture from day 1 with dependency injection and interfaces. Document-driven workflow with 12 specialized agents, test specifications before code, RED-GREEN-REFACTOR cycles, iterative quality loops, approval gates, MCP integration (BC Intelligence, MS Docs, AL Dependency). Supports TDD, estimation, planning, development, testing, and expert consultation.",
-  "version": "2.21.0",
+  "description": "Lead-as-Manager AL development for Business Central with agent teams. Main session acts as engineering manager, spawning specialist teammates for parallel work. Competitive solution design (2-3 architects debate approaches), parallel implementation (N developers on different modules), parallel code review (4 specialists: security, AL expert, performance, test coverage), parallel test development (4 engineers: unit, integration, scenario, edge case). Lightweight /fix workflow. MCP integration (BC Intelligence, MS Docs, AL Dependency). Commands: interview, plan, develop, fix, test, document.",
+  "version": "3.0.0",
   "author": {
     "name": "Stefan"
   },
   "agents": [
     "./agents/interview.md",
-    "./agents/requirements-engineer.md",
-    "./agents/solution-planner.md",
+    "./agents/solution-architect.md",
     "./agents/al-developer.md",
-    "./agents/code-reviewer.md",
-    "./agents/diagnostics-fixer.md",
-    "./agents/test-engineer.md",
-    "./agents/test-reviewer.md",
-    "./agents/plan-reviewer.md",
-    "./agents/docs-writer.md",
-    "./agents/bc-expert.md",
-    "./agents/docs-lookup.md",
-    "./agents/dependency-navigator.md"
+    "./agents/security-reviewer.md",
+    "./agents/al-expert-reviewer.md",
+    "./agents/performance-reviewer.md",
+    "./agents/test-coverage-reviewer.md",
+    "./agents/unit-test-engineer.md",
+    "./agents/integration-test-engineer.md",
+    "./agents/scenario-test-engineer.md",
+    "./agents/edge-case-test-engineer.md",
+    "./agents/docs-writer.md"
   ]
 }
