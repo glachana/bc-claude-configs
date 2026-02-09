@@ -1,0 +1,16 @@
+{
+    "name": "bc-claude-configs",
+    "owner": {
+        "name": "Gabriel Lachana"
+    },
+    "metadata": {
+        "description": "Reusable Claude Code plugins for Business Central AL development"
+    },
+    "plugins": [
+        {
+            "name": "profile-al-development",
+            "source": "./profile-al-development",
+            "description": "Lead-as-Manager AL development for Business Central with agent teams, specialist agents, and full lifecycle commands."
+        }
+    ]
+}
