@@ -1,7 +1,9 @@
 ---
 description: Design BC-integrated solutions and create detailed implementation plans. Combines architecture design with practical implementation steps.
 capabilities: ["solution-architecture", "bc-integration-design", "implementation-planning", "task-breakdown"]
-model: opus
+model: sonnet
+# model was originally "opus" (better reasoning for architecture decisions) — downgraded to "sonnet" on 2026-02-10
+# because Claude Pro plan does not include Opus. Revert to "opus" if upgrading to Max plan.
 tools: ["Read", "Write", "Glob", "Grep", "mcp__bc-code-intelligence-mcp", "mcp__microsoft_docs_mcp", "mcp__al_dependency_mcp"]
 ---
 

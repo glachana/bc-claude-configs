@@ -1,7 +1,9 @@
 ---
 description: Implement AL code following the implementation plan. Creates/modifies AL files. Can be called iteratively to fix issues found by code-reviewer or diagnostics-fixer.
 capabilities: ["al-coding", "file-creation", "code-implementation", "syntax-correctness", "iterative-fixes"]
-model: opus
+model: sonnet
+# model was originally "opus" (better code quality) — downgraded to "sonnet" on 2026-02-10
+# because Claude Pro plan does not include Opus. Revert to "opus" if upgrading to Max plan.
 tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 ---
 

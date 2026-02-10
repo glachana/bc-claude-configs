@@ -157,17 +157,17 @@ User Request
 
 | Agent | Model | Reason |
 |-------|-------|--------|
-| `requirements-engineer` | opus | Complex analysis |
-| `solution-planner` | opus | Architecture decisions |
-| `al-developer` | opus | Code quality critical |
-| `code-reviewer` | opus | Thorough review needed |
-| `diagnostics-fixer` | sonnet | Pattern-based fixes |
-| `test-engineer` | sonnet | Test generation |
-| `test-reviewer` | sonnet | Test analysis |
+| `solution-architect` | sonnet | Architecture decisions |
+| `al-developer` | sonnet | Code implementation |
+| `security-reviewer` | sonnet | Security analysis |
+| `al-expert-reviewer` | sonnet | AL best practices |
+| `performance-reviewer` | sonnet | Performance analysis |
+| `test-coverage-reviewer` | sonnet | Test coverage analysis |
+| `unit-test-engineer` | sonnet | Unit test generation |
+| `integration-test-engineer` | sonnet | Integration test generation |
+| `scenario-test-engineer` | sonnet | Scenario test generation |
+| `edge-case-test-engineer` | sonnet | Edge case test generation |
 | `interview` | sonnet | Question generation |
-| `bc-expert` | opus | Expert consultation |
-| `docs-lookup` | sonnet | Documentation search |
-| `dependency-navigator` | sonnet | Object exploration |
 | `docs-writer` | sonnet | Documentation generation |
 
 ## Output Files by Agent
