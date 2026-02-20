@@ -17,6 +17,31 @@ related_topics: []
 
 These are personal coding standards that must be strictly enforced across all Business Central AL development.
 
+## Language in Code
+
+**ALL code artifacts MUST be written in English only**, regardless of the conversation language:
+
+- Comments (inline and block)
+- `Label` values and all user-facing strings
+- Variable, field, procedure, and parameter names
+- Error, message, and confirmation text
+- Documentation comments (`///`)
+- `Caption`, `ToolTip`, and other property strings
+
+```al
+// ✅ CORRECT
+CustomerNotFoundErr: Label 'Customer %1 does not exist.', Comment = '%1 = Customer No.';
+// Comment in English
+
+// ❌ INCORRECT
+CustomerNotFoundErr: Label 'Le client %1 n''existe pas.';  // French label
+// Commentaire en français
+```
+
+This rule applies unconditionally — the conversation language never bleeds into source code.
+
+---
+
 ## Naming Conventions
 
 ### **PascalCase Requirement**

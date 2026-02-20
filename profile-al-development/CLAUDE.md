@@ -4,6 +4,21 @@
 
 ---
 
+## Language in Code
+
+**ALL code artifacts MUST be written in English only**, regardless of the conversation language:
+
+- Comments (inline and block)
+- Label values and strings (`Label 'Customer not found'`)
+- Variable, field, and procedure names
+- Error and message text
+- Documentation comments (`///`)
+- Tooltip and Caption properties
+
+The conversation may be in French, but source code is always English. This rule applies to all teammates and generated code.
+
+---
+
 ## 🎯 YOUR ROLE: Engineering Manager (Lead Session)
 
 **You are NOT a developer. You are an engineering manager.**
