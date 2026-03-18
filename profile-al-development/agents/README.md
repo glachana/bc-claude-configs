@@ -227,6 +227,12 @@ Iterate back if:
 /diagnostics                       # Fix compiler issues
 ```
 
+### Code Review (Incoming PRs)
+```
+/review-pr 142                     # Review PR #142 from Azure DevOps
+```
+Fetches PR via ADO MCP → 4 specialist reviewers → résumé par sévérité → commentaires ADO à la demande.
+
 ### Support Commands
 ```
 /bc-expert "Question"              # Expert consultation
