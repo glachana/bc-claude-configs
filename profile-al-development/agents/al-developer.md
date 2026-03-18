@@ -318,12 +318,22 @@ TaskCreate: "TDD REFACTOR: Validate credit limit within limit"
 ```al
 tableextension [Number] "[Name]" extends [BaseTable]
 {
+    // If ALL fields share the same DataClassification, set it here at object level
+    // and omit it on each individual field (fields inherit it automatically).
+    // Only set DataClassification on a field when it DIFFERS from the object-level value.
+    DataClassification = CustomerContent;
+
     fields
     {
         field([Number]; [FieldName]; [Type])
         {
             Caption = '[Caption]';
-            DataClassification = [Classification];
+            // ToolTip goes HERE on the table field — all pages using this field
+            // will inherit it automatically. Only override on a page when the
+            // tooltip needs to be different in that specific page context.
+            ToolTip = 'Specifies [what this field represents].';
+            // DataClassification omitted here — inherited from object level above.
+            // Add it only if this field needs a DIFFERENT classification.
 
             trigger OnValidate()
             begin
@@ -383,8 +393,10 @@ pageextension [Number] "[Name]" extends [BasePage]
                 field([FieldName]; Rec.[FieldName])
                 {
                     ApplicationArea = All;
-                    Caption = '[Caption]';
-                    ToolTip = '[Tooltip]';
+                    // ⚠️ NO ToolTip here — the ToolTip is defined on the table field
+                    // and is inherited automatically by all pages using this field.
+                    // Only add ToolTip here if this page needs a DIFFERENT tooltip
+                    // than the one defined on the table (rare exception, not the default).
                 }
             }
         }
@@ -501,9 +513,9 @@ Before marking a file complete:
 - [ ] Follows AL naming conventions
 - [ ] Has XML documentation for public procedures
 - [ ] Includes error handling
-- [ ] Has proper DataClassification
+- [ ] DataClassification set at object level (header) when all fields share the same classification — NOT repeated on each field unless a field differs
 - [ ] Uses ApplicationArea = All for fields/actions
-- [ ] Has meaningful ToolTips
+- [ ] ToolTip defined on table fields (not page fields) — page only if override needed
 
 ## Handling Missing Information
 
@@ -656,8 +668,29 @@ Don't do comprehensive testing - that's for test-engineer.
 // Missing ApplicationArea
 field(CreditLimit; Rec.CreditLimit) { }
 
-// No DataClassification
-field(50100; CreditLimit; Decimal) { }
+// DataClassification repeated on every field when already set at object level
+tableextension 50100 "Customer Ext" extends Customer
+{
+    DataClassification = CustomerContent;  // set at object level ✓
+    fields
+    {
+        field(50100; CreditLimit; Decimal)
+        {
+            DataClassification = CustomerContent;  // ❌ DUPLICATE — remove this
+        }
+        field(50101; CreditWarning; Boolean)
+        {
+            DataClassification = CustomerContent;  // ❌ DUPLICATE — remove this
+        }
+    }
+}
+
+// ToolTip on page field when it's already on the table field
+field(CreditLimit; Rec.CreditLimit)
+{
+    ApplicationArea = All;
+    ToolTip = 'Specifies the credit limit.';  // ❌ redundant if table field already has it
+}
 
 // Cryptic error messages
 Error('Err');
@@ -672,12 +705,35 @@ if Customer.Find('-') then
 field(CreditLimit; Rec.CreditLimit)
 {
     ApplicationArea = All;
+    // No ToolTip here — inherited from table field definition
 }
 
-// Proper DataClassification
-field(50100; CreditLimit; Decimal)
+// DataClassification at object level (shared by all fields)
+tableextension 50100 "Customer Ext" extends Customer
 {
-    DataClassification = CustomerContent;
+    DataClassification = CustomerContent;  // ✅ applies to ALL fields below
+
+    fields
+    {
+        field(50100; CreditLimit; Decimal)
+        {
+            Caption = 'Credit Limit';
+            ToolTip = 'Specifies the maximum credit amount allowed for this customer.';
+            // No DataClassification needed — inherited from object level
+        }
+        field(50101; CreditWarning; Boolean)
+        {
+            Caption = 'Credit Warning';
+            ToolTip = 'Specifies whether a warning is shown when the credit limit is exceeded.';
+            // No DataClassification needed — inherited from object level
+        }
+        field(50102; InternalAuditNote; Text[250])
+        {
+            Caption = 'Internal Audit Note';
+            ToolTip = 'Specifies an internal note for audit purposes.';
+            DataClassification = AccountData;  // ✅ DIFFERENT from object level — override justified
+        }
+    }
 }
 
 // Clear error messages

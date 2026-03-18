@@ -30,6 +30,67 @@ Review AL code for adherence to AL/BC best practices, naming conventions, and de
 - Record variable scoping
 - Trigger usage (not empty triggers)
 
+#### ToolTip Placement Rule
+- ToolTip MUST be defined on the **table field** (or table extension field), not on the page field
+- A page field should have ToolTip **only** if it intentionally overrides the table field's ToolTip
+- Flag any page field with a ToolTip that duplicates the table field's ToolTip as redundant
+
+```al
+// ❌ Bad — ToolTip on page field when table field already defines it
+field(CreditLimit; Rec.CreditLimit)
+{
+    ApplicationArea = All;
+    ToolTip = 'Specifies the credit limit.';  // remove if table field has same tooltip
+}
+
+// ✅ Good — ToolTip on table field, page field inherits automatically
+// Table:
+field(50100; CreditLimit; Decimal)
+{
+    ToolTip = 'Specifies the credit limit.';
+}
+// Page:
+field(CreditLimit; Rec.CreditLimit)
+{
+    ApplicationArea = All;
+    // No ToolTip — inherited from table
+}
+```
+
+#### DataClassification Duplication Rule
+- If `DataClassification` is set at **object level** (object header or properties), do NOT repeat it on individual fields — they inherit it natively
+- Only add `DataClassification` on a field when it **differs** from the object-level value
+- Flag any field-level DataClassification that matches the object-level value as a duplicate
+
+```al
+// ❌ Bad — DataClassification repeated needlessly on each field
+tableextension 50100 "Customer Ext" extends Customer
+{
+    DataClassification = CustomerContent;
+    fields
+    {
+        field(50100; CreditLimit; Decimal)
+        {
+            DataClassification = CustomerContent;  // duplicate — remove
+        }
+    }
+}
+
+// ✅ Good — object-level sets the default, field overrides only when different
+tableextension 50100 "Customer Ext" extends Customer
+{
+    DataClassification = CustomerContent;
+    fields
+    {
+        field(50100; CreditLimit; Decimal) { }               // inherits CustomerContent
+        field(50101; InternalNote; Text[250])
+        {
+            DataClassification = AccountData;                 // justified override
+        }
+    }
+}
+```
+
 ### 3. BC Patterns
 - Table extension vs separate table (correct choice?)
 - Event usage (appropriate integration pattern?)

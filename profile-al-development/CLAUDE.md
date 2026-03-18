@@ -419,6 +419,66 @@ begin
 end;
 ```
 
+**6. ToolTip on table field, not page field:**
+```al
+// ✅ Good — ToolTip on table/table extension field, inherited by all pages
+tableextension 50100 "Customer Ext" extends Customer
+{
+    fields
+    {
+        field(50100; "ABC Credit Limit"; Decimal)
+        {
+            ToolTip = 'Specifies the maximum credit amount for this customer.';
+        }
+    }
+}
+// Page field: no ToolTip needed — inherited automatically
+field("ABC Credit Limit"; Rec."ABC Credit Limit") { ApplicationArea = All; }
+
+// ❌ Bad — ToolTip only on page, not inherited by other pages
+tableextension 50100 "Customer Ext" extends Customer
+{
+    fields { field(50100; "ABC Credit Limit"; Decimal) { } }  // no ToolTip!
+}
+field("ABC Credit Limit"; Rec."ABC Credit Limit")
+{
+    ApplicationArea = All;
+    ToolTip = 'Specifies the maximum credit amount.';  // only this page benefits
+}
+```
+
+**7. DataClassification at object level, not repeated per field:**
+```al
+// ✅ Good — set once at object level, all fields inherit it
+tableextension 50100 "Customer Ext" extends Customer
+{
+    DataClassification = CustomerContent;  // applies to all fields
+
+    fields
+    {
+        field(50100; "ABC Credit Limit"; Decimal) { }      // inherits CustomerContent
+        field(50101; "ABC Credit Warning"; Boolean) { }    // inherits CustomerContent
+        field(50102; "ABC Audit Note"; Text[250])
+        {
+            DataClassification = AccountData;              // override — justified
+        }
+    }
+}
+
+// ❌ Bad — DataClassification duplicated on every field
+tableextension 50100 "Customer Ext" extends Customer
+{
+    DataClassification = CustomerContent;
+    fields
+    {
+        field(50100; "ABC Credit Limit"; Decimal)
+        {
+            DataClassification = CustomerContent;  // duplicate — remove
+        }
+    }
+}
+```
+
 ### Common Code Smells to Flag in Review
 
 - Missing SetLoadFields on record retrieval
@@ -427,6 +487,8 @@ end;
 - No error handling on critical operations
 - Direct database access without permissions check
 - Inefficient loops (N+1 queries)
+- ToolTip defined on page field instead of table field (or duplicated on both)
+- DataClassification repeated on fields when already set at object level
 
 **When reviewers flag these, have developers fix them before presenting to user.**
 
