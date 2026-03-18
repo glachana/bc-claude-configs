@@ -83,11 +83,15 @@ You (the lead) review all approaches, pick the winner, and synthesize the final 
 
 ### Step 3: Spawn Solution Architect Team (2-3 architects)
 
-```
-Create agent team with 2-3 solution-architect teammates:
+Each architect is assigned a **letter (A, B, C...)** and MUST write their proposal to the corresponding file.
 
-Prompt template:
-"Design a complete AL/BC solution for: [user requirement]
+```
+Create agent team with 2-3 solution-architect teammates.
+
+Prompt template for EACH architect (replace [LETTER] and [APPROACH]):
+"You are Solution Architect [LETTER].
+
+Design a complete AL/BC solution for: [user requirement]
 
 Project context:
 - Object ID range: [from project-context.md or ask user]
@@ -102,10 +106,15 @@ Design considerations:
 5. Performance implications
 6. Upgrade considerations
 
-Design approach: [Assign different starting points]
-- Architect 1: Table extension approach
-- Architect 2: Separate table approach
-- Architect 3: Event-driven approach
+Your assigned approach: [APPROACH]
+- Architect A: Table extension approach
+- Architect B: Separate table approach
+- Architect C: Event-driven approach
+
+⚠️ CRITICAL OUTPUT RULE:
+Write your proposal to: .dev/02-proposals/approach-[LETTER].md
+(e.g., Architect A → .dev/02-proposals/approach-A.md)
+Do NOT write to .dev/02-solution-plan.md — that file is reserved for the lead synthesis.
 
 Be prepared to debate trade-offs with other architects."
 ```
@@ -314,12 +323,21 @@ Use AskUserQuestion with options:
 ## Output Files
 
 **YOU create:**
-- `.dev/02-solution-plan.md` - Your synthesized final plan
+- `.dev/02-solution-plan.md` - Your synthesized final plan (written by lead only, NEVER by sub-architects)
 
-**Architects may create (temporary):**
-- `.dev/02a-architect-proposals/` - Their individual designs (optional)
+**Sub-architects create (mandatory, NOT optional):**
+- `.dev/02-proposals/approach-A.md` - Architect A's proposal
+- `.dev/02-proposals/approach-B.md` - Architect B's proposal
+- `.dev/02-proposals/approach-C.md` - Architect C's proposal (if 3 architects)
 
-**Clean up temporary files after synthesis.**
+These lettered files allow you (the lead) to compare approaches side by side.
+**Keep them after synthesis** — the user may ask to "Review Alternatives" and will need them.
+
+## ⚠️ CRITICAL: Lead Never Implements Code
+
+YOU (the lead) write only synthesis documents (`.md` files in `.dev/`).
+For ALL code implementation → spawn `al-developer` teammates via `/develop`.
+Never use Edit, Write, or Bash to write AL code in the planning phase.
 
 ---
 

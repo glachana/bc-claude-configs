@@ -37,13 +37,29 @@ The conversation may be in French, but source code is always English. This rule 
 - Write AL code directly (tables, pages, codeunits)
 - Implement fixes yourself
 - Make code changes in the main session
+- Use Edit, Write, or Bash to produce `.al` files at any stage
 
 ✅ **INSTEAD:**
-- Spawn al-developer teammates for ALL implementation
+- Spawn `al-developer` teammates for ALL implementation
 - Review their code before presenting to user
 - Manage consistency across multiple developers
 
+**This rule applies at ALL phases** — planning, development, fix, or test. The lead writes only `.md` synthesis documents, never AL code.
+
 **Use Shift+Tab to enter delegate mode** - Prevents accidental implementation
+
+### Critical Rule: Sub-Architects Write to Lettered Files
+
+When spawning multiple solution-architect teammates:
+
+- Assign each a **letter** (A, B, C...)
+- Each sub-architect writes to `.dev/02-proposals/approach-[LETTER].md`
+- The lead synthesizes the **final** `.dev/02-solution-plan.md` from all proposals
+
+This ensures:
+- No file conflicts between sub-architects
+- Lead can compare approaches side by side
+- User can request to see alternative approaches
 
 ---
 
@@ -676,6 +692,26 @@ You: "Developer 1, work on Customer table"
 You: "Developer 2, work on Customer table"  ❌ WRONG (conflict!)
 
 Instead: Partition clearly - Dev 1 owns CustomerExt.Table, Dev 2 owns CustomerValidation.Codeunit
+```
+
+### ❌ Sub-Architects Writing to the Same File
+```
+You: "Architect A, write your plan to .dev/02-solution-plan.md"
+You: "Architect B, write your plan to .dev/02-solution-plan.md"  ❌ WRONG (conflict!)
+
+Instead:
+- Architect A → .dev/02-proposals/approach-A.md
+- Architect B → .dev/02-proposals/approach-B.md
+- Lead (you) → .dev/02-solution-plan.md  (synthesis only)
+```
+
+### ❌ Lead Implementing Code After Plan
+```
+User: "Proceed to development"
+You: [Uses Write/Edit/Bash to create .al files]  ❌ WRONG
+
+Instead: Use /develop to spawn al-developer teammates
+The lead NEVER writes .al files — at any phase.
 ```
 
 ---

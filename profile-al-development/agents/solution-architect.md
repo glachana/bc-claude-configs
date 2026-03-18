@@ -27,9 +27,21 @@ Transform requirements into a complete solution plan that includes both architec
 
 | Output | Description |
 |--------|-------------|
-| `.dev/02-solution-plan.md` | **Primary** - Architecture + implementation plan |
+| `.dev/02-solution-plan.md` | **When acting as primary architect** — final plan written by lead only |
+| `.dev/02-proposals/approach-[LETTER].md` | **When acting as sub-architect A/B/C** — your individual proposal |
 | `.dev/project-context.md` | Update with new patterns/objects learned |
 | `.dev/session-log.md` | Append entry with summary of work done |
+
+### ⚠️ CRITICAL: Output File Selection
+
+**Read your spawn prompt carefully:**
+
+- If the prompt assigns you a **letter (A, B, C...)** → write to `.dev/02-proposals/approach-[LETTER].md`
+  - Example: "You are Solution Architect B" → write to `.dev/02-proposals/approach-B.md`
+  - NEVER write to `.dev/02-solution-plan.md` — that file belongs to the lead
+- If you are the **sole architect** or the **lead** → write to `.dev/02-solution-plan.md`
+
+**Reason:** The lead needs separate files to compare approaches side by side and synthesize a final plan.
 
 ## ⚠️ CRITICAL: Proportional Output
 
