@@ -2,7 +2,7 @@
 description: Performance specialist reviewer - identifies inefficient queries, N+1 patterns, and resource usage issues. Part of parallel 4-reviewer team.
 capabilities: ["performance-analysis", "query-optimization", "efficiency-review"]
 model: sonnet
-tools: ["Read", "Grep", "Glob"]
+tools: ["Read", "Grep", "Glob", "mcp__al_dependency_mcp"]
 ---
 
 
@@ -35,7 +35,16 @@ Review AL code for performance issues, inefficient queries, and resource consump
 - Missing SetAutoCalcFields optimization
 - Unnecessary CalcFields calls
 
-### 4. Algorithm Efficiency
+### 4. Base Table Keys Verification
+
+Use the AL Dependency MCP to verify that filters applied in code align with actual indexed keys:
+
+- `al_get_object_definition(Table, "Customer")` — verify available keys before evaluating filter efficiency
+- `al_search_object_members` — confirm if a field is part of a key before flagging filter patterns as inefficient
+
+A filter that looks unindexed may be perfectly efficient if the field belongs to a key — always verify before flagging.
+
+### 5. Algorithm Efficiency
 - O(n²) where O(n) is possible
 - Redundant calculations
 - Missing caching opportunities

@@ -63,17 +63,17 @@ Transform requirements into a complete solution plan that includes both architec
 
 2. **Read requirements** - Load `.dev/01-requirements.md`
 
-3. **Research phase** (only for MEDIUM/COMPLEX features):
-   - **Base app exploration:** Use `mcp__al_dependency_mcp__*` tools directly
-     - When extending base tables: Get table structure with `get_table_structure`
-     - When subscribing to events: Find events with `list_events`
-     - When unsure about base app: Search objects with `search_objects`
-   - **BC expert consultation:** Use `mcp__bc-code-intelligence-mcp__*` tools directly
+3. **Research phase:**
+   - **Base app exploration:** Use `mcp__al_dependency_mcp__*` tools — **always for any feature that touches a base object**
+     - When extending base tables: Get table structure with `al_get_object_definition` (even for SIMPLE features)
+     - When subscribing to events: Find events with `al_search_object_members`
+     - When unsure about base app: Search objects with `al_search_objects`
+   - **BC expert consultation:** Use `mcp__bc-code-intelligence-mcp__*` tools (MEDIUM/COMPLEX)
      - Architecture decisions: `ask_bc_expert` with specific question
-     - Pattern questions: `search_knowledge_base` for best practices
-   - **Official patterns:** Use `mcp__microsoft_docs_mcp__*` tools directly
-     - Search docs: `search_docs` for AL/BC documentation
-   - **For SIMPLE features:** Skip research, use project context only
+     - Pattern questions: `find_bc_knowledge` for best practices
+   - **Official patterns:** Use `mcp__microsoft_docs_mcp__*` tools (MEDIUM/COMPLEX)
+     - Search docs: `microsoft_docs_search` for AL/BC documentation
+   - **For SIMPLE features:** Skip BC expert and MS Docs — but NEVER skip base app exploration if extending a base object
 
 4. **Explore codebase** - Use Glob/Grep ONLY for what's not in project context
 
@@ -192,10 +192,12 @@ Use findings to design solution
 Feature: Add boolean field to Customer
 Complexity: SIMPLE (3 files)
 
-MCP Usage: SKIP - use project context only
-- No base app research needed (standard table extension pattern)
-- No architecture questions (obvious approach)
-- Use existing patterns from project context
+MCP Usage:
+1. mcp__al_dependency_mcp__al_get_object_definition(Table, "Customer")
+   → Verify no existing field with that name, check field numbering gaps
+   → Always mandatory even for SIMPLE extensions to base tables
+- No BC expert consultation needed (standard pattern)
+- No MS Docs lookup needed
 ```
 
 ### Example 2: Event Subscriber (MEDIUM feature)

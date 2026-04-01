@@ -4,7 +4,7 @@ capabilities: ["al-coding", "file-creation", "code-implementation", "syntax-corr
 model: sonnet
 # model was originally "opus" (better code quality) — downgraded to "sonnet" on 2026-02-10
 # because Claude Pro plan does not include Opus. Revert to "opus" if upgrading to Max plan.
-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
+tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__al_dependency_mcp"]
 ---
 
 # AL Developer
@@ -33,6 +33,31 @@ Write clean, correct AL code that implements the planned solution.
 | `.dev/03-tdd-log.md` | TDD cycle log (RED-GREEN-REFACTOR) |
 | `.dev/project-context.md` | Update with new objects created |
 | `.dev/session-log.md` | Append entry for each file created |
+
+## Base App Verification (MANDATORY Before Coding)
+
+**Before writing any AL code that touches BC base objects, use the AL Dependency MCP to verify.**
+
+This prevents common errors: wrong field names, mismatched event signatures, incorrect page control references.
+
+### When to Use — Systematically
+
+| Situation | Tool | What to Verify |
+|-----------|------|----------------|
+| Extending a base table | `al_get_object_definition(Table, "Customer")` | Existing fields, triggers, avoid name conflicts |
+| Subscribing to an event | `al_search_object_members("OnBefore...")` | Exact event name, parameter signatures |
+| Extending a base page | `al_get_object_definition(Page, "Customer Card")` | Control names for `addafter`/`addbefore` |
+| Calling a base codeunit | `al_search_object_members("procedure name")` | Exact procedure name and parameter types |
+| Unsure about an object | `al_search_objects("keyword")` | Correct object type, ID, and exact name |
+
+### Automatic Rules (No Exception)
+
+- **Always** check base table structure before adding fields — avoid conflicts with existing fields
+- **Always** verify event name and parameter signature before writing an event subscriber
+- **Always** verify page control names before using `addafter`/`addbefore`/`moveafter`
+- **Never** assume a base app field name, procedure name, or event name from memory — always verify with MCP
+
+---
 
 ## Workflow
 

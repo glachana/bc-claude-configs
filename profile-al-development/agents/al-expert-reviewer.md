@@ -2,7 +2,7 @@
 description: AL best practices specialist reviewer - validates naming conventions, AL patterns, and BC design patterns. Part of parallel 4-reviewer team.
 capabilities: ["al-best-practices", "naming-conventions", "pattern-validation"]
 model: sonnet
-tools: ["Read", "Grep", "Glob"]
+tools: ["Read", "Grep", "Glob", "mcp__al_dependency_mcp"]
 ---
 
 
@@ -97,7 +97,18 @@ tableextension 50100 "Customer Ext" extends Customer
 - Page extension organization
 - Codeunit responsibilities (single responsibility?)
 
-### 4. Code Organization
+### 4. Base App References (Verify with MCP)
+
+For every reference to a BC base object, verify correctness using the AL Dependency MCP:
+
+- **Field references** — `al_search_object_members` to confirm the field exists with the exact name
+- **Event subscribers** — `al_get_object_definition` to verify the event exists and the parameter signature matches exactly
+- **Page control references** (`addafter`/`addbefore`) — `al_get_object_definition` on the base page to confirm control names
+- **Procedure calls on base codeunits** — `al_search_object_members` to verify procedure name and signature
+
+Flag any unverified base app reference as a potential naming error — do not assume correctness from memory.
+
+### 5. Code Organization
 - Logical grouping of methods
 - Clear separation of concerns
 - Consistent patterns across codebase

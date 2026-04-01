@@ -515,6 +515,16 @@ Search official AL/BC documentation from Microsoft Learn.
 
 Navigate base app objects, find events, explore extension dependencies.
 
+**This MCP must be used proactively by all teammates** — not only when explicitly instructed. Key automatic triggers:
+
+- Extending any base table → verify existing fields with `al_get_object_definition`
+- Writing an event subscriber → verify exact event name and parameters with `al_search_object_members`
+- Extending a base page → verify control names with `al_get_object_definition`
+- Calling a base codeunit procedure → verify procedure name and signature with `al_search_object_members`
+- Any uncertainty about a base object → `al_search_objects` before assuming
+
+**Never assume base app field names, event signatures, or procedure names from memory.**
+
 ---
 
 ## 🔨 Build & Test Tools
