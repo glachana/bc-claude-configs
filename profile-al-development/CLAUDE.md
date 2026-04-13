@@ -479,6 +479,75 @@ tableextension 50100 "Customer Ext" extends Customer
 }
 ```
 
+**8. No implicit `with` — always qualify record field access:**
+```al
+// ✅ Good — explicit qualification
+tableextension 50100 "Item Ext" extends Item
+{
+    procedure CheckStock()
+    begin
+        Rec.CalcFields(Inventory);
+        if Rec.Inventory = 0 then
+            exit;
+    end;
+}
+
+// ❌ Bad — implicit with (deprecated, error-prone, forbidden)
+tableextension 50100 "Item Ext" extends Item
+{
+    procedure CheckStock()
+    begin
+        CalcFields(Inventory);   // implicit Rec. — forbidden
+        if Inventory = 0 then    // implicit Rec. — forbidden
+            exit;
+    end;
+}
+```
+
+This applies everywhere: table extensions, page extensions, codeunits with `var` record parameters. Always prefix field and method access with the explicit record variable (`Rec.`, `Customer.`, `SalesHeader.`, etc.).
+
+**9. StyleExpr — use enum syntax, not string literals:**
+```al
+// ✅ Good — enum-based syntax (runtime version 14.0+)
+field("Amount"; Rec.Amount)
+{
+    StyleExpr = AmountStyle;
+}
+
+var
+    AmountStyle: Text;
+
+local procedure SetAmountStyle(Style: PageStyle)
+begin
+    AmountStyle := Format(Style);
+end;
+
+// Direct assignment also valid:
+AmountStyle := Format(PageStyle::StrongAccent);
+
+// ❌ Bad — string literal (not type-safe, will not catch typos at compile time)
+AmountStyle := 'StrongAccent';
+AmountStyle := 'Favorable';
+```
+
+**Available `PageStyle` values** (source: Microsoft Learn):
+
+| Value | Visual effect |
+|---|---|
+| `None` | None |
+| `Standard` | Standard |
+| `StandardAccent` | Blue |
+| `Strong` | Bold |
+| `StrongAccent` | Blue + Bold |
+| `Attention` | Red + Italic |
+| `AttentionAccent` | Blue + Italic |
+| `Favorable` | Bold + Green |
+| `Unfavorable` | Bold + Italic + Red |
+| `Ambiguous` | Yellow |
+| `Subordinate` | Grey |
+
+The StyleExpr property expects a `Text` expression. Always produce that value via `Format(PageStyle::*)` — never a hardcoded string.
+
 ### Common Code Smells to Flag in Review
 
 - Missing SetLoadFields on record retrieval
@@ -489,6 +558,8 @@ tableextension 50100 "Customer Ext" extends Customer
 - Inefficient loops (N+1 queries)
 - ToolTip defined on page field instead of table field (or duplicated on both)
 - DataClassification repeated on fields when already set at object level
+- **Implicit `with` — unqualified field/method access on records** (must use explicit `Rec.` or variable prefix)
+- **StyleExpr assigned with a string literal** instead of `Format(PageStyle::*)` enum syntax
 
 **When reviewers flag these, have developers fix them before presenting to user.**
 

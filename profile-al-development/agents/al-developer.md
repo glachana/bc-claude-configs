@@ -541,6 +541,8 @@ Before marking a file complete:
 - [ ] DataClassification set at object level (header) when all fields share the same classification — NOT repeated on each field unless a field differs
 - [ ] Uses ApplicationArea = All for fields/actions
 - [ ] ToolTip defined on table fields (not page fields) — page only if override needed
+- [ ] No implicit `with` — every field/method access on a record prefixed with explicit variable (`Rec.`, `Customer.`, etc.)
+- [ ] StyleExpr values use `Format(PageStyle::*)` — never a string literal
 
 ## Handling Missing Information
 
@@ -690,6 +692,20 @@ Don't do comprehensive testing - that's for test-engineer.
 
 ### ❌ Don't:
 ```al
+// Implicit with — unqualified field/method access (forbidden)
+tableextension 50100 "Item Ext" extends Item
+{
+    procedure CheckStock()
+    begin
+        CalcFields(Inventory);   // ❌ implicit Rec. — forbidden
+        if Inventory = 0 then    // ❌ implicit Rec. — forbidden
+            exit;
+    end;
+}
+
+// StyleExpr assigned with a string literal (not type-safe)
+AmountStyle := 'StrongAccent';   // ❌ forbidden
+
 // Missing ApplicationArea
 field(CreditLimit; Rec.CreditLimit) { }
 
@@ -760,6 +776,24 @@ tableextension 50100 "Customer Ext" extends Customer
         }
     }
 }
+
+// Explicit Rec. prefix — always qualify record field access
+tableextension 50100 "Item Ext" extends Item
+{
+    procedure CheckStock()
+    begin
+        Rec.CalcFields(Inventory);   // ✅ explicit
+        if Rec.Inventory = 0 then    // ✅ explicit
+            exit;
+    end;
+}
+
+// StyleExpr via PageStyle enum (runtime 14.0+)
+AmountStyle := Format(PageStyle::StrongAccent);   // ✅
+AmountStyle := Format(PageStyle::Favorable);       // ✅
+AmountStyle := Format(PageStyle::Unfavorable);     // ✅
+// Available values: None, Standard, StandardAccent, Strong, StrongAccent,
+// Attention, AttentionAccent, Favorable, Unfavorable, Ambiguous, Subordinate
 
 // Clear error messages
 Error('Credit limit cannot be negative. Value: %1', CreditLimit);

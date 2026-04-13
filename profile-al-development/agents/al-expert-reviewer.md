@@ -155,6 +155,46 @@ begin
 end;
 ```
 
+**Implicit `with` — unqualified record field access (forbidden):**
+```al
+// ❌ Bad — implicit with, deprecated and error-prone
+tableextension 50100 "Item Ext" extends Item
+{
+    procedure CheckStock()
+    begin
+        CalcFields(Inventory);   // implicit Rec. — forbidden
+        if Inventory = 0 then    // implicit Rec. — forbidden
+            exit;
+    end;
+}
+
+// ✅ Good — always explicit
+tableextension 50100 "Item Ext" extends Item
+{
+    procedure CheckStock()
+    begin
+        Rec.CalcFields(Inventory);
+        if Rec.Inventory = 0 then
+            exit;
+    end;
+}
+```
+
+Flag every unqualified field or method access on a record as a critical issue.
+
+**StyleExpr assigned with a string literal (forbidden):**
+```al
+// ❌ Bad — string literal, not type-safe, typos not caught at compile time
+AmountStyle := 'StrongAccent';
+
+// ✅ Good — PageStyle enum (runtime 14.0+)
+AmountStyle := Format(PageStyle::StrongAccent);
+```
+
+Available `PageStyle` values: `None`, `Standard`, `StandardAccent`, `Strong`, `StrongAccent`, `Attention`, `AttentionAccent`, `Favorable`, `Unfavorable`, `Ambiguous`, `Subordinate`.
+
+Flag any `StyleExpr` assignment using a string literal as a critical issue.
+
 **Wrong Integration Pattern:**
 ```al
 // ❌ Bad - modifying base table directly
