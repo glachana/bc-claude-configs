@@ -5,7 +5,7 @@ allowed-tools: ["Task", "Read", "AskUserQuestion"]
 
 # /rationalize
 
-Survey, analyze, and refactor AL code along four axes: readability, duplication, consistency with BC standard patterns, and coupling. Produces a batch-ordered plan and implements approved batches through al-developer.
+Survey, analyze, and refactor AL code along five axes: readability, duplication, consistency with BC standard patterns, coupling, and source organization (file naming, folder structure, logic placement, procedure ownership). Produces a batch-ordered plan and implements approved batches through al-developer.
 
 Three modes are available:
 
@@ -84,7 +84,7 @@ Wait for completion. Read `.dev/rationalize/00-cartography.md` to understand the
 
 ### Phase 2 — Parallel Analysis
 
-Spawn the following three agents simultaneously:
+Spawn the following four agents simultaneously:
 
 ```
 duplication-analyzer:
@@ -116,15 +116,25 @@ Report suspects only — no refactoring proposals.
 CONSTRAINT: Do not propose an interface unless at least 3 callers would
 benefit or a mock is explicitly needed for testing. Tight coupling that is
 stable and has no observable downside is not a suspect."
+
+structure-analyzer:
+"Read .dev/rationalize/00-cartography.md. Analyze source organization:
+file naming conventions, folder structure consistency, logic placement
+(business logic in the wrong layer), and procedure ownership (procedures in
+the wrong codeunit or table). Write findings to .dev/rationalize/scratch-structure.md.
+Report suspects only — no refactoring proposals.
+
+Focus especially on Axis 5 (procedure ownership): flag any procedure whose
+natural home is a different codeunit or table than where it currently lives."
 ```
 
-Wait for ALL THREE to complete before proceeding.
+Wait for ALL FOUR to complete before proceeding.
 
 **Merge scratch files into `01-analysis.md`:**
 
-Read `.dev/rationalize/scratch-duplication.md`, `.dev/rationalize/scratch-readability.md`, and `.dev/rationalize/scratch-coupling.md`.
+Read `.dev/rationalize/scratch-duplication.md`, `.dev/rationalize/scratch-readability.md`, `.dev/rationalize/scratch-coupling.md`, and `.dev/rationalize/scratch-structure.md`.
 
-Build a cross-analyzer score for each object: count how many analyzers flagged it (1, 2, or 3). Objects flagged by 2 or more analyzers are high-priority suspects.
+Build a cross-analyzer score for each object: count how many analyzers flagged it (1 to 4). Objects flagged by 2 or more analyzers are high-priority suspects.
 
 Write the merged result to `.dev/rationalize/01-analysis.md` with this structure:
 
@@ -133,9 +143,9 @@ Write the merged result to `.dev/rationalize/01-analysis.md` with this structure
 Generated: [timestamp]
 
 ## Cross-Analyzer Summary
-| Object | Duplication | Readability | Coupling | Score |
-|--------|-------------|-------------|----------|-------|
-| [Name] | flagged     |             | flagged  | 2/3   |
+| Object | Duplication | Readability | Coupling | Structure | Score |
+|--------|-------------|-------------|----------|-----------|-------|
+| [Name] | flagged     |             | flagged  | flagged   | 3/4   |
 
 ## Suspects by Category
 ### Duplication
@@ -146,6 +156,9 @@ Generated: [timestamp]
 
 ### Coupling
 [content from scratch-coupling.md]
+
+### Structure & Organization
+[content from scratch-structure.md]
 
 ## Validated Candidates
 [filled in after Gate 1]
@@ -158,7 +171,7 @@ Summarize the top suspects (score 2/3 or 3/3 first, then 1/3) with one line per 
 Use AskUserQuestion:
 
 ```
-question: "Analysis complete. [N] objects flagged. [M] flagged by 2+ analyzers.
+question: "Analysis complete. [N] objects flagged. [M] flagged by 2+ analyzers (out of 4).
 Which candidates should be included in the refactoring plan?"
 header: "RATIONALIZE — Gate 1: Candidate Selection"
 options:
@@ -395,6 +408,7 @@ If approved, spawn `al-developer` for batch 1 using the same prompt template as 
 | `.dev/rationalize/scratch-duplication.md` | duplication-analyzer | Raw duplication findings |
 | `.dev/rationalize/scratch-readability.md` | readability-reviewer | Raw readability findings |
 | `.dev/rationalize/scratch-coupling.md` | coupling-analyzer | Raw coupling findings |
+| `.dev/rationalize/scratch-structure.md` | structure-analyzer | Raw structure & organization findings |
 | `.dev/rationalize/01-analysis.md` | This command (merged) | Consolidated suspects + validated candidates |
 | `.dev/rationalize/02-plan.md` | refactor-planner | Batch-ordered refactoring plan |
 | `.dev/rationalize/03-batch-N.md` | al-developer | Per-batch implementation log |
