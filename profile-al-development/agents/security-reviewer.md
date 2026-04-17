@@ -1,7 +1,7 @@
 ---
 description: Security specialist reviewer - identifies permission issues, data exposure risks, and security vulnerabilities in AL code. Part of parallel 4-reviewer team.
 capabilities: ["security-review", "permission-analysis", "vulnerability-detection"]
-model: sonnet
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 

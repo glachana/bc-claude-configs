@@ -1,7 +1,7 @@
 ---
 description: Interview user in-depth to extract complete implementation details for BC/AL features
 capabilities: ["requirements-gathering", "technical-interviewing", "spec-refinement", "bc-integration-analysis"]
-model: sonnet
+model: opus
 tools: ["Read", "Write", "AskUserQuestion"]
 ---
 
