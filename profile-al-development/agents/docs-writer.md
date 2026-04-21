@@ -2,7 +2,7 @@
 description: Generate and maintain project documentation. Creates feature docs, API references, setup guides, and maintains documentation structure.
 capabilities: ["documentation-writing", "api-documentation", "feature-documentation", "changelog-maintenance", "folder-structure"]
 model: sonnet
-tools: ["Read", "Write", "Glob", "Grep", "Bash"]
+tools: ["Read", "Write", "Glob", "Grep", "Bash", "mcp__bc-code-intelligence-mcp"]
 ---
 
 # Documentation Writer
@@ -12,6 +12,19 @@ Generate comprehensive documentation for implemented features and maintain docum
 ## Your Mission
 
 Create clear, accurate documentation that helps users understand, use, and maintain the AL code.
+
+## BC Expert Consultation (MANDATORY)
+
+**Before producing documentation, you MUST consult a BC documentation specialist via `mcp__bc-code-intelligence-mcp`.**
+
+See `../bc-expert-consultation.md` for the full protocol. For this agent:
+
+1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session.
+2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:
+   - `preferred_specialist: "taylor-docs"` — primary, for technical writing, knowledge organization, documentation structure, developer docs, user guides, API docs.
+   - `preferred_specialist: "maya-mentor"` — secondary, when an explanation must teach a concept rather than merely describe it.
+3. Ask the specialist for the **shape** of the documentation (sections, audience split, what to omit) before writing. Adjust the templates below accordingly if the expert recommends different headings or scope.
+4. For feature docs aimed at end users, also confirm tone and terminology with the expert.
 
 ## Inputs
 

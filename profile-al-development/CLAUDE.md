@@ -498,14 +498,60 @@ tableextension 50100 "Customer Ext" extends Customer
 
 You have access to specialized MCP tools. Use them directly for quick lookups, or share relevant findings with teammates.
 
-### BC Code Intelligence MCP (`mcp__bc-code-intelligence-mcp__*`)
+### BC Code Intelligence MCP (`mcp__bc-code-intelligence-mcp__*`) — MANDATORY FOR ALL TEAMMATES
 
-Ask BC specialists on-demand:
-- `bc_architecture_specialist` — Solution design questions
-- `bc_integration_specialist` — Base app integration
-- `bc_test_specialist` — Testing strategies
-- `bc_upgrade_specialist` — Upgrade considerations
-- `bc_performance_specialist` — Performance optimization
+**Every spawned teammate (subagent) must consult a BC specialist via this MCP before finalizing its output.** This is a non-optional quality gate for subagents, not an "on-demand" helper. See `bc-expert-consultation.md` for the full protocol and specialist-to-agent mapping.
+
+**Exception — the lead (you, the main session) is NOT bound by this mandatory rule.** As Engineering Manager, you decide when to consult a BC expert yourself versus when to delegate the consultation to a spawned teammate. Typical cases where the lead benefits from calling `ask_bc_expert` directly:
+- Quick architectural sanity checks before spawning a team (avoids wasted subagent cycles).
+- Arbitrating a disagreement between two teammates' findings.
+- Confirming a tactical decision you are about to make (e.g., picking between two architect proposals).
+
+Otherwise, rely on your teammates' mandatory consultations — they are already baked into every subagent's workflow.
+
+**Minimum required calls per agent invocation:**
+1. `mcp__bc-code-intelligence-mcp__set_workspace_info` (once per session; idempotent — retry if server responds "not yet initialized").
+2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with a concrete, work-specific question and the agent's `preferred_specialist`.
+
+**Who to ask for what — specialist roster (17 personas, backed by a BC knowledge base):**
+- `alex-architect` — Solution design, requirements analysis, technical architecture, integration strategy
+- `jordan-bridge` — System integration, event-driven architecture, API design, extensibility
+- `logan-legacy` — Code archaeology, system evolution, architecture recovery, migration planning
+- `morgan-market` — AppSource strategy, ISV business, AppSource technical validation
+- `sam-coder` — Systematic development, pattern application, code generation, optimization
+- `roger-reviewer` — Code quality, best-practice enforcement, standards compliance
+- `maya-mentor` — Concept explanation, skill building, AL pattern education
+- `eva-errors` — Error handling strategy, exception management, defensive programming
+- `dean-debug` — Performance analysis, query optimization, memory, troubleshooting
+- `seth-security` — Permission model, data access, security validation, privacy compliance
+- `quinn-tester` — Test strategy, test-case design, validation, page-scripting generation
+- `parker-pragmatic` — AI trust, proposal-based development, collaborative validation
+- `taylor-docs` — Technical writing, knowledge organization, documentation systems
+- `uma-ux` — User interface, UX, accessibility, BC page design
+- `victor-versioning` — Version migration, breaking changes, deprecation, upgrade planning
+- `lena-pipe` — CI/CD, PowerShell, AL-Go, AzDO pipelines, container builds
+- `chris-config` — MCP configuration, layered knowledge architecture, environment management
+
+**Agent → primary specialist mapping** (full mapping in `bc-expert-consultation.md`):
+
+| Agent | Primary specialist |
+|---|---|
+| `interview` | `alex-architect` |
+| `solution-architect` | `alex-architect` (+ `jordan-bridge` / `logan-legacy` / `victor-versioning` as needed) |
+| `al-developer` | `sam-coder` (+ `eva-errors`, `roger-reviewer`) |
+| `al-expert-reviewer` | `roger-reviewer` |
+| `performance-reviewer` | `dean-debug` |
+| `security-reviewer` | `seth-security` |
+| `test-coverage-reviewer` | `quinn-tester` |
+| `unit-test-engineer` | `quinn-tester` |
+| `integration-test-engineer` | `quinn-tester` (+ `jordan-bridge`) |
+| `scenario-test-engineer` | `quinn-tester` (+ `uma-ux`) |
+| `edge-case-test-engineer` | `quinn-tester` (+ `eva-errors`) |
+| `docs-writer` | `taylor-docs` |
+
+**Other useful tools on this MCP:** `find_bc_knowledge`, `get_bc_topic`, `analyze_al_code`, `list_specialists`.
+
+**Lead enforcement:** When synthesizing teammate output, verify that every deliverable references at least one `ask_bc_expert` consultation. Reject outputs that skip it without an explicit "MCP unavailable" note.
 
 ### Microsoft Docs MCP (`mcp__microsoft_docs_mcp__*`)
 

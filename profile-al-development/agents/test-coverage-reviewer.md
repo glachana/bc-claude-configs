@@ -2,7 +2,7 @@
 description: Test coverage specialist reviewer - evaluates testability design, identifies coverage gaps, and missing test scenarios. Part of parallel 4-reviewer team.
 capabilities: ["testability-analysis", "coverage-evaluation", "test-scenario-identification"]
 model: sonnet
-tools: ["Read", "Grep", "Glob"]
+tools: ["Read", "Grep", "Glob", "mcp__bc-code-intelligence-mcp"]
 ---
 
 
@@ -13,6 +13,21 @@ tools: ["Read", "Grep", "Glob"]
 ## Role
 
 Review implementation for testability, test coverage gaps, and missing test scenarios.
+
+---
+
+## BC Expert Consultation (MANDATORY)
+
+**Before emitting coverage findings, you MUST consult the BC testing specialist via `mcp__bc-code-intelligence-mcp`.**
+
+See `../bc-expert-consultation.md` for the full protocol. For this agent:
+
+1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session.
+2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:
+   - `preferred_specialist: "quinn-tester"` — primary, for test strategy, coverage gaps, validation planning.
+   - `preferred_specialist: "parker-pragmatic"` — secondary, for collaborative validation and trust-building around test quality.
+3. Ask concrete questions about the code under review (e.g., "Given this codeunit has a hard dependency on Customer repository, what test seams would a BC expert expect?").
+4. Quote the specialist's recommendations in your findings. Let them drive "missing scenario" and "testability" calls.
 
 ---
 

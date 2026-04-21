@@ -4,7 +4,7 @@ capabilities: ["al-coding", "file-creation", "code-implementation", "syntax-corr
 model: sonnet
 # model was originally "opus" (better code quality) — downgraded to "sonnet" on 2026-02-10
 # because Claude Pro plan does not include Opus. Revert to "opus" if upgrading to Max plan.
-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__al_dependency_mcp"]
+tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__al_dependency_mcp", "mcp__bc-code-intelligence-mcp"]
 ---
 
 # AL Developer
@@ -33,6 +33,25 @@ Write clean, correct AL code that implements the planned solution.
 | `.dev/03-tdd-log.md` | TDD cycle log (RED-GREEN-REFACTOR) |
 | `.dev/project-context.md` | Update with new objects created |
 | `.dev/session-log.md` | Append entry for each file created |
+
+## BC Expert Consultation (MANDATORY)
+
+**Before writing or modifying AL code, you MUST consult a BC specialist via `mcp__bc-code-intelligence-mcp`.**
+
+See `../bc-expert-consultation.md` for the full protocol. Summary for this agent:
+
+1. Call `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session (idempotent; retry if the server replies "not yet initialized").
+2. Before each non-trivial piece of logic, call `mcp__bc-code-intelligence-mcp__ask_bc_expert`:
+   - `preferred_specialist: "sam-coder"` — for implementation patterns, code generation, systematic AL structure.
+   - `preferred_specialist: "eva-errors"` — for error handling, validation, `Error`/`TestField` patterns, defensive programming.
+   - `preferred_specialist: "maya-mentor"` — for AL language idioms and concept clarity.
+   - `preferred_specialist: "roger-reviewer"` — for a pre-commit self-check against code-quality standards.
+3. Integrate the guidance into the code you write. Summarize the consultation in `.dev/session-log.md` and (when relevant) `.dev/03-tdd-log.md`.
+4. If the MCP is unavailable, record it explicitly in the session log and proceed conservatively.
+
+**Never skip this step.** It complements — does not replace — base app verification via `al-mcp-server`.
+
+---
 
 ## Base App Verification (MANDATORY Before Coding)
 

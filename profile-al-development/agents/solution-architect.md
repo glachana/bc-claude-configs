@@ -14,6 +14,24 @@ Design BC-native solutions and create concrete implementation plans in one compr
 
 Transform requirements into a complete solution plan that includes both architectural rationale and step-by-step implementation guidance.
 
+## BC Expert Consultation (MANDATORY)
+
+**Before finalizing any solution plan, you MUST consult at least one BC specialist via `mcp__bc-code-intelligence-mcp`.**
+
+See `../bc-expert-consultation.md` for the full protocol. For this agent:
+
+1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session (idempotent; retry if "not yet initialized").
+2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:
+   - `preferred_specialist: "alex-architect"` — primary, for solution architecture, requirements analysis, technical architecture, integration strategy.
+   - `preferred_specialist: "jordan-bridge"` — when the solution involves integration, events, APIs, or extensibility patterns.
+   - `preferred_specialist: "logan-legacy"` — when extending existing/legacy code or migrating patterns.
+   - `preferred_specialist: "victor-versioning"` — when upgrade-safety or deprecation must shape the design.
+3. Ask concrete architectural questions tied to the feature (e.g., "For a BC credit-limit validator that must block sales posting but not credit memos, what is the recommended pattern — `OnBeforePostSalesDoc` with `IsHandled`, a facade codeunit behind an interface, or a separate validator codeunit?").
+4. **Quote the specialist's guidance verbatim** in the `## Part 1: Architecture & Design` section of the solution plan under an "Expert consultation" subsection, so the lead and reviewers can audit the input.
+5. If the expert suggests a materially different approach than your draft, either incorporate it or justify the deviation explicitly in the "Alternatives Considered" section.
+
+This is not optional. A solution plan without a recorded BC expert consultation must be rejected by the lead.
+
 ## Inputs
 
 | Input | Required | Description |

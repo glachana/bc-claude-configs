@@ -2,7 +2,7 @@
 description: Unit test specialist - develops tests for individual functions, methods, and isolated logic. Part of parallel 4-engineer test team.
 capabilities: ["unit-testing", "test-development", "al-test-framework"]
 model: sonnet
-tools: ["Read", "Write", "Grep", "Glob"]
+tools: ["Read", "Write", "Grep", "Glob", "mcp__bc-code-intelligence-mcp"]
 ---
 
 
@@ -13,6 +13,21 @@ tools: ["Read", "Write", "Grep", "Glob"]
 ## Role
 
 Develop unit tests for individual functions, methods, and isolated logic.
+
+---
+
+## BC Expert Consultation (MANDATORY)
+
+**Before writing tests, you MUST consult the BC testing specialist via `mcp__bc-code-intelligence-mcp`.**
+
+See `../bc-expert-consultation.md` for the full protocol. For this agent:
+
+1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session.
+2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:
+   - `preferred_specialist: "quinn-tester"` — primary, for BC test design, AL Test Framework, mocking patterns.
+   - `preferred_specialist: "sam-coder"` — secondary, when the production code under test exposes testable patterns that inform test structure.
+3. Ask specific questions tied to what you are about to test (e.g., "What is the idiomatic way to unit-test a pure `CalculateCreditUtilization` function with the AL Test Framework?").
+4. Incorporate the guidance into test names, assertions, and mocking strategy.
 
 ---
 
