@@ -2,8 +2,52 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "teammateMode": "auto",
   "permissions": {
-    "allow": []
+    "allow": [
+      "Bash(al-compile*)",
+      "Bash(bc-test*)",
+      "Read(**/*.al)",
+      "Read(**/app.json)",
+      "Read(**/launch.json)",
+      "Read(.dev/**)",
+      "Edit(.dev/**)",
+      "Write(.dev/**)",
+      "mcp__plugin_profile-al-development_al-mcp-server__*",
+      "mcp__plugin_profile-al-development_microsoft_docs_mcp__*",
+      "mcp__plugin_profile-al-development_bc-code-intelligence-mcp__*"
+    ],
+    "ask": [
+      "Edit(**/app.json)",
+      "Write(**/app.json)",
+      "Edit(**/*.ruleset.json)",
+      "Edit(**/AppSourceCop.json)",
+      "Edit(**/CodeCop.ruleset.json)"
+    ],
+    "deny": [
+      "Bash(bc-publish*)",
+      "Edit(**/.bcconfig.json)",
+      "Write(**/.bcconfig.json)",
+      "Edit(**/launch.json)",
+      "Write(**/launch.json)",
+      "Bash(Sync-NAVApp*)",
+      "Bash(Uninstall-NAVApp*)",
+      "PowerShell(Sync-NAVApp*)",
+      "PowerShell(Uninstall-NAVApp*)",
+      "PowerShell(Unpublish-NAVApp*)"
+    ]
   },
-  "teammateMode": "auto"
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "AL/BC plugin: developing AL extensions for Microsoft Dynamics 365 Business Central. Source files are .al, project metadata in app.json. Build via al-compile wrapper. Tests via bc-test against local BC dev server. Synthesis docs in .dev/ directory."
+    ],
+    "allow": [
+      "$defaults",
+      "Compiling AL projects with al-compile and reading .dev/compile-errors.log is routine",
+      "Running test codeunits with bc-test against local BC dev server is routine",
+      "Reading and writing .dev/*.md synthesis documents (requirements, plans, reviews) is routine",
+      "Querying AL dependency MCP, BC Code Intelligence MCP and Microsoft Docs MCP is routine for AL/BC development"
+    ]
+  }
 }
