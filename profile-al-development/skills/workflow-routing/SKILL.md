@@ -1,3 +1,8 @@
+---
+name: workflow-routing
+description: Use at the start of any AL development task to classify request complexity (TRIVIAL/SIMPLE/MEDIUM/COMPLEX) and route to the appropriate workflow (/fix, /develop, /plan, /dev-cycle). Defines criteria, decision tree, agent selection per level, time-saving optimizations, and project-context.md priming.
+---
+
 # Workflow Routing: Smart Path Selection
 
 **Purpose:** Route requests to the appropriate workflow based on complexity. Prevents overkill for simple changes.
@@ -70,7 +75,7 @@ Analyze the user request and classify:
 9. Done
 
 **Agents used:** requirements-engineer (brief), solution-planner (lightweight), al-developer, code-reviewer
-**Planning style:** See `proportional-planning.md` - SIMPLE guidelines (100-150 lines total)
+**Planning style:** See `proportional-planning` skill - SIMPLE guidelines (100-150 lines total)
 **Phases skipped:** testing (unless critical)
 **Time saved:** 10-20 minutes vs full workflow
 
@@ -102,7 +107,7 @@ Analyze the user request and classify:
 8. Done
 
 **Agents used:** requirements-engineer (balanced), solution-planner (balanced), al-developer, code-reviewer, diagnostics-fixer
-**Planning style:** See `proportional-planning.md` - MEDIUM guidelines (200-400 lines total)
+**Planning style:** See `proportional-planning` skill - MEDIUM guidelines (200-400 lines total)
 **Phases skipped:** test-engineer (unless critical)
 **Time saved:** 10-15 minutes vs full workflow
 
@@ -144,7 +149,7 @@ Analyze the user request and classify:
 11. Done
 
 **Agents used:** All
-**Planning style:** See `proportional-planning.md` - COMPLEX guidelines (400-800 lines total)
+**Planning style:** See `proportional-planning` skill - COMPLEX guidelines (400-800 lines total)
 **Phases:** All
 **Time saved:** None, but thoroughness justified by complexity
 

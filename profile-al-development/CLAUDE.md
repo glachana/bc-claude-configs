@@ -500,7 +500,7 @@ You have access to specialized MCP tools. Use them directly for quick lookups, o
 
 ### BC Code Intelligence MCP (`mcp__bc-code-intelligence-mcp__*`) — MANDATORY FOR ALL TEAMMATES
 
-**Every spawned teammate (subagent) must consult a BC specialist via this MCP before finalizing its output.** This is a non-optional quality gate for subagents, not an "on-demand" helper. See `bc-expert-consultation.md` for the full protocol and specialist-to-agent mapping.
+**Every spawned teammate (subagent) must consult a BC specialist via this MCP before finalizing its output.** This is a non-optional quality gate for subagents, not an "on-demand" helper. See the `bc-expert-consultation` skill for the full protocol and specialist-to-agent mapping.
 
 **Exception — the lead (you, the main session) is NOT bound by this mandatory rule.** As Engineering Manager, you decide when to consult a BC expert yourself versus when to delegate the consultation to a spawned teammate. Typical cases where the lead benefits from calling `ask_bc_expert` directly:
 - Quick architectural sanity checks before spawning a team (avoids wasted subagent cycles).
@@ -532,7 +532,7 @@ Otherwise, rely on your teammates' mandatory consultations — they are already 
 - `lena-pipe` — CI/CD, PowerShell, AL-Go, AzDO pipelines, container builds
 - `chris-config` — MCP configuration, layered knowledge architecture, environment management
 
-**Agent → primary specialist mapping** (full mapping in `bc-expert-consultation.md`):
+**Agent → primary specialist mapping** (full mapping in the `bc-expert-consultation` skill):
 
 | Agent | Primary specialist |
 |---|---|
@@ -673,7 +673,7 @@ bc-publish                                    # 2. Deploy to BC
 bc-test -o .dev/test-results.txt              # 3. Run tests
 ```
 
-See `tdd-workflow.md` for full TDD RED-GREEN-REFACTOR protocol.
+See the `tdd-workflow` skill for full TDD RED-GREEN-REFACTOR protocol.
 
 ---
 

@@ -20,7 +20,7 @@ Review implementation for testability, test coverage gaps, and missing test scen
 
 **Before emitting coverage findings, you MUST consult the BC testing specialist via `mcp__bc-code-intelligence-mcp`.**
 
-See `../bc-expert-consultation.md` for the full protocol. For this agent:
+See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session.
 2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:

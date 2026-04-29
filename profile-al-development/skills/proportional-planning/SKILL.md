@@ -1,3 +1,8 @@
+---
+name: proportional-planning
+description: Use when scoping the depth of requirements/solution plan output to match feature complexity. Defines line targets and content scope for TRIVIAL/SIMPLE/MEDIUM/COMPLEX classifications, with red-flag indicators that planning is too detailed. Apply before spawning requirements-engineer or solution-planner subagents.
+---
+
 # Proportional Planning Guidelines
 
 **Core Principle:** Planning detail must match implementation complexity. Simple changes need concise plans, complex features need comprehensive documentation.

@@ -1,3 +1,8 @@
+---
+name: bc-expert-consultation
+description: Mandatory protocol for subagents to consult a BC specialist via mcp__bc-code-intelligence-mcp before finalizing any AL/BC output (developer, reviewers, test engineers, architect, interview, docs-writer). Use when a subagent is about to produce a deliverable and needs to ground its work in BC specialist guidance. Defines specialist roster, agent-to-specialist mapping, and failure-mode handling.
+---
+
 # BC Expert Consultation Protocol (MANDATORY for subagents)
 
 This document defines the BC expert consultation workflow via the `mcp__bc-code-intelligence-mcp` MCP server.

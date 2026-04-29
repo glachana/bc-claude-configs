@@ -20,7 +20,7 @@ Review AL code for security vulnerabilities, permission issues, and data exposur
 
 **Before emitting security findings, you MUST consult the BC security specialist via `mcp__bc-code-intelligence-mcp`.**
 
-See `../bc-expert-consultation.md` for the full protocol. For this agent:
+See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session.
 2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:

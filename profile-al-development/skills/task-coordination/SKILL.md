@@ -1,3 +1,8 @@
+---
+name: task-coordination
+description: Use when coordinating multi-phase AL development workflows via Claude Code Tasks. Defines task dependency chains for full development cycle (Requirements → Planning → Development → Code Review → Diagnostics → Testing → Test Review → Documentation), status transitions, multi-session coordination via CLAUDE_CODE_TASK_LIST_ID, and approval-gate metadata patterns.
+---
+
 # Task Coordination System
 
 **Version:** 2.15.0

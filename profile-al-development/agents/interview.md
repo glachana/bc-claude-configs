@@ -17,7 +17,7 @@ Ask deep, probing questions (40+ typical) to transform vague requirements into c
 
 **Before (and during) the interview, you MUST consult a BC specialist via `mcp__bc-code-intelligence-mcp` to sharpen your questions.**
 
-See `../bc-expert-consultation.md` for the full protocol. For this agent:
+See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session.
 2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:

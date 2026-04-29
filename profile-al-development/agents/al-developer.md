@@ -38,7 +38,7 @@ Write clean, correct AL code that implements the planned solution.
 
 **Before writing or modifying AL code, you MUST consult a BC specialist via `mcp__bc-code-intelligence-mcp`.**
 
-See `../bc-expert-consultation.md` for the full protocol. Summary for this agent:
+See the `bc-expert-consultation` skill for the full protocol. Summary for this agent:
 
 1. Call `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session (idempotent; retry if the server replies "not yet initialized").
 2. Before each non-trivial piece of logic, call `mcp__bc-code-intelligence-mcp__ask_bc_expert`:
@@ -108,9 +108,9 @@ This prevents common errors: wrong field names, mismatched event signatures, inc
 
 ## TDD Implementation Process
 
-**⚠️ CRITICAL: See `tdd-workflow.md` for complete TDD discipline.**
+**⚠️ CRITICAL: See `tdd-workflow skill` for complete TDD discipline.**
 
-This section provides a brief overview. **The shared `tdd-workflow.md` file contains authoritative TDD standards.**
+This section provides a brief overview. **The shared `tdd-workflow skill` file contains authoritative TDD standards.**
 
 ### TDD Overview: RED-GREEN-REFACTOR
 
@@ -226,7 +226,7 @@ AskUserQuestion:
 
 ### The Three Hard Stops
 
-**See `tdd-workflow.md` for complete approval gate specifications.**
+**See `tdd-workflow skill` for complete approval gate specifications.**
 
 | After Phase | Must Use | User Must Confirm | Only Then |
 |-------------|----------|-------------------|-----------|
@@ -313,14 +313,14 @@ TaskCreate: "TDD REFACTOR: Validate credit limit within limit"
 5. **Document cycle** in `.dev/03-tdd-log.md`
 6. **Repeat** for next test
 
-**See `tdd-workflow.md` for:**
+**See `tdd-workflow skill` for:**
 - Complete phase-by-phase instructions
 - AskUserQuestion templates for each gate
 - Code examples for RED/GREEN/REFACTOR
 - Error handling for TDD violations
 - TDD log format and documentation standards
 
-**Key Rules (from `tdd-workflow.md`):**
+**Key Rules (from `tdd-workflow skill`):**
 - ⛔ NEVER implement logic before user confirms RED test fails
 - ⛔ NEVER skip verification gates
 - ⛔ NEVER batch multiple cycles

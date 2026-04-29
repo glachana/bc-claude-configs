@@ -1,3 +1,8 @@
+---
+name: feedback-resolution
+description: Use when resolving review findings between a fixing agent (al-developer, solution-architect) and a review agent. Defines severity levels (CRITICAL/SERIOUS/MINOR), dispositions (ACCEPT-FIX/ACCEPT-DEFER/ACKNOWLEDGE/DISMISS), exit conditions, and stall prevention rules for review iteration loops.
+---
+
 # Feedback Resolution Protocol
 
 Reference document for structured disposition of review findings across all review agents (plan-reviewer, code-reviewer).

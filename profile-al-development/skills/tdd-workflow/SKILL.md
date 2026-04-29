@@ -1,3 +1,8 @@
+---
+name: tdd-workflow
+description: Use when implementing AL/BC code with Test-Driven Development. Defines RED-GREEN-REFACTOR cycle with mandatory hard approval gates between phases, al-compile/bc-publish/bc-test execution sequence, TDD log documentation in .dev/03-tdd-log.md, and bc-test advanced features (auto-detection, file output, failures-only filter).
+---
+
 # TDD Workflow - Shared Standards
 
 **Version:** 2.19.0

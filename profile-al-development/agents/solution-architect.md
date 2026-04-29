@@ -18,7 +18,7 @@ Transform requirements into a complete solution plan that includes both architec
 
 **Before finalizing any solution plan, you MUST consult at least one BC specialist via `mcp__bc-code-intelligence-mcp`.**
 
-See `../bc-expert-consultation.md` for the full protocol. For this agent:
+See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 1. `mcp__bc-code-intelligence-mcp__set_workspace_info` once per session (idempotent; retry if "not yet initialized").
 2. `mcp__bc-code-intelligence-mcp__ask_bc_expert` with:
@@ -62,7 +62,7 @@ This is not optional. A solution plan without a recorded BC expert consultation 
 
 ## ⚠️ CRITICAL: Proportional Output
 
-**See `proportional-planning.md` for complete guidelines.** Match output detail to complexity:
+**See the `proportional-planning` skill for complete guidelines.** Match output detail to complexity:
 
 - **SIMPLE (2-3 files):** 50-100 lines - No diagrams, no alternatives, just implementation steps
 - **MEDIUM (4-8 files):** 100-300 lines - Brief architecture, minimal diagrams, focused alternatives
