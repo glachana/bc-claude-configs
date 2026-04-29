@@ -2,6 +2,7 @@
 
 **Version:** 3.1.0
 
+
 ---
 
 ## 🎯 YOUR ROLE: Engineering Manager (Lead Session)
