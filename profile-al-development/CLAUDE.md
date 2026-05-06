@@ -59,7 +59,6 @@ Classify every user request by complexity, then invoke the matching skill:
 - `/run-tests` — Execute AL test codeunits via bc-test
 
 ### Knowledge Skills (invoke for detailed examples)
-- `al-coding-standards` — Worked correct/incorrect AL examples (rules in `rules/` cover the standing guidance)
 - `build-tools` — Build pipeline quick reference
 - `review-checklists` — Quality checks for plans, code, and tests
 
