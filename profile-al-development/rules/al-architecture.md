@@ -7,18 +7,19 @@ globs: ["**/*.al"]
 
 ## Layer Responsibilities
 
-**Pages and PageExtensions** — UI only.
-- Triggers must immediately delegate to a codeunit. No business logic, no calculations, no direct table writes in page code.
-- Acceptable in a page trigger: calling a codeunit procedure, setting a filter, navigating.
-- Not acceptable: any `if`, `while`, field calculation, record modification, or domain logic.
+**Pages and PageExtensions** — UI and UI control only.
+- Acceptable: calling out to a codeunit, setting filters, navigating, visibility expressions, style expressions, and other logic that directly controls what the user sees or how the UI behaves.
+- Not acceptable: business logic, calculations, domain rules, or direct table writes.
+
+**Tables** — data structure and record-level entry points.
+- Field definitions, keys, FlowFields, field-level validation (format, range checks).
+- Table triggers may call a procedure defined on the same table to act on the current record — this is a valid pattern for keeping record-centric operations close to the data. The procedure itself should be thin and delegate to a codeunit for any real logic.
+- No cross-table orchestration from table triggers.
 
 **Codeunits** — own all business logic and orchestration.
 - One codeunit = one domain responsibility.
-- Codeunits may call other codeunits; they do not call page objects.
-
-**Tables** — data structure only.
-- Field definitions, keys, FlowFields, field-level validation (format, range checks).
-- No orchestration, no cross-table logic, no calls to business codeunits from table triggers.
+- Codeunits may call other codeunits.
+- Codeunits generally do not open pages. The exception is codeunits whose explicit responsibility is UI routing — opening, redirecting, or conditionally navigating to pages. This is a narrow exception, not a general pattern.
 
 **Reports and XMLports** — data projection only.
 - Format and extract data. No business rule enforcement.
@@ -34,19 +35,12 @@ Code must be written so it can be tested without a full BC environment where pos
 
 **Pattern**: procedures receive dependencies as interface parameters, or the codeunit receives them via a setter before execution. No inline `CompanyInfo.Get()` or setup table reads buried in business logic — pass the values in or inject the source.
 
-**Interfaces and factories**:
+**Interfaces and dependency resolution**:
 - Define an interface for every external dependency that may vary or need mocking.
-- Provide a factory codeunit that resolves the concrete implementation at runtime.
-- Test code registers a mock implementation in the factory — this is the seam.
+- For simple cases, an overloaded procedure is sufficient: one overload takes the interface as a parameter, the other calls the first with the default implementation. No factory needed.
+- Use a factory codeunit when the dependency resolution is non-trivial, shared across callers, or needs to be swappable at a higher level (e.g. test setup registers a mock once for the whole test). Factories are a tool, not a requirement everywhere.
+- Test code substitutes the real implementation with a mock via the injection point — parameter overload or factory registration. This is the seam.
 - A seam is a point where behavior can be changed without modifying the code under test. Design for seams deliberately.
-
-**Example structure**:
-```
-Interface IEmailService         → defines Send()
-Codeunit EmailServiceFactory    → returns IEmailService (real or mock)
-Codeunit OrderProcessor         → receives IEmailService via parameter or setter
-Codeunit MockEmailService       → test implementation of IEmailService
-```
 
 ## Clear Seams
 

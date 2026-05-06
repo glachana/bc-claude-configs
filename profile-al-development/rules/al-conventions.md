@@ -5,17 +5,25 @@ globs: ["**/*.al"]
 
 # AL Conventions
 
-## Required Field Properties
+## DataClassification
 
-- **`DataClassification`** must be set on every table field. Use `CustomerContent`, `EndUserIdentifiableInformation`, `SystemMetadata`, etc. Never leave `ToBeClassified` in production code.
-- **`ApplicationArea = All`** on all page fields and actions unless there is a specific reason to restrict.
-- **`Caption`** must be set on every field, action, and page — they are user-facing.
+Every table field requires an active decision on `DataClassification` — do not leave it as `ToBeClassified` or omit it.
+
+If the table sets a default via `DataClassification` at object level, individual fields that match the default do not need to repeat it. Fields that differ from the default must explicitly override it.
+
+Use `CustomerContent`, `EndUserIdentifiableInformation`, `SystemMetadata`, `CompanyConfidential`, `AccountData`, `OrganizationIdentifiableInformation`, or `PublicPersonalData` as appropriate. When in doubt, `CustomerContent` is the safe default for business data.
+
+## ApplicationArea
+
+Set a page-level default where all fields share the same area (almost always `ApplicationArea = All` on the page). Fields that match the page default do not need to repeat it. Only set `ApplicationArea` on individual fields or actions when they differ from the page default.
+
+## Caption
+
+`Caption` must be set on every field, action, and page — they are user-facing.
 
 ## Triggers
 
 - No empty triggers. If a trigger has no code, remove it entirely.
-- Page triggers must delegate immediately to a codeunit — no business logic in page code.
-- Table triggers handle field-level validation only — no cross-table orchestration.
 
 ## XML Documentation
 
