@@ -1,22 +1,11 @@
 {
   "name": "profile-al-development",
-  "description": "Lead-as-Manager AL development for Business Central with agent teams. Main session acts as engineering manager, spawning specialist teammates for parallel work. Competitive solution design (2-3 architects debate approaches), parallel implementation (N developers on different modules), parallel code review (4 specialists: security, AL expert, performance, test coverage), parallel test development (4 engineers: unit, integration, scenario, edge case). Lightweight /fix workflow. MCP integration (BC Intelligence, MS Docs, AL Dependency). Commands: interview, plan, develop, fix, test, document.",
-  "version": "3.0.0",
+  "description": "Lead-as-Manager AL development for Business Central with agent teams. Main session acts as engineering manager, spawning specialist teammates for parallel work. Competitive solution design (2-3 architects debate approaches), parallel implementation (N developers on different modules), parallel code review (4 specialists: security, AL expert, performance, test coverage), parallel test development (4 engineers: unit, integration, scenario, edge case). Skills: interview, plan, develop, fix, test, document, compile, publish, run-tests, al-mutate, al-symbols, bc-source, local-bc, verify-tests. MCP integration (BC Intelligence, MS Docs, AL Dependency, ALCOPS, BCTB).",
+  "version": "5.1.0",
   "author": {
     "name": "Stefan"
   },
   "agents": [
-    "./agents/interview.md",
-    "./agents/solution-architect.md",
-    "./agents/al-developer.md",
-    "./agents/security-reviewer.md",
-    "./agents/al-expert-reviewer.md",
-    "./agents/performance-reviewer.md",
-    "./agents/test-coverage-reviewer.md",
-    "./agents/unit-test-engineer.md",
-    "./agents/integration-test-engineer.md",
-    "./agents/scenario-test-engineer.md",
-    "./agents/edge-case-test-engineer.md",
-    "./agents/docs-writer.md"
+    "./agents/al-repo-summarizer.md"
   ]
 }
