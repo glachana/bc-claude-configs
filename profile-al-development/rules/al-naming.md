@@ -13,20 +13,19 @@ PascalCase for ALL identifiers — objects, variables, fields, procedures, param
 
 Always use a minimum two-level namespace. The registered AppSource affix forms the root, with at least one further segment beneath it — e.g. `namespace ABC.Sales;`, `namespace ABC.Core;`, `namespace ABC.Sales.Documents;`.
 
-A two-level (or deeper) namespace provides full uniqueness. Object names do NOT carry the affix when this condition is met. The registered affix is defined in `AppSourceCop.json`.
+A two-level (or deeper) namespace provides organizational uniqueness. The registered affix is defined in `AppSourceCop.json`.
 
-**Let AppSourceCop be the authority.** If AppSourceCop is configured (which it should be) and does not complain about a missing affix, the affix is not required. If it complains, add it. Do not add affixes preemptively when the namespace already satisfies the requirement.
+## Affix Rules (Dynamics International house convention)
 
-## Affix Rules for Extension Fields
-
-Object names never carry the affix (namespace handles it). Extension fields on base-app or third-party tables are different — they require a **suffix** affix:
+**The affix is always a PREFIX, never a suffix.** This is the DynInter house rule; it overrides any suffix-based or namespace-only guidance. Authoritative source, with `.good.al` / `.bad.al` samples: `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`.
 
 | Context | Object Name Affix | Field Name Affix |
 |---|---|---|
-| Custom table | No | No |
-| Table extension | No | **Suffix only** |
-| Custom page / page extension | No | N/A |
-| Codeunit / Enum / Interface | No | N/A |
-| Enum extension | No | **Suffix only** |
+| Custom table | **Prefix** | No |
+| Table extension | **Prefix** | **Prefix** |
+| Custom page / page extension | **Prefix** | N/A |
+| Codeunit / Enum / Interface | **Prefix** | N/A |
+| Enum extension | **Prefix** | **Prefix** |
 
-- **Never use prefix affixes on extension fields.** `"Loyalty Tier ABC"` — correct. `"ABC Loyalty Tier"` — wrong.
+- **Affix at the front.** `"ABC Loyalty Tier"` — correct. `"Loyalty Tier ABC"` (suffix) — wrong.
+- Custom objects (specific and extension) carry the prefix. Fields **added in a table extension** carry the prefix (they live in a base-app table's namespace and must not collide). Fields **inside a fully custom table** do NOT carry it — the owning object already carries the affix.

@@ -14,6 +14,16 @@ You are a security specialist reviewing AL/Business Central code. Your job is to
 
 Read, Grep, Glob
 
+### BCQuality Knowledge (cite, don't paraphrase)
+
+Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
+domains (`security`, `privacy`), search across layers (custom > community > microsoft):
+`${CLAUDE_PLUGIN_ROOT}/bcquality/{custom,community,microsoft}/knowledge/security/` and
+`.../microsoft/knowledge/privacy/`. When a finding maps a rule, add its file path to the
+"Fix Recommendation" cell as `[BCQuality: bcquality/microsoft/knowledge/security/<slug>.md]`
+— do NOT paraphrase the rule from memory. No rule maps → prefix the issue id with
+`house:`. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
+
 ### Review Focus Areas
 
 **Permission Issues:**
@@ -93,6 +103,19 @@ You are an AL/Business Central expert reviewing code for adherence to AL best pr
 ### Tools Available
 
 Read, Grep, Glob
+
+### BCQuality Knowledge (cite, don't paraphrase)
+
+Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
+domains (`style`, `ui`), search across layers (custom > community > microsoft):
+`${CLAUDE_PLUGIN_ROOT}/bcquality/{custom,microsoft}/knowledge/style/` and
+`.../microsoft/knowledge/ui/`. **Naming: the DynInter house rule overrides Microsoft's —
+see `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`: the affix
+is a PREFIX (never suffix); custom objects and table-extension fields are prefixed; fields
+inside a fully custom table are not.** When a finding maps a rule, cite the file path in
+"Fix Recommendation" as `[BCQuality: bcquality/.../knowledge/style/<slug>.md]` — do NOT
+paraphrase. No rule maps → prefix the id with `house:`. Full contract:
+`${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ### Review Focus Areas
 
@@ -181,6 +204,18 @@ You are a performance specialist reviewing AL/Business Central code. Your job is
 ### Tools Available
 
 Read, Grep, Glob
+
+### BCQuality Knowledge (cite, don't paraphrase)
+
+Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
+domain (`performance`), search across layers (community > microsoft):
+`${CLAUDE_PLUGIN_ROOT}/bcquality/{community,microsoft}/knowledge/performance/`. Frequently
+relevant: `avoid-get-inside-loop-on-large-table`, `use-setloadfields-for-partial-records`,
+`apply-filters-before-iterating`, `calcsums-instead-of-calcfields-in-loop`,
+`avoid-commit-inside-loops`. When a finding maps a rule, cite the file path in
+"Fix Recommendation" as `[BCQuality: bcquality/microsoft/knowledge/performance/<slug>.md]`
+— do NOT paraphrase. No rule maps → prefix the id with `house:`. Full contract:
+`${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ### Review Focus Areas
 
@@ -272,6 +307,16 @@ You are a test coverage and testability specialist reviewing AL/Business Central
 ### Tools Available
 
 Read, Grep, Glob
+
+### BCQuality Knowledge (cite, don't paraphrase)
+
+Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
+domain (`testing`), search `${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/testing/`.
+A rule's `<slug>.bad.al` sibling sample is a ready-made "should fail" scenario — flag it as
+a missing negative-test scenario. When a finding maps a rule, cite the file path as
+`[BCQuality: bcquality/microsoft/knowledge/testing/<slug>.md]` — do NOT paraphrase. No rule
+maps → prefix the id with `house:`. Full contract:
+`${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ### Review Focus Areas
 

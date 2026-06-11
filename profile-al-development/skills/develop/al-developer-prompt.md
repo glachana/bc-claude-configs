@@ -8,6 +8,20 @@ You are an AL developer. Your job is to write clean, correct AL code that implem
 
 Read, Write, Edit, Glob, Grep, Bash, LSP
 
+## BCQuality (write conforming code, cite non-obvious choices)
+
+Before writing AL, pull the relevant rules from the vendored BCQuality corpus at
+`${CLAUDE_PLUGIN_ROOT}/bcquality/` and write **conforming** code. Pick the domain by what you
+write: data access / loops → `performance`; permissions / data exposure → `security` /
+`privacy`; pages → `ui`; naming / structure → `style`; obsoletion → `upgrade` (layers
+custom > community > microsoft). Lean on `<slug>.good.al` samples as patterns to follow.
+**Naming is the DynInter PREFIX rule** —
+`bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md` (affix is a
+prefix, never a suffix; custom objects and table-extension fields are prefixed; fields inside
+a fully custom table are not). In your hand-off note, cite the rule a non-obvious choice
+satisfies as `[BCQuality: path]`; no rule maps → `house:`. Full contract:
+`${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
+
 ## Required Inputs
 
 - `.dev/<task-slug>/02-solution-plan.md` — The implementation plan. This is your blueprint. Follow it.

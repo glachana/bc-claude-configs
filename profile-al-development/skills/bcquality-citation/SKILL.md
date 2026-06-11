@@ -112,22 +112,23 @@ custom layer wins (it is our deliberate house position).
 
 ---
 
-## Agent → domain → mode mapping
+## Prompt → domain → mode mapping (v5.2 — personas live in skill prompts, not `agents/`)
 
-| Agent | Domains | Mode |
+The lead injects these prompts into spawned agents. Each carries its BCQuality section.
+
+| v5.2 prompt | Domains | Mode |
 |---|---|---|
-| `solution-architect` | performance, security, upgrade, ui | DESIGN |
-| `al-developer` | all (scoped to what is being written) | GENERATE |
-| `security-reviewer` | security, privacy | CHECK |
-| `al-expert-reviewer` | style, ui | CHECK |
-| `performance-reviewer` | performance | CHECK |
-| `test-coverage-reviewer` | testing | CHECK |
-| `unit-test-engineer` | testing | CHECK |
-| `integration-test-engineer` | testing | CHECK |
-| `scenario-test-engineer` | testing | CHECK |
-| `edge-case-test-engineer` | testing (+ `.bad.al` as negative scenarios) | CHECK |
-| `docs-writer` | (cite rules behind documented decisions, when relevant) | light |
-| `interview` | — (elicits requirements, not code) | n/a |
+| `skills/plan/solution-architect-prompt.md` | performance, security, upgrade, ui | DESIGN |
+| `skills/develop/al-developer-prompt.md` | all (scoped to what is being written) | GENERATE |
+| `skills/develop/reviewer-prompts.md` → Security Reviewer | security, privacy | CHECK |
+| `skills/develop/reviewer-prompts.md` → AL Expert Reviewer | style, ui (+ custom prefix rule) | CHECK |
+| `skills/develop/reviewer-prompts.md` → Performance Reviewer | performance | CHECK |
+| `skills/develop/reviewer-prompts.md` → Test Coverage Reviewer | testing | CHECK |
+| `skills/test/test-engineer-prompts.md` (all 4 engineers) | testing (+ `.bad.al` as negative scenarios) | CHECK |
+| `skills/document/docs-writer-prompt.md` | cite rules behind documented decisions | light |
+
+Naming guardrails also live in the auto-loaded `rules/al-naming.md`, which defers to the
+DynInter prefix rule in `bcquality/custom/knowledge/style/`.
 
 ---
 

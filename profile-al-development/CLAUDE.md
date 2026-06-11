@@ -61,5 +61,12 @@ Classify every user request by complexity, then invoke the matching skill:
 ### Knowledge Skills (invoke for detailed examples)
 - `build-tools` — Build pipeline quick reference
 - `review-checklists` — Quality checks for plans, code, and tests
+- `bcquality-citation` — How specialist agents ground work in Microsoft's vendored BCQuality corpus and cite it by file path (DESIGN/GENERATE/CHECK modes, prompt→domain mapping, the citation gate)
 
-Rules in `rules/` (auto-loaded — `al-engineering.md` always; `al-architecture.md`, `al-naming.md`, `al-data-access.md`, `al-conventions.md` when an `*.al` file is in context) provide standing AL guardrails without skill invocation.
+Rules in `rules/` (auto-loaded — `al-engineering.md` always; `al-architecture.md`, `al-naming.md`, `al-data-access.md`, `al-conventions.md` when an `*.al` file is in context) provide standing AL guardrails without skill invocation. `al-naming.md` defers to the DynInter prefix rule in `bcquality/custom/`.
+
+## BCQuality Citation Gate
+
+The plugin vendors Microsoft's **BCQuality** corpus at `bcquality/` (microsoft + community layers, plus our `custom/` DynInter rules). It is the *cited jurisprudence* — specialist agents back findings and decisions with a file path instead of paraphrasing from memory. The MCP `bc-code-intelligence-mcp` remains the *judge* (reasoning, severity); BCQuality runs alongside it. Each spawned persona prompt (`skills/develop/reviewer-prompts.md`, `al-developer-prompt.md`, `skills/plan/solution-architect-prompt.md`, `skills/test/test-engineer-prompts.md`) carries its BCQuality section; the full contract is the `bcquality-citation` skill.
+
+**Lead enforcement (hard gate):** reject a deliverable that touches a covered domain (`performance`, `security`, `privacy`, `style`, `ui`, `testing`, `upgrade`) but cites no `[BCQuality: path]` and offers no `house:` justification. Acceptable escapes: an explicit `house:` finding (corpus gap) or a stated "no rule applies." Re-vendor the corpus with `scripts/revendor-bcquality.ps1`.
