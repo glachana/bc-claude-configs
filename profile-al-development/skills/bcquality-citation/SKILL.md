@@ -98,7 +98,7 @@ Every finding / decision that maps onto a BCQuality rule carries:
 (defensible in a PR or to a client).
 
 When your judgment fires but **no** BCQuality rule maps, prefix the slug with `house:`
-(e.g. `house:dyninter-abc-suffix`) and leave `references: []`. House findings are
+(e.g. `house:dyninter-abc-prefix`) and leave `references: []`. House findings are
 legitimate — they mark where the corpus has a gap (candidate for the `custom/` layer).
 
 ---

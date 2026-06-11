@@ -42,7 +42,7 @@ skill.
 Folders for this agent (custom wins on conflict — e.g. the DynInter affix rule):
 
 ```
-${CLAUDE_PLUGIN_ROOT}/bcquality/custom/knowledge/style/      # DynInter house rules (e.g. affix-as-suffix)
+${CLAUDE_PLUGIN_ROOT}/bcquality/custom/knowledge/style/      # DynInter house rules (e.g. affix-as-prefix)
 ${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/style/
 ${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/ui/
 ```

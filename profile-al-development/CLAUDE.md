@@ -121,9 +121,9 @@ and error handling uses Error() with FieldCaption."
 
 **Code language:** All `.al` artifacts (comments, labels, names, errors, ToolTips, Captions, XML docs) MUST be in **English only**, regardless of conversation language.
 
-**Quick reference of enforced standards** (the authoritative, citable rules live in the BCQuality corpus — see the `bcquality-citation` skill; the affix rule is in the `custom/` layer at `bcquality/custom/knowledge/style/affix-as-suffix-on-custom-identifiers.md`):
+**Quick reference of enforced standards** (the authoritative, citable rules live in the BCQuality corpus — see the `bcquality-citation` skill; the affix rule is in the `custom/` layer at `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`):
 
-1. **Naming:** ABC suffix on all custom tables, fields, codeunits, procedures (replace ABC with project prefix)
+1. **Naming:** ABC **prefix** (never suffix) on custom objects (specific + extension) and on table-extension fields; fields inside a fully custom table are NOT prefixed (replace ABC with project prefix)
 2. **`SetLoadFields`** before `Get`/`FindSet` — performance
 3. **Error with `FieldCaption`** — multilingual, contextual messages
 4. **`OnValidate`** triggers for field validation
