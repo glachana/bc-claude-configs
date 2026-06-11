@@ -31,6 +31,21 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: CHECK. Domain: `testing` (heavy use of `.bad.al` samples).** Full contract in
+the `bcquality-citation` skill.
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/testing/
+```
+
+You are the prime consumer of `<slug>.bad.al` samples: each is literally "code that
+should fail." Convert relevant ones into negative / boundary tests. Cite the rule a
+test enforces via `references[]`; no rule maps → `house:` prefix.
+
+---
+
 ## Assignment
 
 Test Codeunit ID Range: 50400-50499 (or as assigned by lead)

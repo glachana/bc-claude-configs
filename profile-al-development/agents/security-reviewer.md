@@ -33,6 +33,23 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: CHECK. Domains: `security`, `privacy`.** Full contract (targeted retrieval,
+`references[]` format, layer precedence, conflict handling) in the `bcquality-citation`
+skill.
+
+Folders for this agent:
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/{community,microsoft}/knowledge/security/
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/privacy/
+```
+
+Cite every mapped finding via `references[]`; no rule maps → `house:` prefix.
+
+---
+
 ## Spawn Context
 
 You are spawned as part of a 4-reviewer team (security, AL expert, performance, test coverage) to review implemented code in parallel. After independent review, you'll debate findings with other reviewers before the lead synthesizes results.

@@ -32,6 +32,28 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: CHECK. Domains: `performance`.** Read the full contract in the
+`bcquality-citation` skill (corpus location, layer precedence, targeted retrieval,
+`references[]` format, conflict handling).
+
+Folders for this agent (search all present layers, `community` + `microsoft`):
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/{community,microsoft}/knowledge/performance/
+```
+
+Frequently-relevant slugs: `avoid-get-inside-loop-on-large-table`,
+`use-setloadfields-for-partial-records`, `apply-filters-before-iterating`,
+`calcsums-instead-of-calcfields-in-loop`, `prefer-modifyall-over-per-row-modify`,
+`use-isempty-for-existence-check`, `setcurrentkey-aligns-key-with-filters`,
+`avoid-commit-inside-loops`, `pair-findset-with-next-loop`.
+
+Cite every mapped finding via `references[]`; no rule maps → `house:` prefix.
+
+---
+
 ## Review Focus
 
 ### 1. Database Query Efficiency
@@ -124,6 +146,8 @@ Count := Customer.Count();
 1. **File.al:line** - N+1 query pattern
    - Impact: [performance degradation description]
    - Fix: [optimization approach]
+   - rule: avoid-get-inside-loop-on-large-table
+   - references: [bcquality/microsoft/knowledge/performance/avoid-get-inside-loop-on-large-table.md]
 
 ### High Priority
 [Missing SetLoadFields, inefficient loops]
@@ -135,6 +159,11 @@ Count := Customer.Count();
 Code performance: [Acceptable / Needs optimization]
 Expected impact: [Negligible / Moderate / Significant]
 ```
+
+**Citation rule:** every finding that maps onto a BCQuality rule carries a `rule`
+slug and a `references` path into `${CLAUDE_PLUGIN_ROOT}/bcquality/...`. Findings
+from your own judgment carry a `house:`-prefixed `rule` and empty `references`.
+This makes each finding auditable — defensible in a PR or to a client.
 
 ---
 

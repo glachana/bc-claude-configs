@@ -31,6 +31,20 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: CHECK. Domain: `testing`.** Full contract in the `bcquality-citation` skill.
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/testing/
+```
+
+Shape end-to-end scenarios after the corpus's testing rules. A rule's `<slug>.bad.al`
+sample is a ready-made "should fail" scenario. Cite the rule a test enforces via
+`references[]`; no rule maps → `house:` prefix.
+
+---
+
 ## Assignment
 
 Test Codeunit ID Range: 50300-50399 (or as assigned by lead)

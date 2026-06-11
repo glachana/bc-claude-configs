@@ -33,6 +33,24 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: CHECK. Domains: `style`, `ui`.** Full contract (targeted retrieval,
+`references[]` format, layer precedence, conflict handling) in the `bcquality-citation`
+skill.
+
+Folders for this agent (custom wins on conflict — e.g. the DynInter affix rule):
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/custom/knowledge/style/      # DynInter house rules (e.g. affix-as-suffix)
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/style/
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/ui/
+```
+
+Cite every mapped finding via `references[]`; no rule maps → `house:` prefix.
+
+---
+
 ## Review Focus
 
 ### 1. Naming Conventions

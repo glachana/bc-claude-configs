@@ -50,9 +50,9 @@ claude-configs/
 │   │   ├── bc-expert.md            # BC specialist consultation
 │   │   ├── docs-lookup.md          # Microsoft Docs search
 │   │   └── nav-baseapp.md          # Base app navigation
-│   ├── bc-code-intel-knowledge/     # BC Intelligence MCP knowledge base
-│   │   ├── specialists/             # Specialist personas
-│   │   └── domains/                 # Domain knowledge
+│   ├── bcquality/                   # Vendored Microsoft BCQuality corpus (cited by agents)
+│   │   ├── microsoft/knowledge/     # MS-endorsed rules (7 domains)
+│   │   └── community/knowledge/     # Community rules (performance, security)
 │   ├── .mcp.json                    # MCP server configuration
 │   └── README.md                    # Profile documentation
 ├── project-settings-template.json   # Template for project .claude/settings.json
@@ -97,8 +97,7 @@ The AL profile uses three MCP servers:
 
 1. **BC Code Intelligence MCP** (`bc-code-intelligence-mcp`)
    - BC specialist consultations via structured personas
-   - Knowledge base in `bc-code-intel-knowledge/`
-   - Custom config via `bc-code-intel-config.json`
+   - Uses the MCP's bundled knowledge base (no local custom layer)
 
 2. **Microsoft Docs MCP** (`microsoft_docs_mcp`)
    - Official AL/BC documentation lookup

@@ -121,7 +121,7 @@ and error handling uses Error() with FieldCaption."
 
 **Code language:** All `.al` artifacts (comments, labels, names, errors, ToolTips, Captions, XML docs) MUST be in **English only**, regardless of conversation language.
 
-**Quick reference of enforced standards** (full details + examples in the `al-coding-standards` skill):
+**Quick reference of enforced standards** (the authoritative, citable rules live in the BCQuality corpus — see the `bcquality-citation` skill; the affix rule is in the `custom/` layer at `bcquality/custom/knowledge/style/affix-as-suffix-on-custom-identifiers.md`):
 
 1. **Naming:** ABC suffix on all custom tables, fields, codeunits, procedures (replace ABC with project prefix)
 2. **`SetLoadFields`** before `Get`/`FindSet` — performance
@@ -145,6 +145,12 @@ and error handling uses Error() with FieldCaption."
 Full protocol, 17-specialist roster, and agent→specialist mapping in the `bc-expert-consultation` skill.
 
 **Lead enforcement:** Verify every teammate deliverable references at least one `ask_bc_expert` consultation. Reject outputs that skip it without an explicit "MCP unavailable" note.
+
+### BCQuality Citation — MANDATORY FOR ALL TEAMMATES
+
+**Every teammate that designs, generates, reviews, or tests AL code must ground its work in the vendored BCQuality corpus and cite it by file path.** The MCP is the *judge* (reasoning, severity); BCQuality is the *cited jurisprudence* (traceable references). They run side by side — see the `bcquality-citation` skill for the corpus location, layer precedence, the three modes (DESIGN/GENERATE/CHECK), targeted retrieval, and the agent→domain→mode mapping.
+
+**Lead enforcement (hard gate):** Reject a deliverable that touches a covered domain (`performance`, `security`, `privacy`, `style`, `ui`, `testing`, `upgrade`) but carries no `references[]` into `bcquality/...` and no `house:`-prefixed justification. Acceptable escapes: an explicit `house:` finding (corpus gap), or a stated "no rule applies." A teammate that cannot reach the corpus must say so and fall back to MCP guidance — never silently skip.
 
 ### Microsoft Docs MCP
 
@@ -258,13 +264,13 @@ The plugin ships skills loaded on-demand. Invoke them when their context applies
 | Skill | When to use |
 |---|---|
 | `bc-expert-consultation` | Mandatory MCP protocol for every subagent before finalizing output |
+| `bcquality-citation` | Mandatory BCQuality grounding + `references[]` citation for every subagent (DESIGN/GENERATE/CHECK modes, agent→domain mapping, lead gate) |
 | `tdd-workflow` | RED-GREEN-REFACTOR cycle with hard approval gates |
 | `workflow-routing` | Classify task complexity at the start of any AL request |
 | `proportional-planning` | Match planning detail (lines + sections) to feature complexity |
 | `task-coordination` | Multi-phase workflows via Claude Code Tasks (dependencies, status, multi-session) |
 | `feedback-resolution` | Severity + disposition handling between fixing and review agents |
 | `management-patterns` | Detailed Lead-as-Manager patterns + anti-pattern catalog |
-| `al-coding-standards` | Full AL/BC conventions and best-practice examples |
 | `bc-cli-tools` | Detailed `al-compile` / `bc-publish` / `bc-test` reference |
 
 **Remember:** You're a manager, not a developer. Lead the team, don't do their work.

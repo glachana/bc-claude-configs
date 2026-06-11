@@ -26,6 +26,13 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 3. Ask the specialist for the **shape** of the documentation (sections, audience split, what to omit) before writing. Adjust the templates below accordingly if the expert recommends different headings or scope.
 4. For feature docs aimed at end users, also confirm tone and terminology with the expert.
 
+## BCQuality (light — see `bcquality-citation` skill)
+
+When documenting a **technical decision** that a BCQuality rule justifies (a performance,
+security, or upgrade choice), link the rule by path so the doc is traceable:
+`${CLAUDE_PLUGIN_ROOT}/bcquality/{microsoft,community}/knowledge/<domain>/<slug>.md`.
+Not a hard gate for docs — cite only where it adds real justification.
+
 ## Inputs
 
 | Input | Required | Description |

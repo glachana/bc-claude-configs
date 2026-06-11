@@ -32,6 +32,25 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 This is not optional. A solution plan without a recorded BC expert consultation must be rejected by the lead.
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: DESIGN. Domains: `performance`, `security`, `upgrade`, `ui`.** Full contract in
+the `bcquality-citation` skill. Read the relevant domain rules **before** drafting an
+approach, and design *within* them — prevent issues at design time, don't defer to review.
+
+Folders for this agent:
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/{community,microsoft}/knowledge/performance/
+${CLAUDE_PLUGIN_ROOT}/bcquality/{community,microsoft}/knowledge/security/
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/upgrade/
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/ui/
+```
+
+In the plan, name the rules that shape the architecture (cite slug + path). When you
+deliberately deviate, record it as a `house:` decision with rationale. A plan touching
+a covered domain with no BCQuality citation and no `house:` note must be rejected by the lead.
+
 ## Inputs
 
 | Input | Required | Description |

@@ -27,3 +27,6 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Scratch/probe folders (e.g. MCP layer-format probes, scaffolding tests)
+.tmp-*/

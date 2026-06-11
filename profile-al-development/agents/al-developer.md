@@ -53,6 +53,26 @@ See the `bc-expert-consultation` skill for the full protocol. Summary for this a
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: GENERATE. Domains: all (scoped to what you are writing).** Full contract in the
+`bcquality-citation` skill. Before writing AL, pull the rules for the thing you are
+building and write **conforming** code — prevent issues at write time.
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/{custom,community,microsoft}/knowledge/<domain>/
+```
+
+Pick `<domain>` by what you write: data access / loops → `performance`; permissions /
+data exposure → `security` / `privacy`; pages → `ui`; naming / structure → `style`;
+obsoletion / migration → `upgrade`. Lean on `<slug>.good.al` samples as patterns to
+follow and `<slug>.bad.al` as patterns to avoid. In your hand-off note, cite the rule a
+non-obvious choice satisfies via `references[]`; no rule maps → `house:` prefix. A
+hand-off touching a covered domain with no citation and no `house:` note must be rejected
+by the lead.
+
+---
+
 ## Base App Verification (MANDATORY Before Coding)
 
 **Before writing any AL code that touches BC base objects, use the AL Dependency MCP to verify.**

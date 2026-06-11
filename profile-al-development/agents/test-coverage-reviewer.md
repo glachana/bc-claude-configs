@@ -31,6 +31,22 @@ See the `bc-expert-consultation` skill for the full protocol. For this agent:
 
 ---
 
+## BCQuality (MANDATORY — see `bcquality-citation` skill)
+
+**Mode: CHECK. Domain: `testing`.** Full contract (targeted retrieval, `references[]`
+format, layer precedence, conflict handling) in the `bcquality-citation` skill.
+
+Folder for this agent:
+
+```
+${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/testing/
+```
+
+Use the corpus to spot missing-scenario and testability gaps. Cite every mapped
+finding via `references[]`; no rule maps → `house:` prefix.
+
+---
+
 ## Review Focus
 
 ### 1. Testability Design
