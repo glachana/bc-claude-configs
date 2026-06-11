@@ -17,6 +17,9 @@
       "command": "npx",
       "args": ["bc-code-intelligence-mcp"],
       "env": {}
+    },
+    "alcops": {
+      "command": "alcops-mcp"
     }
   }
 }

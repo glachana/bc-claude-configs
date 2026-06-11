@@ -1,32 +1,26 @@
 {
+  "description": "AL development hooks — compile on turn end",
   "hooks": {
-    "SessionStart": [
+    "PostToolUse": [
       {
-        "matcher": "startup",
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'test -f \"${CLAUDE_PROJECT_DIR}/.dev/project-context.md\" && { echo \"=== Auto-loaded .dev/project-context.md ===\"; cat \"${CLAUDE_PROJECT_DIR}/.dev/project-context.md\"; } || true'"
-          }
-        ]
-      },
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'missing=\"\"; for cmd in al-compile bc-publish bc-test; do command -v \"$cmd\" >/dev/null 2>&1 || missing=\"$missing $cmd\"; done; if [ -n \"$missing\" ]; then echo \"WARNING: Missing AL/BC CLI tools on PATH:$missing\"; echo \"Fix: source ~/.bashrc or open a new terminal. See bc-cli-tools skill.\"; fi'"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/al-hook-record.sh",
+            "timeout": 10
           }
         ]
       }
     ],
-    "PreToolUse": [
+    "Stop": [
       {
-        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'mkdir -p \"${CLAUDE_PROJECT_DIR}/.dev/02-proposals\" 2>/dev/null; exit 0'"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/al-hook-compile.sh",
+            "timeout": 120,
+            "statusMessage": "Compiling AL..."
           }
         ]
       }
