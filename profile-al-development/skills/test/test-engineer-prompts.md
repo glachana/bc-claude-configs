@@ -4,8 +4,9 @@ Combined prompts for all 4 test engineer specialists. The orchestrator selects t
 
 ## BCQuality (testing domain — applies to all 4 engineers)
 
-Ground test scenarios in the vendored BCQuality `testing` rules at
-`${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/testing/`. A rule's `<slug>.bad.al`
+Ground test scenarios in the vendored BCQuality `testing` rules. **Read the index first:**
+`bcquality/_index/testing.md` lists every testing rule (slug, triggers, summary); pick the
+relevant slugs and `Read` only those under `bcquality/microsoft/knowledge/testing/`. A rule's `<slug>.bad.al`
 sibling sample is literally "code that should fail" — convert relevant ones into negative /
 boundary tests. Cite the rule a test enforces as `[BCQuality: bcquality/microsoft/knowledge/testing/<slug>.md]`;
 no rule maps → `house:`. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.

@@ -20,6 +20,12 @@
     },
     "alcops": {
       "command": "alcops-mcp"
+    },
+    "nab-al-tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@nabsolutions/nab-al-tools-mcp"],
+      "env": {}
     }
   }
 }

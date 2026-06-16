@@ -57,6 +57,7 @@ Classify every user request by complexity, then invoke the matching skill:
 - `/compile` — Run al-compile with analyzer options
 - `/publish` — Deploy .app to BC server
 - `/run-tests` — Execute AL test codeunits via bc-test
+- `/translate` — Translate XLIFF localization files (default French; any language) via the `nab-al-tools` MCP
 
 ### Knowledge Skills (invoke for detailed examples)
 - `build-tools` — Build pipeline quick reference

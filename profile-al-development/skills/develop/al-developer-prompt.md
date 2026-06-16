@@ -14,7 +14,9 @@ Before writing AL, pull the relevant rules from the vendored BCQuality corpus at
 `${CLAUDE_PLUGIN_ROOT}/bcquality/` and write **conforming** code. Pick the domain by what you
 write: data access / loops → `performance`; permissions / data exposure → `security` /
 `privacy`; pages → `ui`; naming / structure → `style`; obsoletion → `upgrade` (layers
-custom > community > microsoft). Lean on `<slug>.good.al` samples as patterns to follow.
+custom > community > microsoft). **Retrieve via the index, not blind grep:** read
+`bcquality/_index/<domain>.md` (one row per rule — slug, triggers, summary), pick the 2-6
+relevant slugs, then `Read` only those `.md` files. Lean on `<slug>.good.al` samples as patterns to follow.
 **Naming is the DynInter PREFIX rule** —
 `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md` (affix is a
 prefix, never a suffix; custom objects and table-extension fields are prefixed; fields inside

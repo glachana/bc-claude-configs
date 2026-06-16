@@ -17,9 +17,10 @@ Read, Grep, Glob
 ### BCQuality Knowledge (cite, don't paraphrase)
 
 Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domains (`security`, `privacy`), search across layers (custom > community > microsoft):
-`${CLAUDE_PLUGIN_ROOT}/bcquality/{custom,community,microsoft}/knowledge/security/` and
-`.../microsoft/knowledge/privacy/`. When a finding maps a rule, add its file path to the
+domains (`security`, `privacy`), **read the index first, not the raw folders**: each
+`bcquality/_index/<domain>.md` lists every rule (slug, triggers, summary) across all layers
+(custom > community > microsoft). Pick the matching slugs, `Read` only those `.md` files,
+then evaluate the code against them. When a finding maps a rule, add its file path to the
 "Fix Recommendation" cell as `[BCQuality: bcquality/microsoft/knowledge/security/<slug>.md]`
 — do NOT paraphrase the rule from memory. No rule maps → prefix the issue id with
 `house:`. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
@@ -107,9 +108,10 @@ Read, Grep, Glob
 ### BCQuality Knowledge (cite, don't paraphrase)
 
 Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domains (`style`, `ui`), search across layers (custom > community > microsoft):
-`${CLAUDE_PLUGIN_ROOT}/bcquality/{custom,microsoft}/knowledge/style/` and
-`.../microsoft/knowledge/ui/`. **Naming: the DynInter house rule overrides Microsoft's —
+domains (`style`, `ui`), **read the index first, not the raw folders**: each
+`bcquality/_index/<domain>.md` lists every rule (slug, triggers, summary) across all layers
+(custom > community > microsoft). Pick the matching slugs, `Read` only those, then evaluate.
+**Naming: the DynInter house rule overrides Microsoft's —
 see `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`: the affix
 is a PREFIX (never suffix); custom objects and table-extension fields are prefixed; fields
 inside a fully custom table are not.** When a finding maps a rule, cite the file path in
@@ -208,11 +210,11 @@ Read, Grep, Glob
 ### BCQuality Knowledge (cite, don't paraphrase)
 
 Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domain (`performance`), search across layers (community > microsoft):
-`${CLAUDE_PLUGIN_ROOT}/bcquality/{community,microsoft}/knowledge/performance/`. Frequently
-relevant: `avoid-get-inside-loop-on-large-table`, `use-setloadfields-for-partial-records`,
-`apply-filters-before-iterating`, `calcsums-instead-of-calcfields-in-loop`,
-`avoid-commit-inside-loops`. When a finding maps a rule, cite the file path in
+domain (`performance`), **read the index first, not the raw folders**:
+`bcquality/_index/performance.md` lists every rule (slug, triggers, summary) across layers
+(community > microsoft). Pick the matching slugs by the `triggers` column — e.g. `Get` in a
+loop → `avoid-get-inside-loop-on-large-table`, partial reads → `use-setloadfields-for-partial-records`,
+`Commit` in a loop → `avoid-commit-inside-loops` — then `Read` only those. When a finding maps a rule, cite the file path in
 "Fix Recommendation" as `[BCQuality: bcquality/microsoft/knowledge/performance/<slug>.md]`
 — do NOT paraphrase. No rule maps → prefix the id with `house:`. Full contract:
 `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
