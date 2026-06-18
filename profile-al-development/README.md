@@ -1,6 +1,6 @@
 # AL Development Profile
 
-**Version:** 5.2.2
+**Version:** 5.2.3
 
 Claude Code plugin for Microsoft Dynamics 365 Business Central (AL) development. Document-driven workflow, complexity-based routing, a 4-specialist review team, and a BCQuality citation gate that grounds every recommendation in a traceable rule.
 
