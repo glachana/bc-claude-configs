@@ -86,7 +86,7 @@ Task: "[Feature Name] - Quick Implementation"
 
 ### Creating Tasks at Workflow Start
 
-When starting `/dev-cycle`, create the task structure:
+When starting a full cycle (`/interview` → `/plan` → `/develop` → `/test`), create the task structure:
 
 ```
 TaskCreate: "Requirements Analysis"

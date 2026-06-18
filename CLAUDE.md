@@ -25,34 +25,30 @@ claude-configs/
 │   ├── .claude-plugin/
 │   │   ├── plugin.json              # Plugin metadata (name, version, author)
 │   │   └── settings.json            # Plugin-specific settings
-│   ├── CLAUDE.md                    # AL coding standards and agent orchestration
-│   ├── agents/                      # 11 specialized agents for AL development
-│   │   ├── requirements-engineer.md
-│   │   ├── solution-planner.md
-│   │   ├── al-developer.md
-│   │   ├── code-reviewer.md
-│   │   ├── diagnostics-fixer.md
-│   │   ├── test-engineer.md
-│   │   ├── test-reviewer.md
-│   │   ├── bc-expert.md
-│   │   ├── docs-lookup.md
-│   │   ├── dependency-navigator.md
-│   │   └── interview.md
-│   ├── commands/                    # Slash commands (user-invocable)
-│   │   ├── dev-cycle.md            # Full development lifecycle
-│   │   ├── plan.md                 # Planning phase only
-│   │   ├── develop.md              # Development phase only
-│   │   ├── test.md                 # Testing phase only
-│   │   ├── fix.md                  # Quick bug fix workflow
-│   │   ├── estimate.md             # Estimation workflow
-│   │   ├── interview.md            # Deep requirements gathering
-│   │   ├── diagnostics.md          # Compiler diagnostics
-│   │   ├── bc-expert.md            # BC specialist consultation
-│   │   ├── docs-lookup.md          # Microsoft Docs search
-│   │   └── nav-baseapp.md          # Base app navigation
-│   ├── bcquality/                   # Vendored Microsoft BCQuality corpus (cited by agents)
-│   │   ├── microsoft/knowledge/     # MS-endorsed rules (7 domains)
-│   │   └── community/knowledge/     # Community rules (performance, security)
+│   ├── CLAUDE.md                    # AL orchestration, routing, BCQuality gate
+│   ├── skills/                      # Workflows + knowledge (invoked with /, or auto-loaded)
+│   │   ├── plan/                    # Competitive solution design (architect prompts)
+│   │   ├── develop/                 # Parallel impl + 4-specialist review prompts
+│   │   ├── test/                    # Parallel test engineers prompts
+│   │   ├── fix/                     # Lightweight fix workflow
+│   │   ├── interview/               # Deep requirements gathering
+│   │   ├── document/                # Technical documentation generation
+│   │   ├── compile/ publish/ run-tests/ translate/   # Build/CLI skills
+│   │   ├── workflow-routing/ proportional-planning/  # Routing plumbing (auto-loaded)
+│   │   ├── bcquality-citation/ bc-expert-consultation/  # Citation + expert gates
+│   │   └── ...                      # See `Available Skills` in plugin CLAUDE.md
+│   ├── agents/                      # Single remaining subagent
+│   │   └── al-repo-summarizer.md    # Repo overview agent (others migrated to skill prompts)
+│   ├── commands/                    # Slash commands not yet migrated to skills
+│   │   └── review-pr.md            # Azure DevOps PR review
+│   ├── rules/                       # Auto-loaded AL guardrails (engineering, naming, ...)
+│   ├── hooks/                       # Turn-end auto-compile + citation verification
+│   ├── bcquality/                   # Vendored Microsoft BCQuality corpus + DynInter custom
+│   │   ├── microsoft/               # MS-endorsed rules (7 domains)
+│   │   ├── community/               # Community rules (performance, security)
+│   │   ├── custom/                  # DynInter rules (e.g. prefix-only naming)
+│   │   └── _index/                  # Per-domain citation indexes
+│   ├── scripts/                     # build-bcquality-index, verify-citations, revendor
 │   ├── .mcp.json                    # MCP server configuration
 │   └── README.md                    # Profile documentation
 ├── project-settings-template.json   # Template for project .claude/settings.json
@@ -73,22 +69,22 @@ The AL profile implements a document-driven workflow where:
 
 ### Agent Collaboration Pattern
 
+Each phase is a skill invoked with `/`. The lead session orchestrates; specialist
+personas are spawned from prompt files inside each skill (no standalone agent files).
+
 ```
 User Request
     ↓
-requirements-engineer → .dev/01-requirements.md
+/interview (optional) → .dev/<task>/00-interview.md
     ↓
-solution-planner → .dev/02-solution-plan.md (uses MCP tools)
+/plan → .dev/<task>/02-solution-plan.md   (2-3 solution-architect personas debate, use MCP)
+    ↓  [approval gate]
+/develop → AL source files + .dev/<task>/03-code-review.md
+           (al-developer personas, then 4-specialist review team)
+    ↓  [approval gate]
+/test → test codeunits + .dev/<task>/05-test-plan.md   (4 test-engineer personas)
     ↓
-al-developer → AL source files (reads plan)
-    ↓
-code-reviewer → .dev/03-code-review.md
-    ↓
-diagnostics-fixer → .dev/04-diagnostics.md + fixes
-    ↓
-test-engineer → .dev/05-test-plan.md + test code
-    ↓
-test-reviewer → .dev/06-test-review.md
+/document → docs/ (docs-writer persona)
 ```
 
 ### MCP Server Integration

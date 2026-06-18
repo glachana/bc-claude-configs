@@ -1,510 +1,158 @@
-# AL Development Profile - Full Lifecycle
+# AL Development Profile
 
-**Version:** 2.21.0
+**Version:** 5.2.2
 
-Claude Code profile for Microsoft Dynamics 365 Business Central AL development with intelligent complexity routing and proportional planning.
+Claude Code plugin for Microsoft Dynamics 365 Business Central (AL) development. Document-driven workflow, complexity-based routing, a 4-specialist review team, and a BCQuality citation gate that grounds every recommendation in a traceable rule.
 
-## Overview
+> This is the DynInter fork of Stefan Maron's `bc-claude-configs`, with additions:
+> BCQuality citation protocol, mandatory BC-expert consultation, DynInter naming
+> convention (prefix-only), French translation skill, and Azure DevOps PR review.
 
-This profile provides a document-driven development workflow with specialized agents for each phase of AL development: planning, implementation, testing, and support.
+## Architecture (v5.x)
 
-## Key Features
-
-- **Document-Driven Workflow** - All agents collaborate via `.dev/` markdown files
-- **Project Memory System** - 40-60% faster workflows via `.dev/project-context.md`
-- **Smart Complexity Routing** - Automatically matches workflow to task complexity
-- **Proportional Planning** - Simple tasks get concise plans, complex tasks get comprehensive docs
-- **Full Lifecycle Coverage** - Requirements → Design → Implementation → Testing
-- **MCP Integration** - BC Intelligence, Microsoft Docs, AL Dependency navigation
-- **Automated Workflows** - Complete development cycles with single commands
-- **Clean Context** - Agents write detailed files, return concise summaries
-
-## Quick Start
-
-### Enable in Your AL Project
-
-In your AL project's `.claude/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "my-configs": {
-      "source": {
-        "source": "directory",
-        "path": "/home/stefan/claude-configs"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "profile-al-development@my-configs": true
-  }
-}
-```
-
-### Run Full Development Cycle
+The plugin is **skills-based**. There is no standalone agent roster anymore — the lead
+session orchestrates and spawns specialist *personas* from prompt files inside each skill.
 
 ```
-/dev-cycle "Add customer credit limit validation"
+User Request
+    ↓ (lead classifies complexity → workflow-routing skill)
+/interview (optional)  → deep requirements gathering
+    ↓
+/plan      → 2-3 solution-architect personas debate, synthesize winning plan
+    ↓  [approval gate]
+/develop   → parallel al-developer personas, then 4-specialist review team
+    ↓  [approval gate]
+/test      → 4 parallel test-engineer personas (unit / integration / scenario / edge)
+    ↓
+/document  → docs-writer persona
 ```
 
-This runs the complete pipeline:
-1. Requirements engineering
-2. BC solution design
-3. Implementation planning
-4. Code implementation
-5. Code review
-6. Diagnostics fixing
-7. Test creation
-8. Test review
+All output goes to `.dev/<task-slug>/` (per-task), with `.dev/project-context.md` shared
+across tasks. Personas write detailed files and return concise summaries — the main
+conversation stays clean.
 
-All results in `.dev/` directory.
+## Getting Started
 
-## Available Commands
+1. **Enable the plugin** in your AL project's `.claude/settings.json`
+   (`extraKnownMarketplaces` + `enabledPlugins`).
+2. **One-time setup:** run `/init-context` to generate `.dev/project-context.md`
+   (indexes objects, patterns, integration points → 40-60% faster workflows).
+3. **Then describe your task** and let the lead route it, or invoke a workflow directly.
 
-### Estimation & Planning
+## Skills
 
-- `/estimate "[description]"` - Complete estimation workflow (interview → experts → planning → hours)
-- `/estimate --quick "[description]"` - Quick estimate (skip interview)
-- `/interview` - Deep requirements gathering (40+ questions)
-- `/plan "[description]"` - Planning phase only (requirements → design → plan)
+### Workflow skills (invoke with `/`)
+| Skill | Purpose |
+|-------|---------|
+| `/init-context` | One-time project context indexing |
+| `/interview` | Deep requirements gathering |
+| `/plan` | Competitive solution design (2-3 architects debate) |
+| `/develop` | Parallel implementation + 4-specialist review |
+| `/fix` | Lightweight bug fix (no planning/testing) |
+| `/test` | Parallel test development (4 engineers) |
+| `/document` | Technical documentation generation |
 
-### Quick Fix (⚡ Fastest)
+### Build / CLI skills (invoke with `/`)
+| Skill | Purpose |
+|-------|---------|
+| `/compile` | Run al-compile with analyzers |
+| `/publish` | Deploy `.app` to a BC server |
+| `/run-tests` | Execute AL test codeunits (al-runner / bc-test) |
+| `/translate` | Translate XLIFF localization (default fr-FR) via NAB AL Tools |
+| `/al-symbols` | Download dependency symbol packages |
+| `/al-mutate` | Mutation testing |
+| `/verify-tests` | Adversarial test verification |
 
-- `/fix "[error or bug]"` - Quick bug fix workflow (5 min: locate → fix → verify, no planning)
+### Knowledge / plumbing skills (auto-loaded when relevant — not invoked manually)
+`workflow-routing`, `proportional-planning`, `feedback-resolution`, `task-coordination`,
+`tdd-workflow`, `management-patterns`, `build-tools`, `review-checklists`,
+`bc-cli-tools`, `bcquality-citation`, `bc-expert-consultation`, `local-bc`, `bc-source`.
 
-### Full Workflows
+### Commands
+| Command | Purpose |
+|---------|---------|
+| `/review-pr <id>` | Review an incoming Azure DevOps PR (4 specialist reviewers → ADO comments) |
 
-- `/dev-cycle "[description]"` - Complete development cycle
-- `/develop` - Development phase only (implement → review → fix)
-- `/test` - Testing phase only (create tests → review)
+## Complexity Routing
 
-### On-Demand Support
+| Complexity | Criteria | Route |
+|------------|----------|-------|
+| TRIVIAL | Single file, obvious fix | `/fix` |
+| SIMPLE | 2-3 files, pattern exists | `/fix` or `/plan` → `/develop` |
+| MEDIUM | 4-8 files, design decisions | `/plan` → `/develop` |
+| COMPLEX | New architecture, unclear reqs | `/interview` → `/plan` → `/develop` → `/test` |
 
-- `/bc-expert "[question]"` - Consult BC specialists
-- `/docs-lookup "[topic]"` - Search Microsoft Docs
-- `/nav-baseapp "[query]"` - Explore base app objects
+## BCQuality Citation Gate
 
-## Development Phases
+The plugin vendors Microsoft's **BCQuality** corpus at `bcquality/` (microsoft + community
+layers) plus a `custom/` layer of DynInter rules. Specialist personas back findings with a
+`[BCQuality: path]` citation instead of paraphrasing from memory. The MCP
+`bc-code-intelligence-mcp` remains the reasoning *judge*; BCQuality is the *cited jurisprudence*.
 
-### Phase 1: Planning & Design
+- Indexes per domain: `bcquality/_index/{performance,privacy,security,style,testing,ui,upgrade}.md`
+- Protocol & modes (DESIGN/GENERATE/CHECK): `skills/bcquality-citation/SKILL.md`
+- Re-vendor the corpus: `scripts/revendor-bcquality.ps1`
+- A turn-end hook verifies citations: `hooks/al-hook-verify-citations.sh`
 
-**Agents:**
-1. **requirements-engineer** - Extract and document requirements
-2. **solution-planner** - Design BC-integrated solution + create implementation plan
+**Lead enforcement (hard gate):** a deliverable touching a covered domain must cite a
+`[BCQuality: path]`, or justify a `house:` exception, or state "no rule applies".
 
-**Output:**
-- `.dev/01-requirements.md`
-- `.dev/02-solution-plan.md`
+## DynInter Customizations
 
-### Phase 2: Development & Quality
+- **Naming convention** (`rules/al-naming.md` + `bcquality/custom/style/...`): affix used as
+  **prefix only**, never suffix. Table-extension fields prefixed; fields on a dedicated
+  custom table are not.
+- **Mandatory BC-expert consultation** before finalizing any AL/BC deliverable
+  (`skills/bc-expert-consultation/SKILL.md`).
+- The local specialist knowledge layer (`bc-code-intel-knowledge/`) was removed in favor of
+  the BCQuality corpus + the MCP's bundled knowledge.
 
-**Agents:**
-3. **al-developer** - Write AL code
-4. **code-reviewer** - Review code quality
-5. **diagnostics-fixer** - Fix compiler diagnostics
+## MCP Servers
 
-**Output:**
-- `.dev/03-code-review.md`
-- `.dev/04-diagnostics.md`
-- AL source files
+| Server | Use |
+|--------|-----|
+| `bc-code-intelligence-mcp` | BC specialist consultations (the reasoning judge) |
+| `microsoft_docs_mcp` | Official AL/BC documentation lookup |
+| `al-mcp-server` | Base app object navigation, event discovery |
+| `alcops` | AL code analysis / fixes |
+| `nab-al-tools` | XLIFF translation tooling |
 
-### Phase 3: Testing & Validation
+**Rule:** the main conversation never calls MCP tools directly — only spawned personas do.
 
-**Agents:**
-6. **test-engineer** - Create comprehensive tests
-7. **test-reviewer** - Review test coverage
+## Auto-loaded Rules
 
-**Output:**
-- `.dev/05-test-plan.md`
-- `.dev/06-test-review.md`
-- Test codeunits
-
-### Support Agents (On-Demand)
-
-**Agents:**
-8. **bc-expert** - BC specialist consultation
-9. **docs-lookup** - Microsoft Docs search
-10. **dependency-navigator** - Base app exploration
-
-**Output:**
-- `.dev/expert-[topic].md`
-- `.dev/docs-[topic].md`
-- `.dev/nav-[topic].md`
-
-**Note:** solution-planner uses BC Intelligence, MS Docs, and AL Dependency MCP tools internally.
-
-## Automated Test Execution (v2.20+)
-
-Agents can now automatically compile, publish, and execute tests during TDD workflow:
-
-### Requirements
-
-1. **bc-publish** - Publishes .app files to BC server
-2. **bc-test** - Executes test codeunits via OData API
-3. **.bcconfig.json** - BC server configuration
-
-### Setup
-
-Install bc-publish and bc-test utilities (or ensure they're in PATH):
-
-```bash
-# Create .bcconfig.json in your project root
-bc-publish --init
-```
-
-Edit `.bcconfig.json`:
-
-```json
-{
-  "server": "http://localhost",
-  "port": 7048,
-  "instance": "BC",
-  "tenant": "default",
-  "username": "admin",
-  "password": "Admin123!",
-  "apiInstance": "BC",
-  "apiPassword": "your-web-service-access-key",
-  "schemaUpdateMode": "synchronize"
-}
-```
-
-### TDD Workflow with Automated Testing
-
-When using TDD workflow (`/develop` with test specifications):
-
-1. **RED Phase**: Agent writes failing test, compiles, publishes, runs → verifies FAIL → asks user to approve
-2. **GREEN Phase**: Agent implements code, compiles, publishes, runs → verifies PASS → asks user to approve
-3. **REFACTOR Phase**: Agent refactors, compiles, publishes, runs all tests → verifies all PASS → asks user to approve
-
-This automation maintains TDD discipline while eliminating manual deployment steps.
-
-### Advanced bc-test Features
-
-**Auto-Detection:**
-- bc-test automatically detects test codeunit range from app.json
-- No need to specify codeunit IDs manually
-
-**File Output:**
-- `-o file.txt`: Write detailed results to file (human-readable)
-- `-o file.json -f json`: Export as JSON for CI/CD integration
-- Console shows summary only for clean conversation
-
-**Failures-Only Filter:**
-- `--failures-only`: Focus on failed tests only
-- Smart default: Console output shows failures-only by default
-
-**Examples:**
-```bash
-# Auto-detect range, show failures only (default)
-bc-test
-
-# Save all results to file
-bc-test -o .dev/test-results.txt
-
-# Export as JSON for CI/CD
-bc-test -o results.json -f json
-
-# Focus on failures
-bc-test --failures-only
-```
-
-## MCP Server Configuration
-
-This profile uses three MCP servers:
-
-### BC Code Intelligence MCP
-- BC specialist consultations
-- Best practices and patterns
-- Architecture guidance
-
-### Microsoft Docs MCP
-- Official AL documentation
-- API references
-- Breaking changes information
-
-### AL Dependency MCP
-- Base app object navigation
-- Event discovery
-- Dependency analysis
+`rules/` provides standing AL guardrails without skill invocation: `al-engineering.md`
+(always), plus `al-architecture.md`, `al-naming.md`, `al-data-access.md`, `al-conventions.md`
+when an `*.al` file is in context.
 
 ## Directory Structure
 
 ```
 profile-al-development/
-├── .claude-plugin/
-│   └── plugin.json           # Plugin metadata
-├── agents/                   # Specialized agents (10 total)
-│   ├── requirements-engineer.md
-│   ├── solution-planner.md
-│   ├── al-developer.md
-│   ├── code-reviewer.md
-│   ├── diagnostics-fixer.md
-│   ├── test-engineer.md
-│   ├── test-reviewer.md
-│   ├── bc-expert.md
-│   ├── docs-lookup.md
-│   └── dependency-navigator.md
-├── commands/                 # Slash commands
-│   ├── dev-cycle.md
-│   ├── plan.md
-│   ├── develop.md
-│   ├── test.md
-│   ├── bc-expert.md
-│   ├── docs-lookup.md
-│   └── nav-baseapp.md
-├── CLAUDE.md                 # Main profile instructions
-├── .mcp.json                 # MCP server configuration
-└── README.md                 # This file
+├── .claude-plugin/        # plugin.json, settings.json
+├── CLAUDE.md              # Orchestration, routing, BCQuality gate
+├── skills/                # Workflow + build + knowledge skills (each a SKILL.md)
+├── agents/                # al-repo-summarizer (only remaining standalone agent)
+├── commands/              # review-pr (ADO PR review)
+├── rules/                 # Auto-loaded AL guardrails
+├── hooks/                 # Turn-end auto-compile + citation verification
+├── bcquality/             # microsoft / community / custom / _index
+├── scripts/               # build-bcquality-index, verify-citations, revendor
+├── .mcp.json  .lsp.json
+└── README.md              # This file
 ```
-
-## Typical Workflow
-
-### Quick Bug Fix (5 minutes)
-
-```bash
-# Fast track for small bugs
-/fix "Email validation fails for john.doe@example.com"
-
-# Reviews:
-# - Locates the issue in code
-# - Shows proposed fix
-# - You approve
-# - Runs diagnostics
-# - Done! Ready to commit
-```
-
-### Starting a New Feature
-
-```bash
-# 1. Run full development cycle
-/dev-cycle "Add field validation for customer emails"
-
-# 2. Review output files
-cat .dev/01-requirements.md
-cat .dev/02-solution-plan.md
-
-# 3. Implementation, review, diagnostics run automatically
-
-# 4. Review code and test results
-cat .dev/03-code-review.md
-cat .dev/06-test-review.md
-
-# 5. Done! Code, tests, and documentation all in place
-```
-
-### Planning Only
-
-```bash
-# Create solution plan without coding
-/plan "Add dashboard for sales analytics"
-
-# Review plan
-cat .dev/02-solution-plan.md
-
-# Later, implement the plan
-/develop
-```
-
-### Getting BC Expert Help
-
-```bash
-# Consult BC specialist
-/bc-expert "Best practice for extending posting routines?"
-
-# Review consultation
-cat .dev/expert-posting-routines.md
-```
-
-### Exploring Base App
-
-```bash
-# Find extension points
-/nav-baseapp "Find all Customer table events"
-
-# Review findings
-cat .dev/nav-customer-events.md
-```
-
-## AL Coding Standards
-
-This profile enforces BC best practices:
-
-- **PascalCase** naming
-- **Table extensions** over base modifications
-- **Event subscribers** for base app integration
-- **SetLoadFields** for performance
-- **XML documentation** on public procedures
-- **DataClassification** on all fields
-
-See `CLAUDE.md` for complete standards.
-
-## Output Files
-
-All agent work documented in `.dev/`:
-
-```
-.dev/
-├── 01-requirements.md      # What to build
-├── 02-solution-plan.md     # Complete solution (design + implementation)
-├── 03-code-review.md       # Code quality review
-├── 04-diagnostics.md       # Compiler fixes
-├── 05-test-plan.md         # Test strategy
-├── 06-test-review.md       # Test coverage review
-├── session-log.md          # Agent activity log
-├── expert-*.md             # BC specialist consultations
-├── docs-*.md               # Microsoft Docs lookups
-└── nav-*.md                # Base app explorations
-```
-
-## Agent Collaboration
-
-Agents read previous outputs to maintain context:
-
-```
-requirements-engineer → 01-requirements.md
-                              ↓
-solution-planner → 02-solution-plan.md (reads 01, uses MCP tools)
-                              ↓
-al-developer → AL code (reads 02)
-                              ↓
-code-reviewer → 03-code-review.md (reads code)
-                              ↓
-[and so on...]
-```
-
-## Benefits
-
-### Document-Driven
-- Complete audit trail
-- Easy to review and iterate
-- Persistent context across sessions
-
-### Clean Main Conversation
-- Agents write to files, not chat
-- Concise status updates only
-- No context pollution
-
-### Full Lifecycle
-- Every phase covered
-- Nothing falls through cracks
-- Consistent quality
-
-### MCP Integration
-- Official Microsoft documentation
-- BC specialist expertise
-- Base app understanding
-
-## Customization
-
-### Project-Specific Settings
-
-In your project's `.claude/CLAUDE.md`:
-
-```markdown
-# Project-Specific AL Guidelines
-
-## Object Number Range
-- Tables: 50100-50199
-- Codeunits: 50100-50199
-- Pages: 50100-50199
-
-## Custom Prefix
-- All objects: `ACME`
-
-@/home/stefan/claude-configs/profile-al-development/CLAUDE.md
-```
-
-The `@` import loads the profile, your settings augment it.
-
-## Troubleshooting
-
-### Plugin Not Loading
-```bash
-# Verify registration
-cat ~/.claude/settings.json
-
-# Check plugin valid
-cat ~/claude-configs/profile-al-development/.claude-plugin/plugin.json
-```
-
-### Agents Not Working
-- Ensure MCP servers are configured
-- Check `.mcp.json` paths
-- Verify BC Intelligence MCP is running
-
-### Clean Slate
-```bash
-# Remove work directory to start fresh
-rm -rf .dev/
-```
-
-## Recommended Hooks
-
-Desktop notifications for when Claude needs your attention or finishes work. Add to your user or project settings (not in the plugin):
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "AskUserQuestion",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "notify-send -t 7000 'Claude Code' 'Question: Waiting for your answer'"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "notify-send -t 5000 'Claude Code' 'Done: Ready for input'"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-**Note:** These hooks go in `~/.claude/settings.json` (user) or `.claude/settings.json` (project), not in the plugin itself. Replace `notify-send` with your system's notification command if not on Linux.
-
-## Requirements
-
-- Claude Code CLI
-- AL Language extension
-- BC development environment
-- MCP servers (optional but recommended):
-  - BC Code Intelligence MCP
-  - Microsoft Docs MCP
-  - AL Dependency MCP
 
 ## Contributing
 
-Improvements to this profile benefit all your AL projects. After making changes:
-
 ```bash
-cd ~/claude-configs
+cd ~/path/to/bc-claude-configs
 git add profile-al-development/
 git commit -m "Improve [aspect]"
 git push
-```
-
-On other computers:
-```bash
-cd ~/claude-configs
-git pull
 ```
 
 ## Resources
 
 - [AL Language Documentation](https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-programming-in-al)
 - [BC Best Practices](https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-dev-best-practices)
-- [Claude Code Profiles](https://docs.anthropic.com/claude/docs/claude-code)
-
----
-
-**Full-lifecycle AL development with intelligent agents and document-driven workflow.**
+</content>

@@ -1,6 +1,6 @@
 ---
 name: workflow-routing
-description: Use at the start of any AL development task to classify request complexity (TRIVIAL/SIMPLE/MEDIUM/COMPLEX) and route to the appropriate workflow (/fix, /develop, /plan, /dev-cycle). Defines criteria, decision tree, agent selection per level, time-saving optimizations, and project-context.md priming.
+description: Use at the start of any AL development task to classify request complexity (TRIVIAL/SIMPLE/MEDIUM/COMPLEX) and route to the appropriate workflow (/fix, /plan, /develop, /test, /interview). Defines criteria, decision tree, agent selection per level, time-saving optimizations, and project-context.md priming.
 ---
 
 # Workflow Routing: Smart Path Selection
@@ -119,7 +119,7 @@ Analyze the user request and classify:
 ---
 
 ### 🔴 COMPLEX (Use Full Pipeline - 45-90 min)
-**Route:** `/dev-cycle` full workflow
+**Route:** Full pipeline — `/interview` → `/plan` → `/develop` → `/test`
 
 **Criteria:**
 - New feature (not extension of existing)
@@ -255,7 +255,7 @@ User can force a specific path:
 - `/fix` → Always TRIVIAL path
 - `/develop` → SIMPLE/MEDIUM path (no requirements phase)
 - `/plan` → MEDIUM path (planning only)
-- `/dev-cycle` → COMPLEX path (full pipeline)
+- `/interview` → `/plan` → `/develop` → `/test` → COMPLEX path (full pipeline)
 
 But AI should suggest if path seems wrong:
 ```
