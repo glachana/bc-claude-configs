@@ -76,6 +76,7 @@ Each agent prompt must include:
 
 After agents complete, verify:
 
+- **BC Expert Consultation block present (hard gate)** — every test plan / file header MUST carry a `## BC Expert Consultation` block (specialist, verbatim question, key guidance, applied scenarios). If missing, re-spawn the offending engineer with: "Your output is missing the mandatory `## BC Expert Consultation` block — consult `mcp__bc-code-intelligence-mcp__ask_bc_expert` with `quinn-tester` and re-emit." Do not proceed until compliant.
 - **No ID conflicts** — scan all created test codeunits for duplicate IDs
 - **All assigned scenarios covered** — diff assigned vs. implemented
 - **Consistent patterns** — all use `[Test]` attribute, Arrange-Act-Assert, proper naming

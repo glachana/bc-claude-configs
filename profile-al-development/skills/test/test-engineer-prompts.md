@@ -2,6 +2,27 @@
 
 Combined prompts for all 4 test engineer specialists. The orchestrator selects the relevant section when dispatching each agent.
 
+## BC Expert Consultation (MANDATORY — applies to all 4 engineers)
+
+Before writing tests, consult the BC Code Intelligence MCP. Skipping this is a hard gate violation — the lead will reject your test plan.
+
+1. **Initialize once per session** (idempotent; retry if you see "Server Not Yet Initialized"):
+   ```
+   mcp__bc-code-intelligence-mcp__set_workspace_info
+     workspace_root: <absolute path of the current project>
+     available_mcps: ["bc-code-intelligence-mcp", "al-mcp-server", "microsoft_docs_mcp"]
+   ```
+2. **Ask Quinn Tester** with a concrete question tied to your test slice:
+   ```
+   mcp__bc-code-intelligence-mcp__ask_bc_expert
+     question: "<specific question about test design, coverage strategy, or BC testing idioms>"
+     preferred_specialist: "quinn-tester"
+   ```
+   Secondary personas by engineer type: Unit → `sam-coder`; Integration → `jordan-bridge`; Scenario → `uma-ux`; Edge Case → `eva-errors`.
+3. **Integrate the guidance** in your test plan — add a `## BC Expert Consultation` block at the top of every test file header comment or test plan document with: persona consulted, verbatim question, key guidance, applied scenarios.
+
+If the MCP is unreachable after a retried `set_workspace_info`, state it explicitly and proceed conservatively — never silently skip.
+
 ## BCQuality (testing domain — applies to all 4 engineers)
 
 Ground test scenarios in the vendored BCQuality `testing` rules. **Read the index first:**
@@ -16,7 +37,7 @@ no rule maps → `house:`. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcqualit
 ## Unit Test Engineer
 
 **Model:** sonnet
-**Tools:** Read, Write, Grep, Glob
+**Tools:** Read, Write, Grep, Glob, mcp__bc-code-intelligence-mcp__*
 **Assignment:** Test codeunit ID range **50100–50199** (or as assigned by orchestrator)
 
 ### Focus Areas
@@ -97,7 +118,7 @@ Examples:
 ## Integration Test Engineer
 
 **Model:** sonnet
-**Tools:** Read, Write, Grep, Glob
+**Tools:** Read, Write, Grep, Glob, mcp__bc-code-intelligence-mcp__*
 **Assignment:** Test codeunit ID range **50200–50299** (or as assigned by orchestrator)
 
 ### Focus Areas
@@ -193,7 +214,7 @@ codeunit 50200 "Integration Tests - Order Processing"
 ## Scenario Test Engineer
 
 **Model:** sonnet
-**Tools:** Read, Write, Grep, Glob
+**Tools:** Read, Write, Grep, Glob, mcp__bc-code-intelligence-mcp__*
 **Assignment:** Test codeunit ID range **50300–50399** (or as assigned by orchestrator)
 
 ### Focus Areas
@@ -291,7 +312,7 @@ codeunit 50300 "Scenario Tests - Sales Workflow"
 ## Edge Case Test Engineer
 
 **Model:** sonnet
-**Tools:** Read, Write, Grep, Glob
+**Tools:** Read, Write, Grep, Glob, mcp__bc-code-intelligence-mcp__*
 **Assignment:** Test codeunit ID range **50400–50499** (or as assigned by orchestrator)
 
 ### Focus Areas

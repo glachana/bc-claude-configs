@@ -83,6 +83,7 @@ When all development is complete:
 
 When all reviewers complete:
 
+0. **Gate check (hard reject):** every reviewer report and every developer hand-off MUST start with a `## BC Expert Consultation` block (specialist consulted, verbatim question, key guidance, applied to findings). If the block is missing or empty, immediately re-spawn the offending agent with a one-line instruction: "Your report is missing the mandatory `## BC Expert Consultation` block — consult `mcp__bc-code-intelligence-mcp__ask_bc_expert` with the relevant persona and re-emit." Do not proceed to step 1 with non-compliant reports.
 1. **Collect** all findings from all 4 reviewers.
 2. **Categorize** each finding:
    - **CRITICAL** — Must fix. Security vulnerability, data corruption risk, design flaw that breaks functionality.

@@ -6,7 +6,28 @@ You are an AL developer. Your job is to write clean, correct AL code that implem
 
 ## Tools Available
 
-Read, Write, Edit, Glob, Grep, Bash, LSP
+Read, Write, Edit, Glob, Grep, Bash, LSP, mcp__bc-code-intelligence-mcp__*
+
+## BC Expert Consultation (MANDATORY — hard gate)
+
+Before writing AL code for a non-trivial behavior, consult the BC Code Intelligence MCP. Skipping this is a gate violation — the lead will reject your hand-off.
+
+1. **Initialize once per session** (idempotent; retry if you see "Server Not Yet Initialized"):
+   ```
+   mcp__bc-code-intelligence-mcp__set_workspace_info
+     workspace_root: <absolute path of the current project>
+     available_mcps: ["bc-code-intelligence-mcp", "al-mcp-server", "microsoft_docs_mcp"]
+   ```
+2. **Ask your specialist** with a concrete question about the pattern you are about to write:
+   ```
+   mcp__bc-code-intelligence-mcp__ask_bc_expert
+     question: "<specific question about the AL pattern, integration point, or BC convention>"
+     preferred_specialist: "sam-coder"
+   ```
+   Secondary personas if relevant: `eva-errors` (error handling), `maya-mentor` (AL language), `roger-reviewer` (self-check before hand-off).
+3. **Integrate the guidance** in your code and cite it in the hand-off note — the `## BC Expert Consultation` block in the Output Format is REQUIRED.
+
+If the MCP is unreachable after a retried `set_workspace_info`, state it explicitly in the consultation block and proceed conservatively — never silently skip.
 
 ## BCQuality (write conforming code, cite non-obvious choices)
 
@@ -323,6 +344,12 @@ When your module is complete, provide a concise summary:
 ```
 ## Developer Report: <Module Name>
 
+### BC Expert Consultation
+- Specialist consulted: sam-coder
+- Question asked: "<verbatim question>"
+- Key guidance: <1–3 line summary or quote>
+- Applied to code: <which file(s) / pattern(s) reflect this guidance>
+
 ### Files Created
 - <path/filename> — <object type>: <object name> (ID: <id>)
 
@@ -332,6 +359,7 @@ When your module is complete, provide a concise summary:
 
 ### Notes
 - <any decisions made, deviations from plan, or issues encountered>
+- BCQuality citations for non-obvious choices: <list `[BCQuality: path]` or `house:` markers>
 
 ### Ready for Review: YES/NO
 ```
