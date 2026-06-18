@@ -42,15 +42,11 @@ claude-configs/
 │   ├── commands/                    # Slash commands not yet migrated to skills
 │   │   └── review-pr.md            # Azure DevOps PR review
 │   ├── rules/                       # Auto-loaded AL guardrails (engineering, naming, ...)
-│   ├── hooks/                       # Turn-end auto-compile + citation verification
-│   ├── bcquality/                   # Vendored Microsoft BCQuality corpus + DynInter custom
-│   │   ├── microsoft/               # MS-endorsed rules (7 domains)
-│   │   ├── community/               # Community rules (performance, security)
-│   │   ├── custom/                  # DynInter rules (e.g. prefix-only naming)
-│   │   └── _index/                  # Per-domain citation indexes
-│   ├── scripts/                     # build-bcquality-index, verify-citations, revendor
-│   ├── .mcp.json                    # MCP server configuration
+│   ├── hooks/                       # Turn-end auto-compile
+│   ├── .mcp.json                    # MCP servers (incl. bcquality-mcp, bc-source-mcp)
 │   └── README.md                    # Profile documentation
+│                                    # NB: BCQuality corpus is no longer vendored here —
+│                                    #     it is served by bcquality-mcp (DynInter fork)
 ├── project-settings-template.json   # Template for project .claude/settings.json
 ├── .gitignore
 └── README.md                        # Repository overview and setup
@@ -89,24 +85,28 @@ User Request
 
 ### MCP Server Integration
 
-The AL profile uses three MCP servers:
+The AL profile declares these MCP servers in `.mcp.json`:
 
 1. **BC Code Intelligence MCP** (`bc-code-intelligence-mcp`)
-   - BC specialist consultations via structured personas
-   - Uses the MCP's bundled knowledge base (no local custom layer)
+   - BC specialist consultations via structured personas (the reasoning *judge*)
+   - Uses the MCP's bundled knowledge base
 
-2. **Microsoft Docs MCP** (`microsoft_docs_mcp`)
-   - Official AL/BC documentation lookup
-   - HTTP-based MCP server
+2. **BCQuality MCP** (`bcquality-mcp`)
+   - Serves Microsoft's BCQuality corpus (microsoft + community + DynInter `custom/` layers)
+   - The *cited jurisprudence*; pointed at `DynamicsInternational/BCQuality` via `BCQUALITY_REPO_URL`
+   - Workhorse tool: `bcquality_get_applicable_for_context`
 
-3. **AL Dependency MCP** (`al-mcp-server`)
-   - Base app object navigation
-   - Event discovery and dependency analysis
-   - Runs via npx
+3. **BC Source MCP** (`bc-source-mcp`)
+   - Base app AL source lookup across all versions/localizations (partial clone + SQLite index)
+   - Tools `bc_get_object`, `bc_get_event_publishers`, `bc_get_procedure`, `bc_search_code`, …
 
-4. **Serena MCP** (optional project-specific MCP)
-   - IDE assistant integration
-   - Project context awareness
+4. **Microsoft Docs MCP** (`microsoft_docs_mcp`)
+   - Official AL/BC documentation lookup (HTTP-based)
+
+5. **AL Dependency MCP** (`al-mcp-server`)
+   - Base app object navigation, event discovery, dependency analysis
+
+Plus `alcops` (AL code analysis) and `nab-al-tools` (XLIFF translation).
 
 ## Common Development Tasks
 

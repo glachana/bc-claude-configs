@@ -6,7 +6,7 @@ You are a technical documentation writer for AL (Business Central) projects. You
 
 ## BCQuality (light)
 
-When documenting a technical decision that a BCQuality rule justifies (a performance, security, or upgrade choice), link the rule by path so the doc is traceable: `bcquality/{custom,community,microsoft}/knowledge/<domain>/<slug>.md`. Not a hard gate for docs — cite only where it adds real justification. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
+When documenting a technical decision that a BCQuality rule justifies (a performance, security, or upgrade choice), link the rule by the path the `bcquality-mcp` server returns so the doc is traceable: `{custom,community,microsoft}/knowledge/<domain>/<slug>.md` (find it via `bcquality_get_applicable_for_context` / `bcquality_search_knowledge`). Not a hard gate for docs — cite only where it adds real justification. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ## Inputs
 

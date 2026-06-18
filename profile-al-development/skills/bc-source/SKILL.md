@@ -1,97 +1,60 @@
 ---
 name: bc-source
-description: Look up Business Central base application source code (tables, pages, codeunits, events) from MSDyn365BC.Sandbox.Code.History. Use this to verify object structures, find event publishers, or check field definitions.
+description: Look up Business Central base application source code (tables, pages, codeunits, events) via the bc-source-mcp server. Use this to verify object structures, find event publishers, or check field/procedure definitions across BC versions and localizations.
 ---
 
 # /bc-source — BC Base App Source Lookup
 
-Reference repository for BC base application AL source code across all versions.
-Use this when you need to verify table structures, find event publishers, check page layouts,
-or understand how standard BC objects work.
+Authoritative, structured access to BC base application AL source — all versions (v23→v29),
+all localizations (W1 + 47 countries) — through the **`bc-source-mcp`** MCP server. Use it to
+verify object structures, find the exact event to subscribe to, or check a procedure
+signature **instead of relying on training-data memory** (a major source of AL hallucinations).
 
-## Setup (one-time per session)
+> The old workflow (manual `git clone` of MSDyn365BC.Sandbox.Code.History + `grep`) is gone.
+> The MCP does a partial clone + SQLite index once, then answers lookups in <100 ms.
 
-Clone the correct branch for the customer's BC version. Check `app.json` for the runtime version.
+## Pick the right branch
 
-```bash
-# Clone to /tmp/bc-source (shallow, fast)
-git clone -b w1-27 --single-branch --depth 1 \
-  https://github.com/StefanMaron/MSDyn365BC.Sandbox.Code.History.git \
-  /tmp/bc-source 2>/dev/null || echo "Already cloned"
-```
+Branches are named `{country}-{major}`, e.g. `w1-28` (worldwide) or `fr-28` (France). Read the
+customer's `app.json` runtime / target to choose the major version; use the country branch when
+verifying localized objects, otherwise `w1`.
 
-For country-specific localizations, use the country code:
-```bash
-git clone -b us-27 --single-branch --depth 1 ...
-```
+- `bc_list_versions` — available BC versions (with/without vNext)
+- `bc_list_localizations` — 47 country codes + W1
+- `bc_list_branches` — all upstream branches
+- `bc_cache_status` — which branches are already indexed locally (fast); `bc_refresh` to add/update one
 
-Branch naming: `{country}-{major}` where country is `w1` (worldwide), `us`, `de`, `fr`, etc.
+## Core lookups
 
-## Finding objects
+| Need | Tool | Notes |
+|------|------|-------|
+| Full source + metadata of an object | `bc_get_object` | by type + name/ID on a branch |
+| All fields on a table | `bc_get_object` | returns the full table AL |
+| Event publishers of an object | `bc_get_event_publishers` | `IntegrationEvent`, `BusinessEvent`, `InternalEvent` |
+| A specific procedure (signature + body) | `bc_get_procedure` | targeted, avoids pulling the whole object |
+| Full-text / pattern search | `bc_search_code` | ripgrep-backed, scope by app/type |
+| List objects (filtered) | `bc_list_objects` | by type / app / name pattern, paginated |
+| Is an object present across versions? | `bc_find_object_across_branches` | compare presence/changes |
+| Apps in a branch | `bc_list_apps` | top-level apps |
 
-The base app source is in `BaseApp/Source/Base Application/`.
+## Common use cases → tool
 
-### Find a table by name or ID
+1. **Verify a field exists before extending a table** → `bc_get_object` (table) on the target branch.
+2. **Find the right event to subscribe to** → `bc_get_event_publishers` on the relevant codeunit
+   (e.g. `Approvals Mgmt.`), or `bc_search_code "IntegrationEvent"` scoped to an app.
+3. **Check a procedure's exact signature** → `bc_get_procedure`.
+4. **Compare an object W1 vs a localization** (e.g. `Customer` FR vs W1) → `bc_get_object` on each branch.
+5. **Find all usages of a pattern** across the Base Application → `bc_search_code`.
 
-```bash
-grep -rl "table [0-9]* \"Purchase Header\"" /tmp/bc-source/BaseApp/Source/ | head -5
-# or by ID
-grep -rl "table 38 " /tmp/bc-source/BaseApp/Source/ | head -5
-```
+## Admin
 
-### Find a page
+- `bc_refresh` — re-fetch + re-index one branch (or all). Run after a Microsoft cumulative update.
+- `bc_cache_status` — disk usage + indexed branches.
+- `bc_prune_cache` — drop worktrees you no longer need.
 
-```bash
-grep -rl "page [0-9]* \"Purchase Order\"" /tmp/bc-source/BaseApp/Source/ | head -5
-```
+## Notes
 
-### Find a codeunit
-
-```bash
-grep -rl "codeunit [0-9]* \"Approvals Mgmt.\"" /tmp/bc-source/BaseApp/Source/ | head -5
-```
-
-### Find event publishers
-
-```bash
-# Find all integration events in a specific codeunit
-grep -n "IntegrationEvent" /tmp/bc-source/BaseApp/Source/**/ApprovalsMgmt.Codeunit.al
-```
-
-### Find all fields on a table
-
-```bash
-# Read the table file to see all fields
-cat /tmp/bc-source/BaseApp/Source/**/PurchaseHeader.Table.al | head -200
-```
-
-### Search for any pattern across base app
-
-```bash
-grep -rn "OnAfterCheck.*ApprovalPossible" /tmp/bc-source/BaseApp/Source/
-```
-
-## Common use cases
-
-1. **Verify a field exists on a table** before writing a table extension
-2. **Find the right event** to subscribe to (search for `IntegrationEvent` in relevant codeunits)
-3. **Check field types and properties** (DataClassification, OptionMembers, etc.)
-4. **Understand data flow** by reading codeunit procedures
-5. **Find page controls** to determine where to add extension fields
-
-## Structure reference
-
-```
-/tmp/bc-source/
-├── BaseApp/Source/Base Application/   ← Main app (tables, pages, codeunits)
-├── System Application/Source/         ← System utilities
-├── BusinessFoundation/Source/         ← Foundation types
-└── ...other modules
-```
-
-Within BaseApp, files follow the pattern:
-- `{ObjectName}.Table.al`
-- `{ObjectName}.Page.al`
-- `{ObjectName}.Codeunit.al`
-- `{ObjectName}.Report.al`
-- `{ObjectName}.Enum.al`
+- This is read-only reference. Spawned personas call these tools; the main conversation does not
+  edit code based on them directly.
+- If a needed branch isn't indexed yet, `bc_get_object`/`bc_search_code` will surface it — index it
+  with `bc_refresh` (first index of a branch downloads + builds, subsequent lookups are instant).

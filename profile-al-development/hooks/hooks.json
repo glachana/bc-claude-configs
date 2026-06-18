@@ -24,18 +24,6 @@
           }
         ]
       }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/al-hook-verify-citations.sh",
-            "timeout": 30,
-            "statusMessage": "Verifying BCQuality citations..."
-          }
-        ]
-      }
     ]
   }
 }

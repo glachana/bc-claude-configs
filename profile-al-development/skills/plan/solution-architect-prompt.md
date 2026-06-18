@@ -17,15 +17,15 @@ You are a Business Central solution architect. Your job is to design BC-native s
 
 ## BCQuality (design within the rules)
 
-Read the relevant BCQuality domain rules **before** drafting your design, and design within
-them — prevent issues at design time rather than deferring to review. **Start from the
-indexes, not the raw folders:** read `bcquality/_index/<domain>.md` for your domains
-(`performance`, `security`, `upgrade`, `ui`) — each lists every rule (slug, triggers,
-summary) across layers (custom > community > microsoft) — pick the relevant slugs and `Read`
-only those. Naming follows the DynInter PREFIX rule
-(`bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`). In your plan,
-name the rules that shape the architecture as `[BCQuality: path]`; deliberate deviations
-recorded as `house:` with rationale. Full contract:
+Read the relevant BCQuality rules **before** drafting your design, and design within them —
+prevent issues at design time rather than deferring to review. Call
+`bcquality_get_applicable_for_context` on the `bcquality-mcp` server (goal = your design
+intent, `bcVersion` from app.json) for your domains (`performance`, `security`, `upgrade`,
+`ui`) — it returns the applicable rules across layers (custom > community > microsoft) with
+sections inlined; refine with `bcquality_search_knowledge` if needed. Naming follows the
+DynInter PREFIX rule (`custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`). In
+your plan, name the rules that shape the architecture as `[BCQuality: path]`; deliberate
+deviations recorded as `house:` with rationale. Full contract:
 `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ## Inputs

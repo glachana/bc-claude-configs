@@ -25,12 +25,13 @@ If the MCP is unreachable after a retried `set_workspace_info`, state it explici
 
 ## BCQuality (testing domain — applies to all 4 engineers)
 
-Ground test scenarios in the vendored BCQuality `testing` rules. **Read the index first:**
-`bcquality/_index/testing.md` lists every testing rule (slug, triggers, summary); pick the
-relevant slugs and `Read` only those under `bcquality/microsoft/knowledge/testing/`. A rule's `<slug>.bad.al`
-sibling sample is literally "code that should fail" — convert relevant ones into negative /
-boundary tests. Cite the rule a test enforces as `[BCQuality: bcquality/microsoft/knowledge/testing/<slug>.md]`;
-no rule maps → `house:`. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
+Ground test scenarios in the BCQuality `testing` rules from the `bcquality-mcp` server. Call
+`bcquality_get_applicable_for_context` (or `bcquality_search_knowledge` with `domain:
+testing`) to find the relevant rules, then pull a rule's `<slug>.bad.al` sample with
+`bcquality_get_examples` — literally "code that should fail"; convert relevant ones into
+negative / boundary tests. Cite the rule a test enforces as
+`[BCQuality: microsoft/knowledge/testing/<slug>.md]`; no rule maps → `house:`. Full contract:
+`${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ---
 

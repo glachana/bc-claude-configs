@@ -31,18 +31,17 @@ If the MCP is unreachable after a retried `set_workspace_info`, state it explici
 
 ## BCQuality (write conforming code, cite non-obvious choices)
 
-Before writing AL, pull the relevant rules from the vendored BCQuality corpus at
-`${CLAUDE_PLUGIN_ROOT}/bcquality/` and write **conforming** code. Pick the domain by what you
-write: data access / loops → `performance`; permissions / data exposure → `security` /
-`privacy`; pages → `ui`; naming / structure → `style`; obsoletion → `upgrade` (layers
-custom > community > microsoft). **Retrieve via the index, not blind grep:** read
-`bcquality/_index/<domain>.md` (one row per rule — slug, triggers, summary), pick the 2-6
-relevant slugs, then `Read` only those `.md` files. Lean on `<slug>.good.al` samples as patterns to follow.
-**Naming is the DynInter PREFIX rule** —
-`bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md` (affix is a
-prefix, never a suffix; custom objects and table-extension fields are prefixed; fields inside
-a fully custom table are not). In your hand-off note, cite the rule a non-obvious choice
-satisfies as `[BCQuality: path]`; no rule maps → `house:`. Full contract:
+Before writing AL, pull the relevant rules from the `bcquality-mcp` server and write
+**conforming** code. Call `bcquality_get_applicable_for_context` (goal = what you are about
+to build, `bcVersion` from app.json) — it scopes by domain automatically (data access /
+loops → `performance`; permissions / data exposure → `security` / `privacy`; pages → `ui`;
+naming / structure → `style`; obsoletion → `upgrade`; layers custom > community > microsoft)
+and returns the rules with sections inlined. Pull `<slug>.good.al` patterns with
+`bcquality_get_examples` to follow. **Naming is the DynInter PREFIX rule** —
+`custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md` (affix is a prefix, never a
+suffix; custom objects and table-extension fields are prefixed; fields inside a fully custom
+table are not). In your hand-off note, cite the rule a non-obvious choice satisfies as
+`[BCQuality: path]`; no rule maps → `house:`. Full contract:
 `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ## Required Inputs

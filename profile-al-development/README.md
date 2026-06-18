@@ -84,34 +84,40 @@ conversation stays clean.
 
 ## BCQuality Citation Gate
 
-The plugin vendors Microsoft's **BCQuality** corpus at `bcquality/` (microsoft + community
-layers) plus a `custom/` layer of DynInter rules. Specialist personas back findings with a
-`[BCQuality: path]` citation instead of paraphrasing from memory. The MCP
+Microsoft's **BCQuality** corpus (microsoft + community layers plus a `custom/` layer of
+DynInter rules) is served by the **`bcquality-mcp`** server, pointed at the
+`DynamicsInternational/BCQuality` fork via `BCQUALITY_REPO_URL`. Specialist personas back
+findings with a `[BCQuality: path]` citation instead of paraphrasing from memory. The MCP
 `bc-code-intelligence-mcp` remains the reasoning *judge*; BCQuality is the *cited jurisprudence*.
 
-- Indexes per domain: `bcquality/_index/{performance,privacy,security,style,testing,ui,upgrade}.md`
+- Workhorse tool: `bcquality_get_applicable_for_context` (applicable rules with sections inlined)
 - Protocol & modes (DESIGN/GENERATE/CHECK): `skills/bcquality-citation/SKILL.md`
-- Re-vendor the corpus: `scripts/revendor-bcquality.ps1`
-- A turn-end hook verifies citations: `hooks/al-hook-verify-citations.sh`
+- Cited paths re-verifiable with `bcquality_get_knowledge`
+- DynInter custom rules live in the fork's `custom/` layer (not vendored in this repo)
 
 **Lead enforcement (hard gate):** a deliverable touching a covered domain must cite a
 `[BCQuality: path]`, or justify a `house:` exception, or state "no rule applies".
 
 ## DynInter Customizations
 
-- **Naming convention** (`rules/al-naming.md` + `bcquality/custom/style/...`): affix used as
+- **Naming convention** (`rules/al-naming.md` + the BCQuality `custom/` layer rule
+  `custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`): affix used as
   **prefix only**, never suffix. Table-extension fields prefixed; fields on a dedicated
   custom table are not.
 - **Mandatory BC-expert consultation** before finalizing any AL/BC deliverable
   (`skills/bc-expert-consultation/SKILL.md`).
+- **Dedicated MCP servers** `bcquality-mcp` (BCQuality corpus) and `bc-source-mcp` (BC base
+  app source) replace the previously vendored corpus and the manual base-app clone.
 - The local specialist knowledge layer (`bc-code-intel-knowledge/`) was removed in favor of
-  the BCQuality corpus + the MCP's bundled knowledge.
+  the BCQuality MCP + the BC-intelligence MCP's bundled knowledge.
 
 ## MCP Servers
 
 | Server | Use |
 |--------|-----|
 | `bc-code-intelligence-mcp` | BC specialist consultations (the reasoning judge) |
+| `bcquality-mcp` | Serves the BCQuality corpus (cited jurisprudence) — DynInter fork |
+| `bc-source-mcp` | BC base app AL source lookup, all versions/localizations |
 | `microsoft_docs_mcp` | Official AL/BC documentation lookup |
 | `al-mcp-server` | Base app object navigation, event discovery |
 | `alcops` | AL code analysis / fixes |
@@ -135,11 +141,10 @@ profile-al-development/
 ├── agents/                # al-repo-summarizer (only remaining standalone agent)
 ├── commands/              # review-pr (ADO PR review)
 ├── rules/                 # Auto-loaded AL guardrails
-├── hooks/                 # Turn-end auto-compile + citation verification
-├── bcquality/             # microsoft / community / custom / _index
-├── scripts/               # build-bcquality-index, verify-citations, revendor
-├── .mcp.json  .lsp.json
+├── hooks/                 # Turn-end auto-compile
+├── .mcp.json  .lsp.json   # MCP servers (incl. bcquality-mcp, bc-source-mcp) + LSP
 └── README.md              # This file
+# NB: the BCQuality corpus is no longer vendored here — bcquality-mcp serves it.
 ```
 
 ## Contributing
@@ -155,4 +160,3 @@ git push
 
 - [AL Language Documentation](https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-programming-in-al)
 - [BC Best Practices](https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-dev-best-practices)
-</content>

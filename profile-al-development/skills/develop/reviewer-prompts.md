@@ -37,14 +37,15 @@ If the MCP is unreachable after a retried `set_workspace_info`, state it explici
 
 ### BCQuality Knowledge (cite, don't paraphrase)
 
-Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domains (`security`, `privacy`), **read the index first, not the raw folders**: each
-`bcquality/_index/<domain>.md` lists every rule (slug, triggers, summary) across all layers
-(custom > community > microsoft). Pick the matching slugs, `Read` only those `.md` files,
-then evaluate the code against them. When a finding maps a rule, add its file path to the
-"Fix Recommendation" cell as `[BCQuality: bcquality/microsoft/knowledge/security/<slug>.md]`
-— do NOT paraphrase the rule from memory. No rule maps → prefix the issue id with
-`house:`. Full contract: `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
+Microsoft's BCQuality corpus is served by the `bcquality-mcp` server. For your
+domains (`security`, `privacy`), call `bcquality_get_applicable_for_context` (goal = what
+the code does, `bcVersion` from app.json) — it returns the applicable rules across all
+layers (custom > community > microsoft) with sections inlined; refine with
+`bcquality_search_knowledge` (domain-filtered) if needed. Evaluate the code against them.
+When a finding maps a rule, add its path to the "Fix Recommendation" cell as
+`[BCQuality: microsoft/knowledge/security/<slug>.md]` — do NOT paraphrase the rule from
+memory. No rule maps → prefix the issue id with `house:`. Full contract:
+`${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ### Review Focus Areas
 
@@ -155,16 +156,17 @@ If the MCP is unreachable after a retried `set_workspace_info`, state it explici
 
 ### BCQuality Knowledge (cite, don't paraphrase)
 
-Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domains (`style`, `ui`), **read the index first, not the raw folders**: each
-`bcquality/_index/<domain>.md` lists every rule (slug, triggers, summary) across all layers
-(custom > community > microsoft). Pick the matching slugs, `Read` only those, then evaluate.
+Microsoft's BCQuality corpus is served by the `bcquality-mcp` server. For your
+domains (`style`, `ui`), call `bcquality_get_applicable_for_context` (or
+`bcquality_search_knowledge` for a specific concern), then evaluate against the returned
+rules (custom > community > microsoft).
 **Naming: the DynInter house rule overrides Microsoft's —
-see `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`: the affix
-is a PREFIX (never suffix); custom objects and table-extension fields are prefixed; fields
-inside a fully custom table are not.** When a finding maps a rule, cite the file path in
-"Fix Recommendation" as `[BCQuality: bcquality/.../knowledge/style/<slug>.md]` — do NOT
-paraphrase. No rule maps → prefix the id with `house:`. Full contract:
+`custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md` (retrieve with
+`bcquality_get_knowledge`): the affix is a PREFIX (never suffix); custom objects and
+table-extension fields are prefixed; fields inside a fully custom table are not.** When a
+finding maps a rule, cite the path in "Fix Recommendation" as
+`[BCQuality: <layer>/knowledge/style/<slug>.md]` — do NOT paraphrase. No rule maps →
+prefix the id with `house:`. Full contract:
 `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ### Review Focus Areas
@@ -284,14 +286,14 @@ If the MCP is unreachable after a retried `set_workspace_info`, state it explici
 
 ### BCQuality Knowledge (cite, don't paraphrase)
 
-Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domain (`performance`), **read the index first, not the raw folders**:
-`bcquality/_index/performance.md` lists every rule (slug, triggers, summary) across layers
-(community > microsoft). Pick the matching slugs by the `triggers` column — e.g. `Get` in a
-loop → `avoid-get-inside-loop-on-large-table`, partial reads → `use-setloadfields-for-partial-records`,
-`Commit` in a loop → `avoid-commit-inside-loops` — then `Read` only those. When a finding maps a rule, cite the file path in
-"Fix Recommendation" as `[BCQuality: bcquality/microsoft/knowledge/performance/<slug>.md]`
-— do NOT paraphrase. No rule maps → prefix the id with `house:`. Full contract:
+Microsoft's BCQuality corpus is served by the `bcquality-mcp` server. For your
+domain (`performance`), call `bcquality_get_applicable_for_context` (goal = the code's job,
+`bcVersion` from app.json), or `bcquality_search_knowledge` for a specific concern — e.g.
+`Get` in a loop → `avoid-get-inside-loop-on-large-table`, partial reads →
+`use-setloadfields-for-partial-records`, `Commit` in a loop → `avoid-commit-inside-loops`.
+When a finding maps a rule, cite the path in "Fix Recommendation" as
+`[BCQuality: microsoft/knowledge/performance/<slug>.md]` — do NOT paraphrase. No rule maps →
+prefix the id with `house:`. Full contract:
 `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 
 ### Review Focus Areas
@@ -414,11 +416,11 @@ If the MCP is unreachable after a retried `set_workspace_info`, state it explici
 
 ### BCQuality Knowledge (cite, don't paraphrase)
 
-Microsoft's BCQuality corpus is vendored at `${CLAUDE_PLUGIN_ROOT}/bcquality/`. For your
-domain (`testing`), search `${CLAUDE_PLUGIN_ROOT}/bcquality/microsoft/knowledge/testing/`.
-A rule's `<slug>.bad.al` sibling sample is a ready-made "should fail" scenario — flag it as
-a missing negative-test scenario. When a finding maps a rule, cite the file path as
-`[BCQuality: bcquality/microsoft/knowledge/testing/<slug>.md]` — do NOT paraphrase. No rule
+Microsoft's BCQuality corpus is served by the `bcquality-mcp` server. For your
+domain (`testing`), call `bcquality_get_applicable_for_context` / `bcquality_search_knowledge`,
+then pull a rule's `.bad.al` sample with `bcquality_get_examples` — a ready-made "should
+fail" scenario; flag a missing one as a negative-test gap. When a finding maps a rule, cite
+the path as `[BCQuality: microsoft/knowledge/testing/<slug>.md]` — do NOT paraphrase. No rule
 maps → prefix the id with `house:`. Full contract:
 `${CLAUDE_PLUGIN_ROOT}/skills/bcquality-citation/SKILL.md`.
 

@@ -97,5 +97,26 @@ plomberie — `solution-planner` (renommé `solution-architect` en v3.0) et
 `requirements-engineer` (persona supprimé, absorbé par `/interview` + `/plan`) apparaissent
 encore dans `workflow-routing`, `proportional-planning` et `feedback-resolution`. Renommage
 à confirmer avant application (modifie le comportement d'orchestration).
-</content>
+
+## Migration vers les serveurs MCP (2026-06-18)
+
+Deux serveurs MCP DynInter publiés sur npm remplacent du contenu auparavant embarqué :
+
+- **`bc-source-mcp`** (`npx -y bc-source-mcp`) — remplace la skill `bc-source` (clone git +
+  grep manuel). 13 tools `bc_*`. Skill réécrite. Vérifié live (cache : branches `w1-28`,
+  `w1-26`, `fr-28` indexées).
+- **`bcquality-mcp`** (`npx -y bcquality-mcp`) — remplace le corpus vendoré `bcquality/`
+  (410 fichiers), les scripts (`build-bcquality-index`, `verify-citations`, `revendor`) et le
+  hook `al-hook-verify-citations`. Pointé sur le fork `DynamicsInternational/BCQuality` via
+  `BCQUALITY_REPO_URL`. 10 tools `bcquality_*` ; workhorse `bcquality_get_applicable_for_context`.
+
+Décisions appliquées : **tout migrer vers le MCP** (corpus vendoré supprimé) ; règle custom
+DynInter `affix-as-prefix` **portée dans le fork** (`custom/knowledge/style/`) avant suppression
+locale ; les deux serveurs **enregistrés dans `.mcp.json` du plugin**.
+
+Le contrat de citation `[BCQuality: path]` est **préservé** — seul le retrieval change (appel
+MCP au lieu de lecture fichier) ; les chemins cités restent re-vérifiables via
+`bcquality_get_knowledge`. Fichiers touchés : `.mcp.json`, skills `bc-source` +
+`bcquality-citation`, 4 prompts persona, `rules/al-naming.md`, `hooks/hooks.json`, plugin
+`CLAUDE.md`, root `CLAUDE.md`, profil `README.md`.
 </invoke>

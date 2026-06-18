@@ -24,4 +24,3 @@ The plugin evolved from a fixed 11-agent sequence (v2) → "lead-as-manager" spe
 (v3.0) → skills with inline persona prompts (v5.x). Embedding personas in skills lets the
 lead spawn N parallel instances (e.g. 4 reviewers, 4 test engineers) and keeps each
 persona's BCQuality citation contract next to the workflow that uses it.
-</content>

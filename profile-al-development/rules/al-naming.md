@@ -17,7 +17,7 @@ A two-level (or deeper) namespace provides organizational uniqueness. The regist
 
 ## Affix Rules (Dynamics International house convention)
 
-**The affix is always a PREFIX, never a suffix.** This is the DynInter house rule; it overrides any suffix-based or namespace-only guidance. Authoritative source, with `.good.al` / `.bad.al` samples: `bcquality/custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`.
+**The affix is always a PREFIX, never a suffix.** This is the DynInter house rule; it overrides any suffix-based or namespace-only guidance. Authoritative source, with `.good.al` / `.bad.al` samples: the BCQuality `custom/` layer rule `custom/knowledge/style/affix-as-prefix-on-custom-identifiers.md`, served by the `bcquality-mcp` server (retrieve via `bcquality_get_knowledge`).
 
 | Context | Object Name Affix | Field Name Affix |
 |---|---|---|
